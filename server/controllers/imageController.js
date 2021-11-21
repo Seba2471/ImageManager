@@ -5,6 +5,7 @@ class imageController {
     const image = new Image({
       name: req.body.name,
       path: 'path test',
+      file_name: 'tests',
       owner: '619a9c798a48b499289e3f06',
     });
 

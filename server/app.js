@@ -8,6 +8,7 @@ const app = express();
 //db
 db();
 
+app.use(express.static('public'));
 //cors
 app.use(cors());
 
