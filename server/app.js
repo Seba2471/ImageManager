@@ -1,5 +1,5 @@
 import express from 'express';
-import webRouter from './routers/web_router.js';
+import apiRouter from './routers/apiRouter.js';
 import db from './db/mongoose.js';
 import cors from 'cors';
 
@@ -15,6 +15,6 @@ app.use(cors());
 app.use(express.json());
 
 //mount routers
-app.use(webRouter);
+app.use(apiRouter);
 
 export default app;
