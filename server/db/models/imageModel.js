@@ -11,10 +11,6 @@ const imageSchema = new Schema({
     type: String,
     required: true,
   },
-  file_name: {
-    type: String,
-    required: true,
-  },
   owner: {
     type: mongoose.Types.ObjectId,
     required: true,
