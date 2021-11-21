@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon server/index.js",
+    "test": "eslint src --fix --cache --no-error-on-unmatched-pattern",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,9 @@
     "mongoose": "^6.0.13"
   },
   "devDependencies": {
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
     "nodemon": "^2.0.15",
     "prettier": "^2.4.1"
   }

@@ -1,4 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const port = process.env.PORT;
+const port = process.env.PORT || 3000;
+const database = process.env.DATABASE;
+
+export { port, database };
