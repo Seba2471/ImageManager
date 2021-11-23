@@ -1,20 +1,35 @@
 import Image from '../db/models/imageModel.js';
+import { removeImage, moveImage, getImagePath } from '../services/image/fileService.js';
 
 class imageController {
-  add(req, res) {
+  async add(req, res) {
     const image = new Image({
       name: req.body.name,
-      path: 'path test',
-      file_name: 'tests',
-      owner: '619a9c798a48b499289e3f06',
+      file_name: req.file.filename,
+      owner: req.body.owner,
     });
 
+    image.path = moveImage(req.body.owner, req.file.filename);
+
     try {
-      image.save();
+      await image.save();
       res.sendStatus(201);
     } catch (e) {
-      console.log(e);
+      res.sendStatus(403);
+      removeImage(req.file.filename);
     }
+  }
+
+  sendImage(req, res) {
+    const owner = req.params.id;
+    const filename = req.params.filename;
+
+    res.status(200).sendFile(getImagePath(owner, filename), (e) => {
+      if (e) {
+        console.log(e);
+        res.sendStatus(403);
+      }
+    });
   }
 }
 

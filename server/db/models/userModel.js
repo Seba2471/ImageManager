@@ -27,6 +27,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  imagesCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 userSchema.pre('save', function (next) {
