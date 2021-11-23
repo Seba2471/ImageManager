@@ -1,26 +1,34 @@
 import Image from '../db/models/imageModel.js';
-import { removeImage, moveImage, getImagePath } from '../services/image/fileService.js';
+import User from '../db/models/userModel.js';
+import { removeErrorImage, moveImage, getImagePath, removeUserImage } from '../services/image/fileService.js';
 
 class imageController {
   async add(req, res) {
-    const image = new Image({
-      name: req.body.name,
-      file_name: req.file.filename,
-      owner: req.body.owner,
-    });
-
-    image.path = moveImage(req.body.owner, req.file.filename);
-
     try {
+      const owner = await User.findById(req.body.owner);
+
+      if (!owner) {
+        throw new Error('User not found');
+      }
+
+      const image = new Image({
+        name: req.body.name,
+        file_name: req.file.filename,
+        owner: owner.id,
+      });
+
+      image.path = moveImage(owner.id, req.file.filename);
+      owner.imagesCount += 1;
       await image.save();
+      await owner.save();
       res.sendStatus(201);
     } catch (e) {
+      removeErrorImage(req.file.filename);
       res.sendStatus(403);
-      removeImage(req.file.filename);
     }
   }
 
-  sendImage(req, res) {
+  send(req, res) {
     const owner = req.params.id;
     const filename = req.params.filename;
 
@@ -30,6 +38,24 @@ class imageController {
         res.sendStatus(403);
       }
     });
+  }
+
+  async delete(req, res) {
+    try {
+      const image = await Image.findById(req.params.id);
+      if (!image) {
+        throw new Error('Image not found');
+      }
+      const owner = await User.findById(image.owner);
+      owner.imagesCount -= 1;
+      removeUserImage(image);
+      await Image.findByIdAndDelete(req.params.id);
+      owner.save();
+      res.sendStatus(204);
+    } catch (e) {
+      console.log(e);
+      res.status(403).send('Image not found');
+    }
   }
 }
 
