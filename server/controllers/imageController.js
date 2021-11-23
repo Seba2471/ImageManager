@@ -3,6 +3,10 @@ import User from '../db/models/userModel.js';
 import { removeErrorImage, moveImage, getImagePath, removeUserImage } from '../services/image/fileService.js';
 
 class imageController {
+  async userImage(req, res) {
+    const images = await Image.find({ owner: req.params.id });
+    res.json(images);
+  }
   async add(req, res) {
     try {
       const owner = await User.findById(req.body.owner);
