@@ -2,12 +2,8 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const imageSchema = new Schema({
-  orignal_name: {
-    type: String,
-    required: true,
-  },
-  file_name: {
+const refreshTokenSchema = new Schema({
+  refreshToken: {
     type: String,
     required: true,
   },
@@ -18,6 +14,6 @@ const imageSchema = new Schema({
   },
 });
 
-const Image = mongoose.model('Image', imageSchema);
+const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);
 
-export default Image;
+export default RefreshToken;

@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 
 const port = process.env.PORT || 3000;
 const database = process.env.DATABASE;
+const accessKey = process.env.ACCESS_KEY;
+const refreshKey = process.env.REFRESH_KEY;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-export { port, database, __dirname };
+export { port, database, __dirname, accessKey, refreshKey };

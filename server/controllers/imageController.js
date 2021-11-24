@@ -4,36 +4,46 @@ import { removeErrorImage, moveImage, getImagePath, removeUserImage } from '../s
 
 class imageController {
   async userImage(req, res) {
-    const images = await Image.find({ owner: req.params.id });
+    const images = await Image.find({ owner: req.user.id });
     res.json(images);
   }
   async add(req, res) {
     try {
-      const owner = await User.findById(req.body.owner);
+      const owner = await User.findById(req.user.id);
 
       if (!owner) {
         throw new Error('User not found');
       }
 
       const image = new Image({
-        name: req.body.name,
+        orignal_name: req.body.orignal_name,
         file_name: req.file.filename,
         owner: owner.id,
       });
 
       image.path = moveImage(owner.id, req.file.filename);
-      owner.imagesCount += 1;
+
+      const imagesCount = owner.imagesCount + 1;
+
+      User.findByIdAndUpdate(owner.id, { imagesCount }, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          docs.imagesCount += 1;
+          console.log('Updated User : ', docs);
+        }
+      });
       await image.save();
-      await owner.save();
       res.sendStatus(201);
     } catch (e) {
+      console.log(e);
       removeErrorImage(req.file.filename);
       res.sendStatus(403);
     }
   }
 
   send(req, res) {
-    const owner = req.params.id;
+    const owner = req.user.id;
     const filename = req.params.filename;
 
     res.status(200).sendFile(getImagePath(owner, filename), (e) => {

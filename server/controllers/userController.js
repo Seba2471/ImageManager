@@ -1,11 +1,7 @@
 import User from '../db/models/userModel.js';
+import { getAccessToken, getRefreshToken, deleteRefreshTokens } from '../services/auth/jwtService.js';
 
 class userController {
-  async list(req, res) {
-    const users = await User.find();
-    res.json(users);
-  }
-
   async create(req, res) {
     const user = new User({
       email: req.body.email,
@@ -32,10 +28,19 @@ class userController {
       if (!isValidPassword) {
         throw new Error('Password not valid');
       }
-      res.sendStatus(200);
-      console.log('Zalogowy!');
+      res.json({ accessToken: getAccessToken(user), refreshToken: getRefreshToken(user) });
     } catch (e) {
-      res.status(404).send('Email or password is wrong');
+      console.log(e);
+      res.status(401).send('Email or password is wrong');
+    }
+  }
+
+  async logout(req, res) {
+    try {
+      await deleteRefreshTokens(req.user.id);
+      res.sendStatus(200);
+    } catch (e) {
+      console.log(e);
     }
   }
 }
