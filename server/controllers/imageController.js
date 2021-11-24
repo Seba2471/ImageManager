@@ -30,11 +30,10 @@ class imageController {
           console.log(err);
         } else {
           docs.imagesCount += 1;
-          console.log('Updated User : ', docs);
         }
       });
       await image.save();
-      res.sendStatus(201);
+      res.status(201).send('Image add');
     } catch (e) {
       console.log(e);
       removeErrorImage(req.file.filename);
