@@ -1,4 +1,5 @@
 import getApi from '../getApi.js';
+import VueAuthImage from 'vue-auth-image';
 // import axios from 'axios';
 
 // const LOGIN_URL = '/login';
@@ -31,6 +32,7 @@ const actions = {
       const response = await getApi().post('/login', payload);
       context.commit('setAccessToken', response.data.accessToken);
       context.commit('setRefreshToken', response.data.refreshToken);
+      VueAuthImage.setup(response.data.accessToken);
       return true;
     } catch (err) {
       context.commit('setAccessToken', null);
