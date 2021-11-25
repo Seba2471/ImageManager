@@ -1,11 +1,9 @@
 <template>
-  <div>Strona głowna</div>
+  <div>Register</div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
-
-  components: {},
+  name: 'Register',
 };
 </script>
