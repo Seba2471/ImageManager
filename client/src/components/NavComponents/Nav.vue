@@ -7,7 +7,7 @@
 
       <v-list-item-title>Imager</v-list-item-title>
 
-      <v-btn icon @click.stop="mini = !mini">
+      <v-btn icon @click="mini = !mini">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
     </v-list-item>
@@ -45,9 +45,13 @@ export default {
           icon: 'mdi-help-box',
         },
       ],
-      hover: true,
       mini: false,
     };
+  },
+  watch: {
+    mini: function (val) {
+      this.$emit('clicked', val);
+    },
   },
 };
 </script>

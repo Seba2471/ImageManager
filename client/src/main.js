@@ -8,6 +8,10 @@ import VueAuthImage from 'vue-auth-image';
 // register vue-auth-image directive
 Vue.use(VueAuthImage);
 
+if (store.getters.getAccessToken) {
+  VueAuthImage.setup(store.getters.getAccessToken);
+}
+
 Vue.config.productionTip = false;
 
 new Vue({
