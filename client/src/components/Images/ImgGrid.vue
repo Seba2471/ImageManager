@@ -30,7 +30,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'ImgGrid',
-  props: ['selectMode'],
+  props: ['images', 'selectMode'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
@@ -43,7 +43,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      images: 'getImages',
       selected: 'getSelected',
     }),
   },

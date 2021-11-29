@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Images from '../views/Images.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
+import Album from '../views/Album.vue';
 
 Vue.use(VueRouter);
 
@@ -14,11 +15,6 @@ const routes = [
     component: Home,
   },
   {
-    path: '/images',
-    name: 'Images',
-    component: Images,
-  },
-  {
     path: '/login',
     name: 'Login',
     component: Login,
@@ -27,6 +23,17 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/images',
+    name: 'Images',
+    component: Images,
+  },
+  {
+    path: '/album/:id',
+    name: 'Album',
+    component: Album,
+    props: true,
   },
 ];
 

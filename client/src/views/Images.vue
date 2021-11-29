@@ -19,7 +19,7 @@
       <v-btn v-if="selectMode" @click="changeSelectMode" class="ml-2" small color="error"> Anuluj </v-btn>
     </div>
 
-    <ImgGrid v-bind:selectMode="this.selectMode"></ImgGrid>
+    <ImgGrid v-bind:selectMode="this.selectMode" v-bind:images="this.images"></ImgGrid>
   </v-main>
 </template>
 

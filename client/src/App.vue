@@ -29,7 +29,7 @@
 
 <script>
 import TopBar from './components/TopBar.vue';
-import NavComponent from './components/NavComponents/Nav.vue';
+import NavComponent from './components/Nav.vue';
 
 export default {
   name: 'App',

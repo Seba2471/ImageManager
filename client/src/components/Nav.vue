@@ -31,7 +31,7 @@
             <v-list-item-title v-text="item.title"></v-list-item-title>
           </v-list-item-content>
         </template>
-        <v-list-item :to="{ path: `/albums/${album._id}` }" v-for="album in albums" :key="album._id">
+        <v-list-item :to="{ path: `/album/${album._id}` }" v-for="album in albums" :key="album._id">
           <v-list-item-icon><v-icon> mdi-panorama-variant</v-icon> </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title v-text="album.name"></v-list-item-title>
