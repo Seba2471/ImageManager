@@ -4,17 +4,27 @@ const IMAGES_URL = '/images';
 
 const state = {
   images: [],
+  selected: [],
 };
 
 const getters = {
   getImages(state) {
     return state.images;
   },
+  getSelected(state) {
+    return state.selected;
+  },
 };
 
 const mutations = {
   setImages(state, images) {
     state.images = images;
+  },
+  setSelected(state, selected) {
+    state.selected = selected;
+  },
+  addSelected(state, selected) {
+    state.selected = [...state.selected, selected];
   },
 };
 

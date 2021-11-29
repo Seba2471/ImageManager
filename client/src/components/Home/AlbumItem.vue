@@ -5,12 +5,15 @@
       :max-width="100"
       class="d-flex justify-center"
     ></v-img>
-    Wakacje 2019
+    <p class="text-center">{{ albumName }}</p>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ['albumName'],
+  name: 'AlbumItem',
+};
 </script>
 
 <style lang="scss" scoped></style>

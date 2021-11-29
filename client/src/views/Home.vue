@@ -5,26 +5,15 @@
       <v-divider class="mb-5" width="120px" />
     </div>
     <v-row class="mb-5" justify-center>
-      <v-col cols="1" class="d-flex justify-end align-center"><v-icon>mdi-chevron-left</v-icon></v-col>
-      <v-col sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
-        <AlbumItem />
+      <v-col cols="1" class="d-flex justify-end align-center" v-if="this.albums.length > 3"><v-icon>mdi-chevron-left</v-icon></v-col>
+      <v-col v-for="album in albums" :key="album.id" sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
+        <AlbumItem :albumName="album.name" />
       </v-col>
-      <v-col sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
-        <AlbumItem />
-      </v-col>
-      <v-col sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
-        <AlbumItem />
-      </v-col>
-      <v-col sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
-        <AlbumItem />
-      </v-col>
-      <v-col sm="6" md="4" lg="3" xl="2" class="d-flex justify-center">
-        <AlbumItem />
-      </v-col>
-      <v-col cols="1" class="d-flex justify-start align-center"><v-icon>mdi-chevron-right</v-icon></v-col>
+
+      <v-col cols="1" class="d-flex justify-start align-center" v-if="this.albums.length > 3"><v-icon>mdi-chevron-right</v-icon></v-col>
     </v-row>
     <div class="mt-5 ml-6">
-      Moje albumy
+      Moje zdjęcia
       <v-divider class="mb-5" width="120px" />
     </div>
     <v-row>
@@ -33,7 +22,9 @@
       </v-col>
 
       <v-col class="d-flex justify-center" cols="12" sm="6" md="4" lg="3" xl="2">
-        <v-btn color="primary">Wszystkie zdjęcia </v-btn>
+        <router-link :to="{ name: 'Images' }">
+          <v-btn color="primary">Wszystkie zdjęcia </v-btn>
+        </router-link>
       </v-col>
     </v-row>
     <v-overlay :value="overlay">
@@ -72,20 +63,28 @@ export default {
   },
   created() {
     this.fetchImages();
-    this.displayImages = this.images.splice(0, 12);
+    this.fetchAlbums();
+    if (this.windowWidth < 1250) {
+      this.displayImages = this.images.splice(0, 6);
+    } else if (this.windowWidth > 1250 && this.windowWidth < 1904) {
+      this.displayImages = this.images.splice(0, 8);
+    } else if (this.windowWidth > 1904) {
+      this.displayImages = this.images.splice(0, 12);
+    }
   },
   computed: {
     ...mapGetters({
       images: 'getImages',
+      albums: 'getAlbums',
     }),
   },
   methods: {
     ...mapActions({
       fetchImages: 'fetchImages',
+      fetchAlbums: 'fetchAlbums',
     }),
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';
-      console.log(this.windowWidth);
       if (this.windowWidth > 1904) {
         this.overlayImageSize = '900px';
       } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
