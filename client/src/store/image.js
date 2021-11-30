@@ -37,20 +37,20 @@ const actions = {
       console.log(e);
     }
   },
-  addImages(context, payload) {
+  async addImages(context, payload) {
     let formData = new FormData();
-    // payload.files.map((file) => {
-    //   formData.append('files[' + file + ']');
-    // });
-    formData.append('image', payload.files);
-    formData.append('orignal_name', 'Testowy');
+
+    payload.files.map((file) => {
+      formData.append('image', file);
+    });
 
     try {
-      getApi().post('/image', formData, {
+      await getApi().post('/image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      context.dispatch('fetchImages');
     } catch (e) {
       console.log(e);
     }

@@ -19,7 +19,7 @@
       <v-btn v-if="selectMode" @click="changeSelectMode" class="ml-2" small color="error"> Anuluj </v-btn>
     </div>
     <v-overlay :value="overlay">
-      <ImgUpload />
+      <ImgUpload @clicked="changeOverlay" />
     </v-overlay>
     <ImgGrid v-bind:selectMode="this.selectMode" v-bind:images="this.images"></ImgGrid>
   </v-main>
@@ -35,8 +35,8 @@ export default {
   components: { ImgGrid, ImgUpload },
   data() {
     return {
-      selectMode: false,
       overlay: false,
+      selectMode: false,
     };
   },
   create() {
@@ -63,6 +63,9 @@ export default {
       if (this.selectMode) {
         this.setSelected([]);
       }
+    },
+    changeOverlay(value) {
+      this.overlay = value;
     },
     addImages() {
       this.overlay = true;

@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12">
         <v-card min-width="500px" min-height="500px" color="grey">
-          <v-file-input v-model="files" label="File input"></v-file-input>
+          <v-file-input @change="Preview_image" v-model="files" label="File input" multiple></v-file-input>
           <v-btn @click="submitImages"> Dodaj </v-btn>
         </v-card>
       </v-col>
@@ -16,15 +16,18 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      files: null,
+      files: [],
     };
   },
   methods: {
     ...mapActions({
       addImages: 'addImages',
     }),
+    Preview_image() {},
     submitImages() {
       this.addImages({ files: this.files });
+      this.$emit('clicked', false);
+      console.log(this.files);
     },
   },
 };
