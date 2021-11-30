@@ -4,7 +4,7 @@
       Moje zdjęcia
       <v-divider class="mb-3" width="120px" />
       <v-btn v-if="!selectMode" @click="changeSelectMode" small color="primary"> Zazanacz </v-btn>
-      <v-btn v-if="!selectMode" @click="changeSelectMode" class="ml-2" small color="success"> Dodaj zdjęcia </v-btn>
+      <v-btn v-if="!selectMode" @click="addImages" class="ml-2" small color="success"> Dodaj zdjęcia </v-btn>
       <v-menu v-if="selectMode" offset-y close-on-click>
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on" small> Dodaj do albumu </v-btn>
@@ -15,7 +15,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <v-btn v-if="selectMode" @click="changeSelectMode" class="ml-2" small color="primary"> Stwórz nowy album </v-btn>
+      <v-btn v-if="selectMode" @click="addToNewAlbum" class="ml-2" small color="primary"> Stwórz nowy album </v-btn>
       <v-btn v-if="selectMode" @click="changeSelectMode" class="ml-2" small color="error"> Anuluj </v-btn>
     </div>
 
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       selectMode: false,
+      overlay: false,
     };
   },
   create() {
@@ -48,10 +49,11 @@ export default {
   methods: {
     ...mapMutations({
       setSelected: 'setSelected',
-      addAlbumImage: 'addAlbumImage',
     }),
     ...mapActions({
       fetchImages: 'fetchImages',
+      addAlbumImages: 'addAlbumImages',
+      createAlbum: 'createAlbum',
     }),
     changeSelectMode() {
       this.selectMode = !this.selectMode;
@@ -59,8 +61,14 @@ export default {
         this.setSelected([]);
       }
     },
+    addImages() {},
     addToAlbum(id) {
-      this.addAlbumImage(id, this.selected);
+      this.addAlbumImages({ id: id, images: this.selected });
+      this.selectMode = !this.selectMode;
+    },
+    addToNewAlbum() {
+      this.createAlbum({ name: 'Wakacje 2020', images: this.selected });
+      this.selectMode = !this.selectMode;
     },
   },
 };
