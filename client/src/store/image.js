@@ -37,6 +37,24 @@ const actions = {
       console.log(e);
     }
   },
+  addImages(context, payload) {
+    let formData = new FormData();
+    // payload.files.map((file) => {
+    //   formData.append('files[' + file + ']');
+    // });
+    formData.append('image', payload.files);
+    formData.append('orignal_name', 'Testowy');
+
+    try {
+      getApi().post('/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default {

@@ -18,18 +18,21 @@
       <v-btn v-if="selectMode" @click="addToNewAlbum" class="ml-2" small color="primary"> Stwórz nowy album </v-btn>
       <v-btn v-if="selectMode" @click="changeSelectMode" class="ml-2" small color="error"> Anuluj </v-btn>
     </div>
-
+    <v-overlay :value="overlay">
+      <ImgUpload />
+    </v-overlay>
     <ImgGrid v-bind:selectMode="this.selectMode" v-bind:images="this.images"></ImgGrid>
   </v-main>
 </template>
 
 <script>
+import ImgUpload from '../components/Images/ImgUpload.vue';
 import ImgGrid from '../components/Images/ImgGrid.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Images',
-  components: { ImgGrid },
+  components: { ImgGrid, ImgUpload },
   data() {
     return {
       selectMode: false,
@@ -61,7 +64,9 @@ export default {
         this.setSelected([]);
       }
     },
-    addImages() {},
+    addImages() {
+      this.overlay = true;
+    },
     addToAlbum(id) {
       this.addAlbumImages({ id: id, images: this.selected });
       this.selectMode = !this.selectMode;
