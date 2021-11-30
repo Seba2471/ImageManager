@@ -20,6 +20,7 @@ class userController {
   }
   async login(req, res) {
     try {
+      console.log(req.body.email);
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
         throw new Error('User not found');
