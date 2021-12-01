@@ -1,36 +1,37 @@
 <template>
-  <v-row class="d-flex align-center mt-2">
-    <v-autocomplete
-      v-model="select"
-      :loading="loading"
-      :items="items"
-      :search-input.sync="search"
-      cache-items
-      class="ml-12"
-      flat
-      hide-no-data
-      hide-details
-      label="Szukaj"
-      solo-inverted
-      light
-      prepend-icon="mdi-magnify"
-    ></v-autocomplete>
-    <v-col class="d-flex justify-end">
-      <v-menu left offset-y transition="scale-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <div class="d-flex align-center">seba4@gmail.com</div>
+  <div>
+    <v-row class="wrapper">
+      <v-col lg="1">
+        <h1 class="d-flex align-center">PICTLIST</h1>
+      </v-col>
+      <v-col lg="4" offset="1">
+        <v-text-field hide-details solo label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
+      </v-col>
+      <v-col lg="1" offset="3" class="d-flex align-center">
+        <v-row>
+          <v-col class="d-flex align-center justify-end">
+            <v-icon> mdi-tray-arrow-up </v-icon>
+            <div class="d-flex align-center ml-2">Prześlij</div>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col lg="2" class="d-flex justify-end">
+        <v-menu left offset-y transition="scale-transition">
+          <template v-slot:activator="{ on, attrs }">
+            <div class="d-flex align-center">seba4@gmail.com</div>
 
-          <v-icon x-large v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
-        </template>
+            <v-icon x-large v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
+          </template>
 
-        <v-list>
-          <v-list-item>
-            <v-list-item-title>Wyloguj</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-col>
-  </v-row>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>Wyloguj</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -47,4 +48,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.wrapper {
+  padding-left: 2%;
+  padding-right: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin: 0 0;
+}
+</style>

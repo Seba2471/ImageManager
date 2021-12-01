@@ -1,13 +1,14 @@
 <template>
-  <v-container>
+  <v-row>
     <v-row>
-      <v-col class="d-flex justify-center" v-for="image in images" :key="image.id" cols="12" sm="6" md="4" lg="3" xl="2">
-        <div class="img_wrp">
-          <img @click="imgAction(image.file_name, image._id)" v-auth-image="`${link}${image.file_name}`" width="200" height="200" />
-          <v-btn v-if="showSelectedIcon(image._id)" class="selectIcon" fab x-small>
-            <v-icon color="blue" medium> mdi-check </v-icon>
-          </v-btn>
-        </div>
+      <v-col class="d-flex justify-center" v-for="image in images" :key="image.id" cols="10" sm="6" md="4" lg="3" xl="2">
+        <img
+          @mouseover="showIcon"
+          @click="imgAction(image.file_name, image._id)"
+          v-auth-image="`${link}${image.file_name}`"
+          width="200"
+          height="200"
+        />
       </v-col>
     </v-row>
     <v-overlay :value="overlay">
@@ -23,7 +24,7 @@
         <v-icon x-large @click="nextImg">mdi-chevron-right</v-icon>
       </v-row>
     </v-overlay>
-  </v-container>
+  </v-row>
 </template>
 
 <script>
@@ -107,16 +108,4 @@ export default {
   },
 };
 </script>
-<style>
-.img_wrp {
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-}
-.selectIcon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: -5px -5px;
-}
-</style>
+<style></style>
