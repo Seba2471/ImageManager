@@ -2,7 +2,7 @@
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
     <TopBar class="topBar" />
     <v-row>
-      <div v-if="false" cols="2" class="navComponent">
+      <div v-if="true" cols="1" class="navComponent">
         <NavComponent />
       </div>
       <v-col>

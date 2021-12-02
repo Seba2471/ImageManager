@@ -57,7 +57,7 @@ export default {
       addImages: 'addImages',
     }),
     changeOverlay() {
-      this.$emit('clicked', false);
+      this.$emit('close', false);
     },
     Preview_image() {
       this.isEmpty = false;
@@ -67,7 +67,7 @@ export default {
       this.addImages({
         files: this.files,
       });
-      this.$emit('clicked', false);
+      this.$emit('close', false);
     },
   },
 };
