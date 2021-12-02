@@ -25,6 +25,18 @@ export default {
       iconClass: 'icon',
     };
   },
+  watch: {
+    selected: function (val) {
+      if (val.length == 0) {
+        console.log('odznacz');
+        this.isSelect = false;
+        this.hover = false;
+        this.iconColor = '#ffffff';
+        this.imgClass = '';
+        this.iconClass = 'icon';
+      }
+    },
+  },
   computed: {
     ...mapGetters({
       selected: 'getSelected',
