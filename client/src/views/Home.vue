@@ -1,14 +1,62 @@
 <template>
-  <v-container> <Img /> </v-container>
+  <v-container>
+    <v-row justify-center>
+      <v-col xl="4" lg="6" xs="12" offset-xl="8" offset-lg="6" class="d-flex align-center justify-end">
+        <v-col cols="5" v-if="isSelected">
+          <v-row>
+            <v-menu bottom :close-on-click="closeOnClick">
+              <template v-slot:activator="{ on, attrs }">
+                <v-col class="imagesButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
+                  <v-icon> mdi-plus-box-outline </v-icon>
+                  <span class="ml-3">Dodaj do albumu</span>
+                </v-col>
+              </template>
+
+              <v-list class="pa-5">
+                <v-list-item class="albumItem pl-4 pr-4">
+                  <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
+                </v-list-item>
+                <v-list-item class="albumItem pl-4 pr-4 d-flex align-center justify-center" v-for="album in this.albums" :key="album._id">
+                  <v-list-item-title>
+                    <v-icon> mdi-panorama-variant </v-icon> <span class="ml-2"> {{ album.name }} </span>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-row>
+        </v-col>
+        <v-col cols="3" v-if="isSelected">
+          <v-row>
+            <v-col class="imagesButton pa-3 d-flex align-center justify-center" @click="sort">
+              <v-icon> mdi-trash-can-outline </v-icon>
+              <span class="ml-3">Usuń</span>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="5">
+          <v-row>
+            <v-col class="imagesButton pa-3 d-flex align-center justify-center" @click="sort">
+              <v-icon> mdi-sort</v-icon>
+              <span class="ml-3">Od najnowszych </span>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-col>
+    </v-row>
+    <ImgGrid />
+  </v-container>
 </template>
 
 <script>
-import Img from '../components/Images/Img.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
+
+import ImgGrid from '../components/Images/ImgGrid.vue';
 export default {
   name: 'Home',
 
-  components: { Img },
+  components: {
+    ImgGrid,
+  },
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
@@ -18,30 +66,28 @@ export default {
       overlayImageSize: '300px',
       displayImages: {},
       currentPosition: 0,
+      isSelected: false,
     };
-  },
-  created() {
-    this.fetchImages();
-    this.fetchAlbums();
-    if (this.windowWidth < 1250) {
-      this.displayImages = this.images.splice(0, 6);
-    } else if (this.windowWidth > 1250 && this.windowWidth < 1904) {
-      this.displayImages = this.images.splice(0, 8);
-    } else if (this.windowWidth > 1904) {
-      this.displayImages = this.images.splice(0, 12);
-    }
   },
   computed: {
     ...mapGetters({
-      images: 'getImages',
+      selected: 'getSelected',
       albums: 'getAlbums',
     }),
   },
+  watch: {
+    selected: function (val) {
+      if (val.length == 0) {
+        this.isSelected = false;
+      } else {
+        this.isSelected = true;
+      }
+    },
+  },
   methods: {
-    ...mapActions({
-      fetchImages: 'fetchImages',
-      fetchAlbums: 'fetchAlbums',
-    }),
+    sort() {
+      console.log('work');
+    },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';
       if (this.windowWidth > 1904) {
@@ -84,8 +130,15 @@ export default {
   },
 };
 </script>
+
 <style>
-.activeIcon {
-  background-color: red;
+.imagesButton:hover {
+  background-color: var(--v-secondary-base);
+  border-radius: 25px;
+}
+
+.albumItem:hover {
+  background-color: var(--v-secondary-base);
+  border-radius: 25px;
 }
 </style>

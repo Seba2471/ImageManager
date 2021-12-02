@@ -10,7 +10,6 @@
   "dependencies": {
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
-    "image-thumbnail": "^1.0.14",
     "vue": "^2.6.11",
     "vue-auth-image": "git://github.com/hans-peter123/vue-auth-image.git",
     "vue-light-gallery": "^1.0.1",
