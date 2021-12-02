@@ -6,19 +6,19 @@
           <v-row>
             <v-menu bottom close-on-click>
               <template v-slot:activator="{ on, attrs }">
-                <v-col class="imagesButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
+                <v-col class="customButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
                   <v-icon> mdi-plus-box-outline </v-icon>
                   <span class="ml-3">Dodaj do albumu</span>
                 </v-col>
               </template>
 
               <v-list class="pa-5">
-                <v-list-item :to="{ name: 'NewAlbum' }" class="albumItem pl-4 pr-4">
+                <v-list-item :to="{ name: 'NewAlbum' }" class="customButton pl-4 pr-4">
                   <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
                 </v-list-item>
                 <v-list-item
                   @click="addImagesToExistAlbum(album._id)"
-                  class="albumItem pl-4 pr-4 d-flex align-center justify-center"
+                  class="customButton pl-4 pr-4 d-flex align-center justify-center"
                   v-for="album in this.albums"
                   :key="album._id"
                 >
@@ -32,7 +32,7 @@
         </v-col>
         <v-col cols="3" v-if="isSelected">
           <v-row>
-            <v-col class="imagesButton pa-3 d-flex align-center justify-center" @click="sort">
+            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="sort">
               <v-icon> mdi-trash-can-outline </v-icon>
               <span class="ml-3">Usuń</span>
             </v-col>
@@ -40,7 +40,7 @@
         </v-col>
         <v-col cols="5">
           <v-row>
-            <v-col class="imagesButton pa-3 d-flex align-center justify-center" @click="sort">
+            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="sort">
               <v-icon> mdi-sort</v-icon>
               <span class="ml-3">Od najnowszych </span>
             </v-col>
@@ -148,15 +148,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.imagesButton:hover {
-  background-color: var(--v-secondary-base);
-  border-radius: 25px;
-}
-
-.albumItem:hover {
-  background-color: var(--v-secondary-base);
-  border-radius: 25px;
-}
-</style>

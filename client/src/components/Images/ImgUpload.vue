@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-card light color="background" min-width="800px">
-      <v-row>
+    <v-card light color="background" min-width="800px" max-width="1000">
+      <v-row class="mb-5">
         <v-col class="d-flex justify-end mt-1 mr-2">
           <v-icon @click="changeOverlay"> mdi-close </v-icon>
         </v-col>
@@ -13,8 +13,7 @@
               show-size
               counter
               prepend-icon="mdi-camera"
-              light
-              color="primary"
+              color="secondary"
               @change="Preview_image"
               v-model="files"
               label="Wybierz zdjęcia"
@@ -23,18 +22,20 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="d-flex justify-center" v-for="(url, index) in urls" :key="index" sm="6" md="4" lg="3" xl="3">
-            <div class="img_wrp">
-              <img :src="url" width="70" height="70" />
-              <div class="selectIcon">
-                <v-icon color="red" small> mdi-close </v-icon>
+          <ul>
+            <li v-for="(url, index) in urls" :key="index">
+              <div cols="2" class="img_wrp">
+                <img :src="url" height="100" />
+                <v-icon class="deleteIcon" color="red" small> mdi-close </v-icon>
               </div>
-            </div>
-          </v-col>
+            </li>
+            <li></li>
+          </ul>
         </v-row>
-        <v-row>
-          <v-col v-if="!isEmpty" cols="4" class="d-flex align-center">
-            <v-btn v-if="!isEmpty" block color="primary" @click="submitImages"> Prześlij zdjęcia </v-btn>
+        <v-row class="mt-5">
+          <v-col cols="4" offset="4" v-if="!isEmpty" class="d-flex align-center justify-center customButton">
+            <v-icon> mdi-tray-arrow-up </v-icon>
+            <div class="d-flex align-center ml-2">Prześlij</div>
           </v-col>
         </v-row>
       </div>
@@ -73,13 +74,36 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.selectIcon {
-  margin-top: -12px;
-  margin-right: -10px;
+<style scoped>
+.deleteIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 2px 2px;
+}
+.img_wrp {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+img {
+  margin: 5px;
+}
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
+
+li {
+  margin-top: 2vh;
+  height: 2%;
+  flex-grow: 1;
+}
+li:last-child {
+  flex-grow: 10;
 }
 .wrapper {
   padding: 50px;
-  margin-bottom: -50px;
 }
 </style>

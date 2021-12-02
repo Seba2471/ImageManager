@@ -39,7 +39,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .App {
   font-family: 'Montserrat', sans-serif;
 }
@@ -54,5 +54,12 @@ export default {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   padding-right: 1%;
+}
+.customButton:hover {
+  background-color: var(--v-light-base);
+  border-radius: 25px;
+}
+.customButton {
+  color: var(--v-text-base);
 }
 </style>

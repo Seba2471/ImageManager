@@ -9,7 +9,7 @@
       </v-col>
       <v-col lg="1" offset="3" class="d-flex align-center">
         <v-row>
-          <v-col @click="showImgUploader = true" class="d-flex align-center justify-center imagesButton">
+          <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
             <div class="d-flex align-center ml-2">Prześlij</div>
           </v-col>

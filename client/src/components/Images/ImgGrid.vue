@@ -2,7 +2,7 @@
   <v-row class="mt-3 d-flex justify-center">
     <ul v-if="!mobile">
       <li v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" :image="image" />
+        <Img class="ma-3 imgComponent" :image="image" height="250" />
       </li>
       <li></li>
     </ul>

@@ -1,6 +1,6 @@
 <template>
   <div class="img_wrp" @mouseover="hover = true" @mouseleave="hover = false">
-    <img :class="imgClass" v-auth-image="`${link}${image.file_name}`" height="250" />
+    <img :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
     <div v-if="hover || isSelect" :class="iconClass" fab x-small>
       <v-icon @click="IconSelect(image._id)" @mouseover="IconHover" @mouseleave="IconNoHover" :color="iconColor" medium>
         mdi-checkbox-marked-circle
@@ -14,7 +14,7 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Img',
-  props: ['image'],
+  props: ['image', 'height'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
