@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card light color="background" min-width="800px" max-width="1000">
+    <v-card light color="background" class="uploaderCard">
       <v-row class="mb-5">
         <v-col class="d-flex justify-end mt-1 mr-2">
           <v-icon @click="changeOverlay"> mdi-close </v-icon>
@@ -24,16 +24,18 @@
         <v-row>
           <ul>
             <li v-for="(url, index) in urls" :key="index">
-              <div cols="2" class="img_wrp">
-                <img :src="url" height="100" />
-                <v-icon class="deleteIcon" color="red" small> mdi-close </v-icon>
+              <div class="img_wrp">
+                <img :src="url" height="100px" />
+                <div class="deleteIcon">
+                  <v-icon @click="deleteImg(url)" color="red" small> mdi-close </v-icon>
+                </div>
               </div>
             </li>
             <li></li>
           </ul>
         </v-row>
         <v-row class="mt-5">
-          <v-col cols="4" offset="4" v-if="!isEmpty" class="d-flex align-center justify-center customButton">
+          <v-col @click="submitImages" cols="4" offset="4" v-if="!isEmpty" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
             <div class="d-flex align-center ml-2">Prześlij</div>
           </v-col>
@@ -53,6 +55,13 @@ export default {
       isEmpty: true,
     };
   },
+  watch: {
+    files: function (val) {
+      if (val.length == 0) {
+        this.isEmpty = true;
+      }
+    },
+  },
   methods: {
     ...mapActions({
       addImages: 'addImages',
@@ -63,6 +72,11 @@ export default {
     Preview_image() {
       this.isEmpty = false;
       this.files.map((file) => this.urls.push(URL.createObjectURL(file)));
+    },
+    deleteImg(val) {
+      const index = this.urls.indexOf(val);
+      this.urls = this.urls.filter((url) => url != val);
+      this.files.splice(index, 1);
     },
     submitImages() {
       this.addImages({
@@ -75,11 +89,14 @@ export default {
 </script>
 
 <style scoped>
+.uploaderCard {
+  min-width: 800px;
+  max-width: 1000px;
+}
 .deleteIcon {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin: 2px 2px;
+  top: -10px;
+  right: -5px;
 }
 .img_wrp {
   display: inline-block;
@@ -87,7 +104,7 @@ export default {
   cursor: pointer;
 }
 img {
-  margin: 5px;
+  margin-left: 5px;
 }
 ul {
   display: flex;
