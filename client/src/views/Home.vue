@@ -13,7 +13,7 @@
               </template>
 
               <v-list class="pa-5">
-                <v-list-item class="albumItem pl-4 pr-4">
+                <v-list-item :to="{ name: 'NewAlbum' }" class="albumItem pl-4 pr-4">
                   <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
                 </v-list-item>
                 <v-list-item

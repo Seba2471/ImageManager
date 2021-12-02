@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Images from '../views/Images.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Album from '../views/Album.vue';
+import NewAlbum from '../views/NewAlbum.vue';
 
 Vue.use(VueRouter);
 
@@ -25,14 +25,15 @@ const routes = [
     component: Register,
   },
   {
-    path: '/images',
-    name: 'Images',
-    component: Images,
-  },
-  {
     path: '/albums',
     name: 'Albums',
     component: Album,
+    props: true,
+  },
+  {
+    path: '/album/new',
+    name: 'NewAlbum',
+    component: NewAlbum,
     props: true,
   },
 ];
