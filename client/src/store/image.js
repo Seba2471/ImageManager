@@ -37,6 +37,24 @@ const actions = {
       console.log(e);
     }
   },
+  async addImages(context, payload) {
+    let formData = new FormData();
+
+    payload.files.map((file) => {
+      formData.append('image', file);
+    });
+
+    try {
+      await getApi().post('/image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      context.dispatch('fetchImages');
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
 
 export default {

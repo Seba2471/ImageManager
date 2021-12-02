@@ -30,8 +30,8 @@ const routes = [
     component: Images,
   },
   {
-    path: '/album/:id',
-    name: 'Album',
+    path: '/albums',
+    name: 'Albums',
     component: Album,
     props: true,
   },
