@@ -4,7 +4,7 @@
       <v-col xl="4" lg="6" xs="12" offset-xl="8" offset-lg="6" class="d-flex align-center justify-end">
         <v-col cols="5" v-if="isSelected">
           <v-row>
-            <v-menu bottom :close-on-click="closeOnClick">
+            <v-menu bottom close-on-click>
               <template v-slot:activator="{ on, attrs }">
                 <v-col class="imagesButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
                   <v-icon> mdi-plus-box-outline </v-icon>
@@ -16,7 +16,12 @@
                 <v-list-item class="albumItem pl-4 pr-4">
                   <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
                 </v-list-item>
-                <v-list-item class="albumItem pl-4 pr-4 d-flex align-center justify-center" v-for="album in this.albums" :key="album._id">
+                <v-list-item
+                  @click="addImagesToExistAlbum(album._id)"
+                  class="albumItem pl-4 pr-4 d-flex align-center justify-center"
+                  v-for="album in this.albums"
+                  :key="album._id"
+                >
                   <v-list-item-title>
                     <v-icon> mdi-panorama-variant </v-icon> <span class="ml-2"> {{ album.name }} </span>
                   </v-list-item-title>
@@ -48,7 +53,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 import ImgGrid from '../components/Images/ImgGrid.vue';
 export default {
@@ -85,8 +90,21 @@ export default {
     },
   },
   methods: {
+    ...mapMutations({
+      setSelected: 'setSelected',
+    }),
+    ...mapActions({
+      fetchAlbums: 'fetchAlbums',
+      addAlbumImages: 'addAlbumImages',
+      createAlbum: 'createAlbum',
+    }),
     sort() {
       console.log('work');
+    },
+    addImagesToExistAlbum(id) {
+      this.addAlbumImages({ id, images: this.selected });
+      this.setSelected([]);
+      console.log(this.selected);
     },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';
