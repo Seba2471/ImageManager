@@ -1,16 +1,16 @@
 <template>
-  <v-row>
-    <v-row>
-      <v-col class="d-flex justify-center" v-for="image in images" :key="image.id" cols="10" sm="6" md="4" lg="3" xl="2">
-        <img
-          @mouseover="showIcon"
-          @click="imgAction(image.file_name, image._id)"
-          v-auth-image="`${link}${image.file_name}`"
-          width="200"
-          height="200"
-        />
+  <v-row class="mt-3 d-flex justify-center">
+    <ul v-if="!mobile">
+      <li v-for="(image, index) in this.images" :key="index">
+        <Img class="ma-3 imgComponent" :image="image" />
+      </li>
+      <li></li>
+    </ul>
+    <div v-if="mobile">
+      <v-col v-for="(image, index) in this.images" :key="index">
+        <Img class="ma-3 imgComponent" :image="image" />
       </v-col>
-    </v-row>
+    </div>
     <v-overlay :value="overlay">
       <v-row>
         <v-col cols="10" class="d-flex justify-end">
@@ -28,10 +28,11 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import Img from './Img.vue';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
+  components: { Img },
   name: 'ImgGrid',
-  props: ['images', 'selectMode'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
@@ -40,17 +41,34 @@ export default {
       currentPosition: 0,
       windowWidth: window.innerWidth,
       overlayImageSize: '300px',
+      mobile: false,
     };
+  },
+  watch: {
+    windowWidth: function (val) {
+      console.log(val);
+    },
+  },
+  created() {
+    if (this.windowWidth <= 750) {
+      this.mobile = true;
+    }
+    this.fetchImages();
+    this.setSelected([]);
   },
   computed: {
     ...mapGetters({
       selected: 'getSelected',
+      images: 'getImages',
     }),
   },
   methods: {
     ...mapMutations({
       addSelected: 'addSelected',
       setSelected: 'setSelected',
+    }),
+    ...mapActions({
+      fetchImages: 'fetchImages',
     }),
     imgAction(file_name, id) {
       if (this.selectMode) {
@@ -108,4 +126,46 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+}
+
+li {
+  margin-top: 2vh;
+  height: 2%;
+  flex-grow: 1;
+}
+li:last-child {
+  flex-grow: 10;
+}
+@media (max-aspect-ratio: 1/1) {
+  li {
+    height: 30%;
+  }
+}
+@media (max-height: 480px) {
+  li {
+    height: 80vh;
+  }
+}
+@media (max-aspect-ratio: 1/1) and (max-width: 480px) {
+  ul {
+    flex-direction: row;
+    padding-right: 24px;
+  }
+
+  li {
+    height: auto;
+    width: 100%;
+  }
+
+  .imgComponent {
+    width: 100%;
+    max-height: 75vh;
+    min-width: 0;
+  }
+}
+</style>

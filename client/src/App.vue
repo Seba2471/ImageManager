@@ -2,7 +2,7 @@
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
     <TopBar class="topBar" />
     <v-row>
-      <div cols="2" class="navComponent">
+      <div v-if="false" cols="2" class="navComponent">
         <NavComponent />
       </div>
       <v-col>
@@ -25,7 +25,15 @@ export default {
     TopBar,
   },
   data() {
-    return {};
+    return {
+      windowWidth: window.innerWidth,
+      mobile: false,
+    };
+  },
+  created() {
+    if (this.windowWidth <= 480) {
+      this.mobile = true;
+    }
   },
   methods: {},
 };
