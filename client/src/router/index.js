@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
-import Album from '../views/Album.vue';
+import Albums from '../views/Albums.vue';
 import NewAlbum from '../views/NewAlbum.vue';
 
 Vue.use(VueRouter);
@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/albums',
     name: 'Albums',
-    component: Album,
+    component: Albums,
     props: true,
   },
   {
