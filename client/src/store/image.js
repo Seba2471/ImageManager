@@ -1,6 +1,7 @@
 import getApi from '../getApi';
 
 const IMAGES_URL = '/images';
+const IMAGE_URL = '/image';
 
 const state = {
   images: [],
@@ -45,7 +46,7 @@ const actions = {
     });
 
     try {
-      await getApi().post('/image', formData, {
+      await getApi().post(IMAGE_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -53,6 +54,15 @@ const actions = {
       context.dispatch('fetchImages');
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  async deleteImage(context, payload) {
+    try {
+      await getApi().delete(IMAGE_URL + payload.id);
+      return true;
+    } catch (e) {
+      return false;
     }
   },
 };

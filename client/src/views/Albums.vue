@@ -2,7 +2,7 @@
   <div class="mt-15 ma-8">
     <v-row>
       <v-col cols="3" v-for="album in this.albums" :key="album._id">
-        <img class="albumImg d-flex justify-center align-center" v-auth-image="`${link}1638435250273.jpg`" />
+        <img class="albumImg d-flex justify-center align-center" v-auth-image="`${link}1638803858482.jpg`" />
         <span class="albumTitle mt-3 d-flex justify-center align-center"> {{ album.name }} </span>
       </v-col>
     </v-row>
@@ -23,7 +23,7 @@ export default {
       albums: 'getAlbums',
     }),
   },
-  create() {
+  created() {
     this.fetchAlbums();
   },
   methods: {

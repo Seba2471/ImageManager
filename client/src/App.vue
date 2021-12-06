@@ -2,7 +2,7 @@
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
     <TopBar class="topBar" />
     <v-row>
-      <div v-if="true" class="navComponent ml-3">
+      <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
       </div>
       <v-col>
@@ -42,7 +42,6 @@ export default {
 <style>
 .App {
   font-family: 'Montserrat', sans-serif;
-  margin-right: -1%;
 }
 .topBar {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);

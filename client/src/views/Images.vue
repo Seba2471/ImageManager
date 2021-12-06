@@ -21,7 +21,7 @@ export default {
       selectMode: false,
     };
   },
-  create() {
+  created() {
     this.fetchImages();
   },
   computed: {

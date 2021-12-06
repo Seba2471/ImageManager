@@ -48,7 +48,7 @@
         </v-col>
       </v-col>
     </v-row>
-    <ImgGrid imgHeight="250px" />
+    <ImgGrid class="mr-5" imgHeight="250px" />
   </v-container>
 </template>
 

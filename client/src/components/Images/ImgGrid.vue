@@ -6,14 +6,14 @@
       </li>
       <li></li>
     </ul>
-    <div v-if="mobile">
-      <v-col v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" :image="image" />
+    <v-row v-if="mobile" class="ma-5">
+      <v-col :cols="mobileCols" v-for="(image, index) in this.images" :key="index">
+        <Img class="ma-3 imgComponent" :image="image" :height="imgHeight" />
       </v-col>
-    </div>
+    </v-row>
     <v-overlay :value="overlay">
       <v-row>
-        <v-col cols="10" class="d-flex justify-end">
+        <v-col class="d-flex justify-end">
           <v-icon active-class="activeIcon" @click="closeImg" style="margin-right: -22%; margin-top: -3%"> mdi-close</v-icon>
         </v-col>
       </v-row>
@@ -31,7 +31,7 @@
 import Img from './Img.vue';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
-  props: ['imgHeight'],
+  props: ['imgHeight', 'mobileCols'],
   components: { Img },
   name: 'ImgGrid',
   data() {
@@ -51,7 +51,7 @@ export default {
     },
   },
   created() {
-    if (this.windowWidth <= 750) {
+    if (this.windowWidth <= 1050) {
       this.mobile = true;
     }
     this.fetchImages();
@@ -144,7 +144,7 @@ li:last-child {
 }
 @media (max-aspect-ratio: 1/1) {
   li {
-    height: 30%;
+    height: 20%;
   }
 }
 @media (max-height: 480px) {
@@ -161,12 +161,6 @@ li:last-child {
   li {
     height: auto;
     width: 100%;
-  }
-
-  .imgComponent {
-    width: 100%;
-    max-height: 75vh;
-    min-width: 0;
   }
 }
 </style>
