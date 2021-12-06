@@ -1,6 +1,6 @@
 import Image from '../db/models/imageModel.js';
 import User from '../db/models/userModel.js';
-import { removeErrorImage, moveImage, getImagePath, removeUserImage } from '../services/image/fileService.js';
+import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../services/image/fileService.js';
 
 class imageController {
   async userImage(req, res) {
@@ -15,28 +15,35 @@ class imageController {
         throw new Error('User not found');
       }
 
-      const image = new Image({
-        orignal_name: req.body.orignal_name,
-        file_name: req.file.filename,
-        owner: owner.id,
+      let images = [];
+
+      req.files.map((file) => {
+        const image = new Image({
+          orignal_name: file.originalname,
+          file_name: file.filename,
+          owner: owner.id,
+        });
+        image.path = moveImage(owner.id, file.filename);
+        images.push(image);
       });
-
-      image.path = moveImage(owner.id, req.file.filename);
-
-      const imagesCount = owner.imagesCount + 1;
-
-      User.findByIdAndUpdate(owner.id, { imagesCount }, function (err, docs) {
+      User.findByIdAndUpdate(owner.id, { imagesCount: owner.imagesCount + req.files.length }, function (err, docs) {
         if (err) {
           console.log(err);
         } else {
-          docs.imagesCount += 1;
+          docs.imagesCount += req.files.length;
         }
       });
-      await image.save();
-      res.status(201).send('Image add');
+      await Image.insertMany(images)
+        .then(function () {
+          console.log('Images add'); // Success
+        })
+        .catch(function (error) {
+          console.log(error); // Failure
+        });
+      res.status(201).send('Images add');
     } catch (e) {
       console.log(e);
-      removeErrorImage(req.file.filename);
+      removeErrorImage(req.files);
       res.sendStatus(403);
     }
   }
@@ -55,19 +62,14 @@ class imageController {
 
   async delete(req, res) {
     try {
-      const image = await Image.findById(req.params.id);
-      if (!image) {
-        throw new Error('Image not found');
-      }
-      const owner = await User.findById(image.owner);
+      removeUserImages(req.body.images);
+      const owner = await User.findById(req.user.id);
       owner.imagesCount -= 1;
-      removeUserImage(image);
-      await Image.findByIdAndDelete(req.params.id);
       owner.save();
       res.sendStatus(204);
     } catch (e) {
       console.log(e);
-      res.status(403).send('Image not found');
+      res.sendStatus(403);
     }
   }
 }

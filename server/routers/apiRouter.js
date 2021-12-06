@@ -19,9 +19,9 @@ router.post('/login', userController.login);
 router.post('/logout', isAuth, userController.logout);
 
 router.get('/images', isAuth, imageController.userImage);
-router.post('/image', isAuth, uploadImage.single('image'), fileExtensionErrorHandlindMiddleware, imageController.add);
+router.post('/image', isAuth, uploadImage.array('image'), fileExtensionErrorHandlindMiddleware, imageController.add);
 router.get('/image/:filename', isAuth, imageController.send);
-router.delete('/image/:id', isAuth, imageController.delete);
+router.delete('/image', isAuth, imageController.delete);
 
 router.post('/album', isAuth, albumController.create);
 router.get('/albums', isAuth, albumController.list);
