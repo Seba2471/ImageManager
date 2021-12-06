@@ -2,7 +2,7 @@
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
     <TopBar class="topBar" />
     <v-row>
-      <div v-if="false" cols="2" class="navComponent">
+      <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
       </div>
       <v-col>
@@ -39,7 +39,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .App {
   font-family: 'Montserrat', sans-serif;
 }
@@ -54,5 +54,12 @@ export default {
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
   padding-right: 1%;
+}
+.customButton:hover {
+  background-color: var(--v-light-base);
+  border-radius: 25px;
+}
+.customButton {
+  color: var(--v-text-base);
 }
 </style>

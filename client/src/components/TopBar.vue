@@ -9,11 +9,14 @@
       </v-col>
       <v-col lg="1" offset="3" class="d-flex align-center">
         <v-row>
-          <v-col class="d-flex align-center justify-end">
+          <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
             <div class="d-flex align-center ml-2">Prześlij</div>
           </v-col>
         </v-row>
+        <v-overlay :value="showImgUploader">
+          <ImgUpload @close="closeImagesUploader" />
+        </v-overlay>
       </v-col>
       <v-col lg="2" class="d-flex justify-end">
         <v-menu left offset-y transition="scale-transition">
@@ -35,7 +38,9 @@
 </template>
 
 <script>
+import ImgUpload from './Images/ImgUpload.vue';
 export default {
+  components: { ImgUpload },
   name: 'TopBar',
   data() {
     return {
@@ -43,7 +48,13 @@ export default {
       items: [],
       search: null,
       select: null,
+      showImgUploader: false,
     };
+  },
+  methods: {
+    closeImagesUploader(value) {
+      this.showImgUploader = value;
+    },
   },
 };
 </script>
