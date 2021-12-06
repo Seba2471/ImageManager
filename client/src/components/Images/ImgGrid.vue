@@ -1,8 +1,8 @@
 <template>
   <v-row class="mt-3 d-flex justify-center">
     <ul v-if="!mobile">
-      <li v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" :image="image" :height="imgHeight" />
+      <li @click="showImg(image.file_name)" v-for="(image, index) in this.images" :key="index">
+        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" />
       </li>
       <li></li>
     </ul>
@@ -14,14 +14,18 @@
     <v-overlay :value="overlay">
       <v-row>
         <v-col class="d-flex justify-end">
-          <v-icon active-class="activeIcon" @click="closeImg" style="margin-right: -22%; margin-top: -3%"> mdi-close</v-icon>
+          <v-icon active-class="activeIcon" @click="closeImg" style="margin-top: -1%"> mdi-close</v-icon>
         </v-col>
       </v-row>
       <v-row>
-        <v-icon x-large @click="prevImg">mdi-chevron-left</v-icon>
+        <v-col class="d-flex align-center">
+          <v-icon style="height: 40px" x-large @click="prevImg">mdi-chevron-left</v-icon>
+        </v-col>
 
         <img v-auth-image="`${link}${this.currentImg}`" :height="this.overlayImageSize" />
-        <v-icon x-large @click="nextImg">mdi-chevron-right</v-icon>
+        <v-col class="d-flex align-center">
+          <v-icon style="height: 40px" x-large @click="nextImg">mdi-chevron-right</v-icon>
+        </v-col>
       </v-row>
     </v-overlay>
   </v-row>
@@ -71,28 +75,24 @@ export default {
     ...mapActions({
       fetchImages: 'fetchImages',
     }),
-    imgAction(file_name, id) {
-      if (this.selectMode) {
-        if (this.selected.includes(id)) {
-          this.setSelected(this.selected.filter((item) => item != id));
-        } else {
-          this.addSelected(id);
-        }
-      } else {
-        document.documentElement.style.overflow = 'hidden';
-        if (this.windowWidth > 1904) {
-          this.overlayImageSize = '900px';
-        } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
-          this.overlayImageSize = '700px';
-        }
-        this.currentPosition = this.images
-          .map(function (e) {
-            return e.file_name;
-          })
-          .indexOf(file_name);
-        this.currentImg = file_name;
-        this.overlay = true;
+    showOverlay(val, fileName) {
+      console.log(val);
+      this.overlay = true;
+      this.showImg(fileName);
+    },
+    showImg(file_name) {
+      document.documentElement.style.overflow = 'hidden';
+      if (this.windowWidth > 1904) {
+        this.overlayImageSize = '900px';
+      } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
+        this.overlayImageSize = '700px';
       }
+      this.currentPosition = this.images
+        .map(function (e) {
+          return e.file_name;
+        })
+        .indexOf(file_name);
+      this.currentImg = file_name;
     },
     showSelectedIcon(id) {
       if (this.selectMode) {

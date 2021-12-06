@@ -1,6 +1,6 @@
 <template>
   <div class="img_wrp" @mouseover="hover = true" @mouseleave="hover = false">
-    <img :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
+    <img @click="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
     <div v-if="hover || isSelect" :class="iconClass" fab x-small>
       <v-icon @click="IconSelect(image._id)" @mouseover="IconHover" @mouseleave="IconNoHover" :color="iconColor" medium>
         mdi-checkbox-marked-circle
@@ -28,7 +28,6 @@ export default {
   watch: {
     selected: function (val) {
       if (val.length == 0) {
-        console.log('odznacz');
         this.isSelect = false;
         this.hover = false;
         this.iconColor = '#ffffff';
@@ -47,6 +46,9 @@ export default {
       addSelected: 'addSelected',
       setSelected: 'setSelected',
     }),
+    showOverlay(fileName) {
+      this.$emit('showImageOverlay', true, fileName);
+    },
     IconSelect(id) {
       if (!this.isSelect) {
         this.isSelect = true;
@@ -55,7 +57,6 @@ export default {
         this.iconClass = 'selectIcon';
         if (!this.selected.includes(id)) {
           this.addSelected(id);
-          console.log(this.selected);
         }
       } else {
         this.isSelect = false;
@@ -63,7 +64,6 @@ export default {
         this.imgClass = '';
         this.iconClass = 'icon';
         this.setSelected(this.selected.filter((item) => item != id));
-        console.log(this.selected);
       }
     },
     IconHover() {
