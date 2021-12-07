@@ -38,6 +38,17 @@ const actions = {
       return false;
     }
   },
+
+  async refresh(context) {
+    try {
+      const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
+      context.commit('setAccessToken', response.data.accessToken);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  },
 };
 
 export default {

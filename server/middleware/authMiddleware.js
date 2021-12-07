@@ -9,7 +9,7 @@ export const isAuth = (req, res, next) => {
 
   jwt.verify(token, accessKey, (err, data) => {
     if (err) {
-      return res.sendStatus(403);
+      return res.sendStatus(401);
     }
     req.user = data;
     next();

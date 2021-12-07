@@ -7,7 +7,7 @@ export const getAccessToken = (user) => {
     id: user.id,
     email: user.email,
   };
-  return jwt.sign(payload, accessKey, { expiresIn: '10h' });
+  return jwt.sign(payload, accessKey, { expiresIn: '20s' });
 };
 
 export const getRefreshToken = (user) => {

@@ -1,6 +1,16 @@
 import axios from 'axios';
 import store from './store';
 
+async function refreshToken(error) {
+  if (error.response.status === 401) {
+    if (await store.dispatch('refresh')) {
+      const config = { ...error.response.config };
+      config.headers.Authorization = `Bearer ${store.getters.getAccessToken}`;
+      return axios(config);
+    }
+  }
+}
+
 export default () => {
   const getAPI = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL,
@@ -8,5 +18,8 @@ export default () => {
       Authorization: `Bearer ${store.getters.getAccessToken}`,
     },
   });
+  getAPI.interceptors.response.use((response) => response, refreshToken);
   return getAPI;
 };
+
+axios.interceptors.response.use((response) => response, refreshToken);
