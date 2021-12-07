@@ -6,7 +6,6 @@ export const getAccessToken = (user) => {
   const payload = {
     id: user.id,
     email: user.email,
-    imagesCount: user.imagesCount,
   };
   return jwt.sign(payload, accessKey, { expiresIn: '10h' });
 };
@@ -15,7 +14,6 @@ export const getRefreshToken = (user) => {
   const payload = {
     id: user.id,
     email: user.email,
-    imagesCount: user.imagesCount,
   };
 
   const token = jwt.sign(payload, refreshKey);
@@ -26,6 +24,25 @@ export const getRefreshToken = (user) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const compareRefreshToken = (token) => {
+  let userData = {};
+  const refreshToken = RefreshToken.findOne({ refreshToken: token });
+  if (!refreshToken) {
+    throw new Error('Refresh Token Not Exists');
+  }
+  jwt.verify(token, refreshKey, (err, data) => {
+    if (err) {
+      console.log(err);
+      throw new Error('Refresh Token Incorrect');
+    }
+    return (userData = {
+      id: data.id,
+      email: data.email,
+    });
+  });
+  return userData;
 };
 
 export const saveRefreshToken = async (owner, refreshToken) => {
