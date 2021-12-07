@@ -57,9 +57,11 @@ const actions = {
     }
   },
 
-  async deleteImage(context, payload) {
+  async deleteImage(context) {
     try {
-      await getApi().delete(IMAGE_URL + payload.id);
+      await getApi().delete(IMAGE_URL, { data: { images: context.getters.getSelected } });
+      context.commit('setSelected', []);
+      context.dispatch('fetchImages');
       return true;
     } catch (e) {
       return false;

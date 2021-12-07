@@ -35,7 +35,7 @@ export default {
   name: 'Login',
   data() {
     return {
-      userEmail: 'seba4@gmail.com',
+      userEmail: 'sebix@gmail.com',
       userPassword: 'tajne',
       showPassword: false,
       wrong_data: false,

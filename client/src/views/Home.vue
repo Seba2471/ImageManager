@@ -32,7 +32,7 @@
         </v-col>
         <v-col cols="3" v-if="isSelected">
           <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="sort">
+            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
               <v-icon> mdi-trash-can-outline </v-icon>
               <span class="ml-3">Usuń</span>
             </v-col>
@@ -74,6 +74,10 @@ export default {
       isSelected: false,
     };
   },
+  created() {
+    this.fetchImages();
+    this.fetchAlbums();
+  },
   computed: {
     ...mapGetters({
       selected: 'getSelected',
@@ -94,8 +98,10 @@ export default {
       setSelected: 'setSelected',
     }),
     ...mapActions({
-      fetchAlbums: 'fetchAlbums',
+      fetchImages: 'fetchImages',
       addAlbumImages: 'addAlbumImages',
+      deleteImage: 'deleteImage',
+      fetchAlbums: 'fetchAlbums',
       createAlbum: 'createAlbum',
     }),
     sort() {
@@ -105,6 +111,9 @@ export default {
       this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
       console.log(this.selected);
+    },
+    deleteSelectedImages() {
+      this.deleteImage();
     },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';
