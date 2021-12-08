@@ -76,8 +76,7 @@ export default {
       fetchImages: 'fetchImages',
     }),
     showOverlay(val, fileName) {
-      console.log(val);
-      this.overlay = true;
+      this.overlay = val;
       this.showImg(fileName);
     },
     showImg(file_name) {

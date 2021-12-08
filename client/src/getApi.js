@@ -18,7 +18,6 @@ export default () => {
       Authorization: `Bearer ${store.getters.getAccessToken}`,
     },
   });
-  getAPI.interceptors.response.use((response) => response, refreshToken);
   return getAPI;
 };
 
