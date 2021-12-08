@@ -1,10 +1,17 @@
 <template>
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
-    <TopBar class="topBar" />
-    <v-row>
+    <TopBar v-if="isAuthenticated" class="topBar" />
+    <v-row v-if="isAuthenticated">
       <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
       </div>
+      <v-col>
+        <v-main>
+          <router-view />
+        </v-main>
+      </v-col>
+    </v-row>
+    <v-row v-if="!isAuthenticated">
       <v-col>
         <v-main>
           <router-view />
@@ -15,6 +22,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import TopBar from './components/TopBar.vue';
 import NavComponent from './components/Nav.vue';
 
@@ -34,6 +43,11 @@ export default {
     if (this.windowWidth <= 480) {
       this.mobile = true;
     }
+  },
+  computed: {
+    ...mapGetters({
+      isAuthenticated: 'getIsAuthenticated',
+    }),
   },
   methods: {},
 };
