@@ -16,6 +16,7 @@ import albumController from '../controllers/albumController.js';
 
 router.post('/register', userController.create);
 router.post('/login', userController.login);
+router.post('/refresh', userController.refreshToken);
 router.post('/logout', isAuth, userController.logout);
 
 router.get('/images', isAuth, imageController.userImage);

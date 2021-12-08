@@ -5,13 +5,19 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Albums from '../views/Albums.vue';
 import NewAlbum from '../views/NewAlbum.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
+
+function isAuthenticated(to, from, next) {
+  return store.getters.getIsAuthenticated ? next() : next('Login');
+}
 
 const routes = [
   {
     path: '/',
     name: 'Home',
+    beforeEnter: isAuthenticated,
     component: Home,
   },
   {
@@ -27,12 +33,14 @@ const routes = [
   {
     path: '/albums',
     name: 'Albums',
+    beforeEnter: isAuthenticated,
     component: Albums,
     props: true,
   },
   {
     path: '/album/new',
     name: 'NewAlbum',
+    beforeEnter: isAuthenticated,
     component: NewAlbum,
     props: true,
   },

@@ -1,5 +1,5 @@
 import User from '../db/models/userModel.js';
-import { getAccessToken, getRefreshToken, deleteRefreshTokens } from '../services/auth/jwtService.js';
+import { getAccessToken, getRefreshToken, compareRefreshToken, deleteRefreshTokens } from '../services/auth/jwtService.js';
 
 class userController {
   async create(req, res) {
@@ -18,6 +18,11 @@ class userController {
       });
     }
   }
+  async refreshToken(req, res) {
+    const user = compareRefreshToken(req.body.refreshToken);
+    res.json({ accessToken: getAccessToken(user) });
+  }
+
   async login(req, res) {
     try {
       console.log(req.body.email);

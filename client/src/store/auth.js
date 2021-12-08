@@ -6,6 +6,7 @@ import getApi from '../getApi.js';
 const state = {
   accessToken: null,
   refreshToken: null,
+  isAuthenticated: false,
 };
 const getters = {
   getAccessToken(state) {
@@ -13,6 +14,9 @@ const getters = {
   },
   getRefreshToken(state) {
     return state.refreshToken;
+  },
+  getIsAuthenticated(state) {
+    return state.isAuthenticated;
   },
 };
 
@@ -23,6 +27,9 @@ const mutations = {
   setRefreshToken(state, refreshToken) {
     state.refreshToken = refreshToken;
   },
+  setIsAuthenticated(state, isAuthenticated) {
+    state.isAuthenticated = isAuthenticated;
+  },
 };
 
 const actions = {
@@ -31,12 +38,30 @@ const actions = {
       const response = await getApi().post('/login', payload);
       context.commit('setAccessToken', response.data.accessToken);
       context.commit('setRefreshToken', response.data.refreshToken);
+      context.commit('setIsAuthenticated', true);
       return true;
     } catch (err) {
-      context.commit('setAccessToken', null);
-      context.commit('setRefreshToken', null);
+      context.dispatch('logout');
       return false;
     }
+  },
+
+  async refresh(context) {
+    try {
+      if (context.getters.isAuthenticated) {
+        const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
+        context.commit('setAccessToken', response.data.accessToken);
+        return true;
+      }
+    } catch (e) {
+      context.dispatch('logout');
+      return false;
+    }
+  },
+  async logout(context) {
+    context.commit('setAccessToken', null);
+    context.commit('setRefreshToken', null);
+    context.commit('setIsAuthenticated', false);
   },
 };
 
