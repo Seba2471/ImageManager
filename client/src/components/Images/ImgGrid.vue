@@ -2,7 +2,7 @@
   <v-row class="mt-3 d-flex justify-center">
     <ul v-if="!mobile">
       <li @click="showImg(image.file_name)" v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" />
+        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" :selectOne="selectOne" />
       </li>
       <li></li>
     </ul>
@@ -35,7 +35,7 @@
 import Img from './Img.vue';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
-  props: ['imgHeight', 'mobileCols'],
+  props: ['imgHeight', 'mobileCols', 'selectOne'],
   components: { Img },
   name: 'ImgGrid',
   data() {

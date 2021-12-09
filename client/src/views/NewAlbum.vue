@@ -1,50 +1,51 @@
 <template>
   <div>
-    <v-col @click="addAlbum" cols="8" offset="4" xl="3" lg="3" sm="3" xs="2" md="1" offset-xl="9" offset-lg="9">
-      <div class="customButton pa-3 d-flex align-center justify-center">
-        <v-icon> mdi-plus-box-outline </v-icon>
-        <span class="ml-3">Stwórz nowy album</span>
+    <v-col cols="12" class="d-flex align-center justify-center mt-5">
+      <h2>Kreator tworzenia nowego albumu</h2>
+    </v-col>
+    <v-row class="d-flex align-center justify-center mt-10">
+      <v-col cols="2" xl="2" lg="3" md="4">
+        <Step number="1" title="Podaj tytuł" :disable="!showTitle" />
+      </v-col>
+      <v-col cols="2" xl="2" lg="3" md="4" class="ml-7">
+        <Step number="2" title="Wybierz miniaturkę" :disable="!showThumbnail" />
+      </v-col>
+      <v-col cols="2" xl="2" lg="3" md="4" class="ml-7">
+        <Step number="3" title="Wybierz zdjęcia" :disable="!showImages" />
+      </v-col>
+      GOTOWE
+    </v-row>
+
+    <v-col cols="8" offset="4" xl="3" lg="3" sm="3" xs="2" md="1" offset-xl="9" offset-lg="9">
+      <div @click="next" class="customButton pa-3 d-flex align-center justify-center">
+        <span class="ml-3">Dalej</span>
+        <v-icon> mdi-chevron-right </v-icon>
       </div>
     </v-col>
-    <v-row class="d-flex justify-center">
-      <v-col xl="8" lg="8">
-        <v-row>
-          <v-row>
-            <v-col cols="12" class="d-flex align-center justify-center mt-5">
-              <h2>Kreator tworzenia nowego albumu</h2>
-            </v-col>
-          </v-row>
-          <v-col cols="10" offset="1" xl="6" offset-xl="3" class="mt-16 ma-xs-5">
-            <v-text-field v-model="albumTitle" outlined label="Tytuł albumu" />
-          </v-col>
-          <v-col v-if="!showImages" @click="showImages = true" cols="6" offset="3" class="d-flex align-center justify-center customButton mt-16">
-            <v-icon> mdi-plus</v-icon>
-            <div class="d-flex align-center ml-2">Dodaj zdjęcia</div>
-          </v-col>
-          <v-col cols="12">
-            <ImgGrid cols="6" v-if="showImages" imgHeight="150px" mobileCols="6" />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
   </div>
 </template>
 
 <script>
+import Step from '../components/NewAlbum/Step.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
-import ImgGrid from '../components/Images/ImgGrid.vue';
+// import ImgGrid from '../components/Images/ImgGrid.vue';
 export default {
   components: {
-    ImgGrid,
+    // ImgGrid,
+    Step,
   },
   data() {
     return {
+      showTitle: true,
+      showThumbnail: false,
       showImages: false,
       albumTitle: '',
+      images: [],
     };
   },
   created() {
-    console.log('RUN');
+    this.images = this.selected;
+    this.showTitle = true;
   },
   computed: {
     ...mapGetters({
