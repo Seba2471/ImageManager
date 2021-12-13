@@ -6,6 +6,7 @@ const IMAGE_URL = '/image';
 const state = {
   images: [],
   selected: [],
+  saveSelected: [],
 };
 
 const getters = {
@@ -15,6 +16,9 @@ const getters = {
   getSelected(state) {
     return state.selected;
   },
+  getSaveSelected(state) {
+    return state.saveSelected;
+  },
 };
 
 const mutations = {
@@ -23,6 +27,9 @@ const mutations = {
   },
   setSelected(state, selected) {
     state.selected = selected;
+  },
+  setSaveSelected(state, selected) {
+    state.saveSelected = selected;
   },
   addSelected(state, selected) {
     state.selected = [...state.selected, selected];

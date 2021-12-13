@@ -14,7 +14,7 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Img',
-  props: ['image', 'height'],
+  props: ['image', 'height', 'selectOne'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
@@ -33,6 +33,15 @@ export default {
         this.iconColor = '#ffffff';
         this.imgClass = '';
         this.iconClass = 'icon';
+      }
+      if (this.selectOne) {
+        if (!val.includes(this.image._id)) {
+          this.isSelect = false;
+          this.hover = false;
+          this.iconColor = '#ffffff';
+          this.imgClass = '';
+          this.iconClass = 'icon';
+        }
       }
     },
   },
@@ -56,7 +65,11 @@ export default {
         this.imgClass = 'selectImg';
         this.iconClass = 'selectIcon';
         if (!this.selected.includes(id)) {
-          this.addSelected(id);
+          if (this.selectOne) {
+            this.setSelected([id]);
+          } else {
+            this.addSelected(id);
+          }
         }
       } else {
         this.isSelect = false;

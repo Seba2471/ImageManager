@@ -1,8 +1,11 @@
 <template>
   <div class="mt-15 ma-8">
     <v-row>
-      <v-col cols="3" v-for="album in this.albums" :key="album._id">
-        <img class="albumImg d-flex justify-center align-center" v-auth-image="`${link}1638803858482.jpg`" />
+      <v-col cols="4" v-for="album in this.albums" :key="album._id">
+        <div class="d-flex justify-center align-center">
+          <img class="albumImg" v-auth-image="`${link}${album.thumbnail}`" />
+        </div>
+
         <span class="albumTitle mt-3 d-flex justify-center align-center"> {{ album.name }} </span>
       </v-col>
     </v-row>
@@ -37,7 +40,8 @@ export default {
 <style scoped>
 .albumImg {
   border-radius: 50px;
-  height: 250px;
+  height: 23vh;
+  max-width: 30vh;
 }
 .albumTitle {
   font-size: 18px;
