@@ -70,7 +70,7 @@ export default {
   padding-right: 1%;
 }
 .customButton:hover {
-  background-color: var(--v-light-base);
+  background-color: var(--v-greyLight-base);
   border-radius: 25px;
 }
 .customButton {

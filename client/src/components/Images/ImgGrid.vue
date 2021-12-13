@@ -2,7 +2,7 @@
   <v-row class="mt-3 d-flex justify-center">
     <ul v-if="!mobile">
       <li @click="showImg(image.file_name)" v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" :selectOne="selectOne" />
+        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" :selectOne="selectOne" :isSelected="true" />
       </li>
       <li></li>
     </ul>
@@ -49,17 +49,20 @@ export default {
       mobile: false,
     };
   },
-  watch: {
-    windowWidth: function (val) {
-      console.log(val);
-    },
-  },
   created() {
     if (this.windowWidth <= 1050) {
       this.mobile = true;
     }
     this.fetchImages();
     this.setSelected([]);
+  },
+  watch: {
+    windowWidth: function (val) {
+      console.log(val);
+    },
+    selected: function () {
+      this.fetchImages();
+    },
   },
   computed: {
     ...mapGetters({
@@ -93,14 +96,13 @@ export default {
         .indexOf(file_name);
       this.currentImg = file_name;
     },
-    showSelectedIcon(id) {
-      if (this.selectMode) {
-        if (this.selected.includes(id)) {
-          return true;
-        }
+    checkSelected(id) {
+      if (this.selected.includes(id)) {
+        console.log('true tu jets');
+        return true;
+      } else {
         return false;
       }
-      return false;
     },
     closeImg() {
       this.currentPosition = 0;

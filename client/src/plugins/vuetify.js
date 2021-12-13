@@ -13,8 +13,8 @@ export default new Vuetify({
       light: {
         primary: '#9A9A9A',
         secondary: '#B0B0B0',
-        gray: '#CBCBCB',
-        grayLight: 'EDEDED',
+        grey: '#CBCBCB',
+        greyLight: 'EDEDED',
         text: '#4A4A4A',
         accent: '#8c9eff',
         error: '#b71c1c',

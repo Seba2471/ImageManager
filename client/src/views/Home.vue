@@ -13,7 +13,7 @@
               </template>
 
               <v-list class="pa-5">
-                <v-list-item :to="{ name: 'NewAlbum' }" class="customButton pl-4 pr-4">
+                <v-list-item @click="createNewAlbum" class="customButton pl-4 pr-4">
                   <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
                 </v-list-item>
                 <v-list-item
@@ -104,13 +104,13 @@ export default {
       fetchAlbums: 'fetchAlbums',
       createAlbum: 'createAlbum',
     }),
-    sort() {
-      console.log('work');
-    },
+    sort() {},
     addImagesToExistAlbum(id) {
       this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
-      console.log(this.selected);
+    },
+    createNewAlbum() {
+      this.$router.push('/album/new');
     },
     deleteSelectedImages() {
       this.deleteImage();

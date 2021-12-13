@@ -15,7 +15,7 @@
       <div :class="disable ? 'title-disabled' : 'title'">{{ title }}</div>
       <div class="d-flex align-center">
         <v-divider />
-        <v-icon x-large class="icon-disabled"> mdi-chevron-right </v-icon>
+        <v-icon x-large :class="disable ? 'icon-disabled' : 'icon'"> mdi-chevron-right </v-icon>
       </div>
     </v-col>
   </v-row>
@@ -51,7 +51,7 @@ export default {
   height: 56px;
   font-weight: bold;
   color: var(--v-gray-base) !important;
-  background-color: var(--v-grayLight-base) !important;
+  background-color: var(--v-greyLight-base) !important;
 }
 
 .arrow {
@@ -74,7 +74,7 @@ export default {
   font-size: 14px !important;
   font-weight: bold;
   line-height: 2rem;
-  color: var(--v-gray-base) !important;
+  color: var(--v-grey-base) !important;
   height: 2.7vh;
   margin-left: -20px;
   margin-bottom: -20px;
@@ -87,14 +87,14 @@ export default {
 
 .icon-disabled {
   margin-left: -20px;
-  color: var(--v-gray-base) !important;
+  color: var(--v-grey-base) !important;
 }
 
 .disable-text {
-  color: var(--v-gray-base) !important;
+  color: var(--v-grey-base) !important;
 }
 
 .disable-bg {
-  background-color: var(--v-grayLight-base) !important;
+  background-color: var(--v-greyLight-base) !important;
 }
 </style>
