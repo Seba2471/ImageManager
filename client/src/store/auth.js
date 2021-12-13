@@ -1,4 +1,5 @@
 import getApi from '../getApi.js';
+import VueAuthImage from 'vue-auth-image';
 // import axios from 'axios';
 
 // const LOGIN_URL = '/login';
@@ -39,6 +40,7 @@ const actions = {
       context.commit('setAccessToken', response.data.accessToken);
       context.commit('setRefreshToken', response.data.refreshToken);
       context.commit('setIsAuthenticated', true);
+      VueAuthImage.setup(response.data.accessToken);
       return true;
     } catch (err) {
       context.dispatch('logout');
@@ -51,6 +53,7 @@ const actions = {
       if (context.getters.isAuthenticated) {
         const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
         context.commit('setAccessToken', response.data.accessToken);
+        VueAuthImage.setup(response.data.accessToken);
         return true;
       }
     } catch (e) {

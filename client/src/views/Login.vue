@@ -2,7 +2,7 @@
   <v-row class="mt-16">
     <v-col xl="6" offset-xl="3" lg="8" offset-lg="2" sm="10" offset-sm="1">
       <v-card class="pa-16" rounded elevation="10">
-        <h1 class="text-center mb-5">PICTURES</h1>
+        <h1 class="text-center mb-5">PICTLIST</h1>
         <p class="mb-5 font-weight-medium">Zaloguj się i zarządzaj swoimi zdjęciami!</p>
         <v-form>
           <v-text-field v-model="userEmail" outlined label="E-mail" required :error="wrong_data"></v-text-field>
