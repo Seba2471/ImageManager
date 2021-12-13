@@ -13,7 +13,8 @@
     </v-row>
     <v-row v-if="!isAuthenticated">
       <v-col>
-        <v-main>
+        <v-main
+          >{{ txt }}
           <router-view />
         </v-main>
       </v-col>
@@ -35,21 +36,37 @@ export default {
   },
   data() {
     return {
-      windowWidth: window.innerWidth,
+      window: {
+        width: 0,
+        height: 0,
+      },
       mobile: false,
     };
   },
   created() {
-    if (this.windowWidth <= 480) {
-      this.mobile = true;
-    }
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   computed: {
     ...mapGetters({
       isAuthenticated: 'getIsAuthenticated',
     }),
   },
-  methods: {},
+  methods: {
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
+
+      if (this.window.width < 960) {
+        this.mobile = true;
+      } else {
+        this.mobile = false;
+      }
+    },
+  },
 };
 </script>
 
