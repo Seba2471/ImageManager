@@ -1,10 +1,20 @@
 <template>
-  <div>Tutaj albumy</div>
+  <div>
+    <v-row>
+      <v-col class="d-flex justify-center">
+        <h1>{{ album.name }}</h1>
+      </v-col>
+    </v-row>
+
+    <ImgGrid :images="this.album.images" imgHeight="250px" />
+  </div>
 </template>
 
 <script>
+import ImgGrid from '../components/Images/ImgGrid.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
+  components: { ImgGrid },
   name: 'Album',
   props: ['id'],
   data() {
@@ -13,20 +23,13 @@ export default {
       selectMode: false,
     };
   },
-  watch: {
-    id: function (val) {
-      this.album = this.albums.filter((item) => {
-        return item._id == val;
-      })[0];
-    },
+  created() {
+    this.fetchAlbums();
   },
   mounted() {
     this.album = this.albums.filter((item) => {
       return item._id == this.id;
     })[0];
-  },
-  created() {
-    this.fetchAlbums();
   },
   computed: {
     ...mapGetters({
@@ -41,12 +44,6 @@ export default {
     ...mapActions({
       fetchAlbums: 'fetchAlbums',
     }),
-    changeSelectMode() {
-      this.selectMode = !this.selectMode;
-      if (this.selectMode) {
-        this.setSelected([]);
-      }
-    },
   },
 };
 </script>

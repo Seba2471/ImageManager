@@ -48,7 +48,7 @@
         </v-col>
       </v-col>
     </v-row>
-    <ImgGrid class="mr-5" imgHeight="250px" />
+    <ImgGrid class="mr-5" imgHeight="250px" :images="this.images" />
   </v-container>
 </template>
 
@@ -80,6 +80,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      images: 'getImages',
       selected: 'getSelected',
       albums: 'getAlbums',
     }),

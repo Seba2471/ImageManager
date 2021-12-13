@@ -1,7 +1,7 @@
 <template>
   <div class="mt-15 ma-8">
     <v-row>
-      <v-col cols="4" v-for="album in this.albums" :key="album._id">
+      <v-col @click="showAlbum(album)" cols="4" v-for="album in this.albums" :key="album._id">
         <div class="d-flex justify-center align-center">
           <img class="albumImg" v-auth-image="`${link}${album.thumbnail}`" />
         </div>
@@ -33,6 +33,9 @@ export default {
     ...mapActions({
       fetchAlbums: 'fetchAlbums',
     }),
+    showAlbum(album) {
+      this.$router.push({ path: `/album/${album._id}` });
+    },
   },
 };
 </script>

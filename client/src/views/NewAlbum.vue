@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import Step from '../components/NewAlbum/Step.vue';
+import Step from '../components/Album/Step.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import ImgGrid from '../components/Images/ImgGrid.vue';
 export default {
