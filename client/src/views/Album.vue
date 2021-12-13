@@ -1,11 +1,14 @@
 <template>
   <div>
-    <v-row>
-      <v-col class="d-flex justify-center">
+    <v-row class="d-flex align-center justify-end mr-10 mt-2">
+      <v-col class="ml-5">
         <h1>{{ album.name }}</h1>
       </v-col>
+      <v-col cols="1" class="customButton d-flex align-center justify-center">
+        <v-icon> mdi-sort</v-icon>
+        <span class="ml-3">Edytuj </span>
+      </v-col>
     </v-row>
-
     <ImgGrid :images="this.album.images" imgHeight="250px" />
   </div>
 </template>

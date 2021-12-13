@@ -42,7 +42,7 @@
           </div>
         </v-col>
       </v-row>
-      <ImgGrid imgHeight="150px" mobileCols="6" selectOne="true" />
+      <ImgGrid :images="this.images" imgHeight="150px" mobileCols="6" selectOne="true" />
     </v-col>
     <v-col v-if="showImages" cols="10" offset="1" class="mt-16">
       <v-row>
@@ -59,7 +59,7 @@
           </div>
         </v-col>
       </v-row>
-      <ImgGrid imgHeight="150px" mobileCols="6" />
+      <ImgGrid :images="this.images" imgHeight="150px" mobileCols="6" />
     </v-col>
   </div>
 </template>

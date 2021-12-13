@@ -53,15 +53,11 @@ export default {
     if (this.windowWidth <= 1050) {
       this.mobile = true;
     }
-    this.fetchImages();
     this.setSelected([]);
   },
   watch: {
     windowWidth: function (val) {
       console.log(val);
-    },
-    selected: function () {
-      this.fetchImages();
     },
   },
   computed: {
