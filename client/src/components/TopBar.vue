@@ -5,7 +5,7 @@
         <h1 class="d-flex align-center">PICTLIST</h1>
       </v-col>
       <v-col lg="4" offset="1">
-        <v-text-field hide-details solo label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-text-field hide-details solo @keyup="searchTimeOut()" v-model="search" label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
       </v-col>
       <v-col lg="1" offset="3" class="d-flex align-center">
         <v-row>
@@ -47,7 +47,8 @@ export default {
     return {
       loading: false,
       items: [],
-      search: null,
+      search: '',
+      awaitingSearch: false,
       select: null,
       showImgUploader: false,
     };
@@ -58,6 +59,19 @@ export default {
     }),
     closeImagesUploader(value) {
       this.showImgUploader = value;
+    },
+    searchTimeOut() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.getSearch();
+      }, 800);
+    },
+    getSearch() {
+      this.$router.push(`/search/${this.search}`);
+      this.search = '';
     },
   },
 };

@@ -1,11 +1,11 @@
 <template>
-  <div class="mt-15 ma-8">
-    <v-row>
-      <v-col @click="showAlbum(album)" cols="4" v-for="album in this.albums" :key="album._id">
+  <div>
+    Wyniki wyszukiwania frazy: {{ query }}
+    <v-row class="mt-5">
+      <v-col @click="showAlbum(album)" class="ml-5" cols="2" v-for="album in this.result" :key="album._id">
         <div class="d-flex justify-center align-center">
           <img class="albumImg" v-auth-image="`${link}${album.thumbnail}`" />
         </div>
-
         <span class="albumTitle mt-3 d-flex justify-center align-center"> {{ album.name }} </span>
       </v-col>
     </v-row>
@@ -13,26 +13,36 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+
 export default {
-  name: 'Albums',
+  props: ['query'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
+      result: [],
     };
+  },
+
+  created() {
+    this.search();
+  },
+  watch: {
+    query: function () {
+      this.search();
+    },
   },
   computed: {
     ...mapGetters({
+      images: 'getImages',
       albums: 'getAlbums',
     }),
   },
-  created() {
-    this.fetchAlbums();
-  },
   methods: {
-    ...mapActions({
-      fetchAlbums: 'fetchAlbums',
-    }),
+    search() {
+      const regex = new RegExp(`${this.query}`, 'i');
+      this.result = this.albums.filter((album) => album.name.match(regex));
+    },
     showAlbum(album) {
       this.$router.push({ path: `/album/${album._id}` });
     },
@@ -40,14 +50,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .albumImg {
   border-radius: 50px;
-  height: 23vh;
-  max-width: 30vh;
-}
-.albumTitle {
-  font-size: 18px;
-  font-weight: bold;
+  height: 15vh;
+  max-width: 20vh;
 }
 </style>
