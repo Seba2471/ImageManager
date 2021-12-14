@@ -6,6 +6,7 @@ import Register from '../views/Register.vue';
 import Albums from '../views/Albums.vue';
 import NewAlbum from '../views/NewAlbum.vue';
 import Album from '../views/Album.vue';
+import Search from '../views/Search.vue';
 import store from '../store';
 
 Vue.use(VueRouter);
@@ -50,6 +51,13 @@ const routes = [
     name: 'Album',
     beforeEnter: isAuthenticated,
     component: Album,
+    props: true,
+  },
+  {
+    path: '/search/:query',
+    name: 'Search',
+    beforeEnter: isAuthenticated,
+    component: Search,
     props: true,
   },
 ];
