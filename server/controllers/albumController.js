@@ -13,6 +13,7 @@ class albumController {
   async create(req, res) {
     const album = new Album({
       name: req.body.name,
+      thumbnail: req.body.thumbnail,
       images: req.body.images,
       owner: req.user.id,
     });
