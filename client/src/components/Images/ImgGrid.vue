@@ -33,9 +33,9 @@
 
 <script>
 import Img from './Img.vue';
-import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-  props: ['imgHeight', 'mobileCols', 'selectOne'],
+  props: ['images', 'imgHeight', 'mobileCols', 'selectOne'],
   components: { Img },
   name: 'ImgGrid',
   data() {
@@ -53,21 +53,16 @@ export default {
     if (this.windowWidth <= 1050) {
       this.mobile = true;
     }
-    this.fetchImages();
     this.setSelected([]);
   },
   watch: {
     windowWidth: function (val) {
       console.log(val);
     },
-    selected: function () {
-      this.fetchImages();
-    },
   },
   computed: {
     ...mapGetters({
       selected: 'getSelected',
-      images: 'getImages',
     }),
   },
   methods: {
@@ -75,15 +70,12 @@ export default {
       addSelected: 'addSelected',
       setSelected: 'setSelected',
     }),
-    ...mapActions({
-      fetchImages: 'fetchImages',
-    }),
     showOverlay(val, fileName) {
       this.overlay = val;
       this.showImg(fileName);
     },
     showImg(file_name) {
-      document.documentElement.style.overflow = 'hidden';
+      // document.documentElement.style.overflow = 'hidden';
       if (this.windowWidth > 1904) {
         this.overlayImageSize = '900px';
       } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
@@ -107,7 +99,6 @@ export default {
     closeImg() {
       this.currentPosition = 0;
       this.overlay = false;
-      document.documentElement.style.overflow = 'auto';
     },
     prevImg() {
       try {

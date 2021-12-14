@@ -5,6 +5,7 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Albums from '../views/Albums.vue';
 import NewAlbum from '../views/NewAlbum.vue';
+import Album from '../views/Album.vue';
 import store from '../store';
 
 Vue.use(VueRouter);
@@ -42,6 +43,13 @@ const routes = [
     name: 'NewAlbum',
     beforeEnter: isAuthenticated,
     component: NewAlbum,
+    props: true,
+  },
+  {
+    path: '/album/:id',
+    name: 'Album',
+    beforeEnter: isAuthenticated,
+    component: Album,
     props: true,
   },
 ];

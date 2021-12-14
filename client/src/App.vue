@@ -1,6 +1,7 @@
 <template>
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
-    <TopBar v-if="isAuthenticated" class="topBar" />
+    <TopBar v-if="isAuthenticated && !mobile" class="topBar" />
+    <TopBarMobile v-if="isAuthenticated && mobile" class="topBar" />
     <v-row v-if="isAuthenticated">
       <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
@@ -25,6 +26,7 @@
 import { mapGetters } from 'vuex';
 
 import TopBar from './components/TopBar.vue';
+import TopBarMobile from './components/TopBarMobile.vue';
 import NavComponent from './components/Nav.vue';
 
 export default {
@@ -32,24 +34,41 @@ export default {
   components: {
     NavComponent,
     TopBar,
+    TopBarMobile,
   },
   data() {
     return {
-      windowWidth: window.innerWidth,
+      window: {
+        width: 0,
+        height: 0,
+      },
       mobile: false,
     };
   },
   created() {
-    if (this.windowWidth <= 480) {
-      this.mobile = true;
-    }
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   computed: {
     ...mapGetters({
       isAuthenticated: 'getIsAuthenticated',
     }),
   },
-  methods: {},
+  methods: {
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
+
+      if (this.window.width < 960) {
+        this.mobile = true;
+      } else {
+        this.mobile = false;
+      }
+    },
+  },
 };
 </script>
 

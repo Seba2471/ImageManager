@@ -108,7 +108,6 @@ img:hover {
 .img_wrp {
   display: inline-block;
   position: relative;
-  cursor: pointer;
 }
 .icon {
   position: absolute;
