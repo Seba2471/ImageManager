@@ -22,17 +22,21 @@
           </v-col>
         </v-row>
         <v-row>
-          <ul>
-            <li v-for="(url, index) in urls" :key="index">
-              <div class="img_wrp">
-                <img :src="url" height="100px" />
-                <div class="deleteIcon">
-                  <v-icon @click="deleteImg(url)" color="red" small> mdi-close </v-icon>
-                </div>
-              </div>
-            </li>
-            <li></li>
-          </ul>
+          <v-virtual-scroll :items="urls" height="300" item-height="110">
+            <template v-slot:default="{ item }">
+              <ul :key="item">
+                <li>
+                  <div class="img_wrp">
+                    <img :src="item" height="100px" />
+                    <div class="deleteIcon">
+                      <v-icon @click="deleteImg(item)" color="red" small> mdi-close </v-icon>
+                    </div>
+                  </div>
+                </li>
+                <li></li>
+              </ul>
+            </template>
+          </v-virtual-scroll>
         </v-row>
         <v-row class="mt-5">
           <v-col @click="submitImages" cols="4" offset="4" v-if="!isEmpty" class="d-flex align-center justify-center customButton">
@@ -79,6 +83,7 @@ export default {
       this.files.splice(index, 1);
     },
     submitImages() {
+      console.log(this.files);
       this.addImages({
         files: this.files,
       });
@@ -92,6 +97,15 @@ export default {
 .uploaderCard {
   min-width: 800px;
   max-width: 1000px;
+}
+@media (max-width: 480px) {
+  .uploaderCard {
+    min-width: 350px;
+    max-width: 350px;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    height: 100%;
+  }
 }
 .deleteIcon {
   position: absolute;
