@@ -17,9 +17,12 @@ class imageController {
 
       let images = [];
 
-      req.files.map((file) => {
+      const imageModiftyDate = req.body.mdates.split(',');
+
+      req.files.map((file, index) => {
         const image = new Image({
           orignal_name: file.originalname,
+          last_modifity: imageModiftyDate[index],
           file_name: file.filename,
           owner: owner.id,
         });

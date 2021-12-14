@@ -7,6 +7,10 @@ const imageSchema = new Schema({
     type: String,
     required: true,
   },
+  last_modifity: {
+    type: String,
+    required: true,
+  },
   file_name: {
     type: String,
     required: true,

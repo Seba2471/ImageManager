@@ -48,9 +48,14 @@ const actions = {
   async addImages(context, payload) {
     let formData = new FormData();
 
+    let ModifiedDate = [];
+
     payload.files.map((file) => {
       formData.append('image', file);
+      ModifiedDate.push(file.lastModifiedDate.toDateString());
     });
+
+    formData.append('mdates', ModifiedDate);
 
     try {
       await getApi().post(IMAGE_URL, formData, {
