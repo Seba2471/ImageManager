@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .albumImg {
   border-radius: 50px;
   height: 23vh;
