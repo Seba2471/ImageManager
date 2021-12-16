@@ -13,6 +13,9 @@ const getters = {
   getImages(state) {
     return state.images;
   },
+  getReverseImage(state) {
+    return state.images.slice().reverse();
+  },
   getSelected(state) {
     return state.selected;
   },

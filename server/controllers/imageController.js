@@ -5,7 +5,7 @@ import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../
 class imageController {
   async userImage(req, res) {
     const images = await Image.find({ owner: req.user.id });
-    res.json(images);
+    res.json(images.reverse());
   }
   async add(req, res) {
     try {

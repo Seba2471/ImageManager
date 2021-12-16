@@ -38,17 +38,20 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="5">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="sort">
-              <v-icon> mdi-sort</v-icon>
-              <span class="ml-3">Od najnowszych </span>
-            </v-col>
-          </v-row>
+        <v-col cols="8">
+          <v-select
+            class="sortButton d-flex align-center justify-center"
+            v-model="sortPick"
+            :items="sortItems"
+            menu-props="auto"
+            label="Sortowanie"
+            hide-details
+            prepend-icon="mdi-sort"
+          ></v-select>
         </v-col>
       </v-col>
     </v-row>
-    <ImgGrid class="mr-5" imgHeight="250px" :images="this.images" />
+    <ImgGrid class="mr-5" imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 
@@ -70,6 +73,8 @@ export default {
       windowWidth: window.innerWidth,
       overlayImageSize: '300px',
       displayImages: {},
+      sortPick: 'Od najnowszy',
+      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(malejąco)'],
       currentPosition: 0,
       isSelected: false,
     };
@@ -77,10 +82,12 @@ export default {
   created() {
     this.fetchImages();
     this.fetchAlbums();
+    this.displayImages = this.images;
   },
   computed: {
     ...mapGetters({
       images: 'getImages',
+      reverseImages: 'getReverseImage',
       selected: 'getSelected',
       albums: 'getAlbums',
     }),
@@ -91,6 +98,14 @@ export default {
         this.isSelected = false;
       } else {
         this.isSelected = true;
+      }
+    },
+    sortPick: async function (val) {
+      if (val == this.sortItems[0]) {
+        this.displayImages = this.images;
+      }
+      if (val == this.sortItems[1]) {
+        this.displayImages = this.reverseImages;
       }
     },
   },
@@ -104,8 +119,8 @@ export default {
       deleteImage: 'deleteImage',
       fetchAlbums: 'fetchAlbums',
       createAlbum: 'createAlbum',
+      sortImages: 'sortImages',
     }),
-    sort() {},
     addImagesToExistAlbum(id) {
       this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
@@ -158,3 +173,9 @@ export default {
   },
 };
 </script>
+<style>
+.sortButton {
+  margin: 0 0;
+  padding: 0 0;
+}
+</style>
