@@ -22,7 +22,7 @@ class imageController {
       req.files.map((file, index) => {
         const image = new Image({
           orignal_name: file.originalname,
-          last_modifity: imageModiftyDate[index],
+          last_modifity: Date.parse(imageModiftyDate[index]),
           file_name: file.filename,
           owner: owner.id,
         });

@@ -19,6 +19,8 @@ export default new Vuetify({
         accent: '#8c9eff',
         error: '#b71c1c',
         background: '#F6F6F6',
+        blue: '#3070AC',
+        blueLight: '#ACD1F3',
       },
     },
   },

@@ -8,7 +8,7 @@ const imageSchema = new Schema({
     required: true,
   },
   last_modifity: {
-    type: String,
+    type: Date,
     required: true,
   },
   file_name: {

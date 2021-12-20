@@ -1,4 +1,5 @@
 import getApi from '../getApi';
+import sortArray from 'sort-array';
 
 const IMAGES_URL = '/images';
 const IMAGE_URL = '/image';
@@ -6,7 +7,6 @@ const IMAGE_URL = '/image';
 const state = {
   images: [],
   selected: [],
-  saveSelected: [],
 };
 
 const getters = {
@@ -16,23 +16,29 @@ const getters = {
   getReverseImage(state) {
     return state.images.slice().reverse();
   },
+  getSortByModifityDateDesc(state) {
+    return sortArray(state.images.slice(), {
+      by: 'last_modifity',
+      order: 'desc',
+    });
+  },
+  getSortByModifityDateAsc(state) {
+    return sortArray(state.images.slice(), {
+      by: 'last_modifity',
+      order: 'asc',
+    });
+  },
   getSelected(state) {
     return state.selected;
-  },
-  getSaveSelected(state) {
-    return state.saveSelected;
   },
 };
 
 const mutations = {
   setImages(state, images) {
-    state.images = images;
+    state.images = [...images];
   },
   setSelected(state, selected) {
-    state.selected = selected;
-  },
-  setSaveSelected(state, selected) {
-    state.saveSelected = selected;
+    state.selected = [...selected];
   },
   addSelected(state, selected) {
     state.selected = [...state.selected, selected];

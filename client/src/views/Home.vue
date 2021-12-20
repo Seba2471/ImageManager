@@ -2,11 +2,27 @@
   <v-container>
     <v-row justify-center>
       <v-col xl="4" lg="6" xs="12" offset-xl="8" offset-lg="6" class="d-flex align-center justify-end">
+        <v-col cols="5">
+          <v-row>
+            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="checkAllImages">
+              <v-icon> mdi-check-circle-outline </v-icon>
+              <span class="ml-3">Zaznacz wszystko</span>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="5" v-if="isSelected">
+          <v-row>
+            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="uncheckAllImages">
+              <v-icon> mdi-checkbox-blank-circle-outline</v-icon>
+              <span class="ml-3">Odznacz wszystko</span>
+            </v-col>
+          </v-row>
+        </v-col>
         <v-col cols="5" v-if="isSelected">
           <v-row>
             <v-menu bottom close-on-click>
               <template v-slot:activator="{ on, attrs }">
-                <v-col class="customButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
+                <v-col class="customButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on">
                   <v-icon> mdi-plus-box-outline </v-icon>
                   <span class="ml-3">Dodaj do albumu</span>
                 </v-col>
@@ -74,7 +90,7 @@ export default {
       overlayImageSize: '300px',
       displayImages: {},
       sortPick: 'Od najnowszy',
-      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(malejąco)'],
+      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
       currentPosition: 0,
       isSelected: false,
     };
@@ -83,16 +99,22 @@ export default {
     this.fetchImages();
     this.fetchAlbums();
     this.displayImages = this.images;
+    this.setSelected([]);
   },
   computed: {
     ...mapGetters({
       images: 'getImages',
       reverseImages: 'getReverseImage',
+      sortByModifityDateDesc: 'getSortByModifityDateDesc',
+      sortByModifityDateAsc: 'getSortByModifityDateAsc',
       selected: 'getSelected',
       albums: 'getAlbums',
     }),
   },
   watch: {
+    images: function () {
+      this.sortImages(this.sortPick);
+    },
     selected: function (val) {
       if (val.length == 0) {
         this.isSelected = false;
@@ -101,12 +123,7 @@ export default {
       }
     },
     sortPick: async function (val) {
-      if (val == this.sortItems[0]) {
-        this.displayImages = this.images;
-      }
-      if (val == this.sortItems[1]) {
-        this.displayImages = this.reverseImages;
-      }
+      this.sortImages(val);
     },
   },
   methods: {
@@ -121,6 +138,25 @@ export default {
       createAlbum: 'createAlbum',
       sortImages: 'sortImages',
     }),
+    sortImages(val) {
+      if (val == this.sortItems[0]) {
+        this.displayImages = this.images;
+      } else if (val == this.sortItems[1]) {
+        this.displayImages = this.reverseImages;
+      } else if (val == this.sortItems[2]) {
+        this.displayImages = this.sortByModifityDateDesc;
+      } else if (val == this.sortItems[3]) {
+        this.displayImages = this.sortByModifityDateAsc;
+      }
+    },
+    checkAllImages() {
+      const result = this.images.map((a) => a._id);
+      console.log(result);
+      this.setSelected(result);
+    },
+    uncheckAllImages() {
+      this.setSelected([]);
+    },
     addImagesToExistAlbum(id) {
       this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
