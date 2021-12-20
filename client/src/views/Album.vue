@@ -28,6 +28,7 @@ export default {
   },
   created() {
     this.fetchAlbums();
+    this.setSelected([]);
   },
   mounted() {
     this.album = this.albums.filter((item) => {

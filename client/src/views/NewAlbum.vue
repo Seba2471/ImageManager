@@ -78,12 +78,14 @@ export default {
       showTitle: true,
       showThumbnail: false,
       showImages: false,
+      savedImages: [],
       albumTitle: '',
       albumThumbnail: '',
       albumImages: [],
     };
   },
   created() {
+    this.savedImages = this.selected;
     this.setSelected([]);
     this.showTitle = true;
   },
@@ -108,7 +110,7 @@ export default {
         this.showImages = true;
         this.showThumbnail = false;
         this.albumThumbnail = this.selected;
-        this.setSelected([]);
+        this.setSelected(this.savedImages);
       }
     },
     back() {
