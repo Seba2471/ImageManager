@@ -34,7 +34,12 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-    <v-progress-linear :value="uploadPercentage"></v-progress-linear>
+    <v-row v-if="uploadPercentage != 0 ? true : false" class="mt-16" align-content="end" justify="center">
+      <v-col class="text-subtitle-1 text-center" cols="12"> Trwa przesyłanie ...</v-col>
+      <v-col cols="10">
+        <v-progress-linear color="blueLight" :value="uploadPercentage"></v-progress-linear>
+      </v-col>
+    </v-row>
   </v-navigation-drawer>
 </template>
 
@@ -56,7 +61,9 @@ export default {
   },
   watch: {
     hideAlbums: function (val) {
-      this.albumsClass = 'active v-list-item--active';
+      if (this.checkPath('/albums')) {
+        this.albumsClass = 'active v-list-item--active';
+      }
       this.getIcon(val);
     },
     $route(to) {
@@ -84,16 +91,13 @@ export default {
     },
     showAlbums() {
       this.hideAlbums = !this.hideAlbums;
-      this.albumsClass = 'active v-list-item--active';
       this.iconClick = true;
     },
     getIcon(val) {
       if (val) {
         this.icon = 'mdi-chevron-down';
-        this.albumsClass = 'active v-list-item--active';
       } else {
         this.icon = 'mdi-chevron-up';
-        this.albumsClass = 'active v-list-item--active';
       }
     },
     checkPath(path) {
