@@ -7,6 +7,7 @@ const IMAGE_URL = '/image';
 const state = {
   images: [],
   selected: [],
+  uploadPercentage: 0,
 };
 
 const getters = {
@@ -31,17 +32,23 @@ const getters = {
   getSelected(state) {
     return state.selected;
   },
+  getUploadPercentage(state) {
+    return state.uploadPercentage;
+  },
 };
 
 const mutations = {
   setImages(state, images) {
-    state.images = [...images];
+    state.images = images;
   },
   setSelected(state, selected) {
     state.selected = [...selected];
   },
   addSelected(state, selected) {
     state.selected = [...state.selected, selected];
+  },
+  setUploadPercentage(state, uploadPercentage) {
+    state.uploadPercentage = uploadPercentage;
   },
 };
 
@@ -67,12 +74,18 @@ const actions = {
     formData.append('mdates', ModifiedDate);
 
     try {
-      await getApi().post(IMAGE_URL, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      context.dispatch('fetchImages');
+      await getApi()
+        .post(IMAGE_URL, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: (progressEvent) =>
+            context.commit('setUploadPercentage', parseInt(Math.round((progressEvent.loaded / progressEvent.total) * 100))),
+        })
+        .then(() => {
+          setTimeout(() => context.commit('setUploadPercentage', 0), 2000);
+          context.dispatch('fetchImages');
+        });
     } catch (e) {
       console.log(e);
     }

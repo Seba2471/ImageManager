@@ -21,7 +21,7 @@
       <v-col lg="2" class="d-flex justify-end">
         <v-menu left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
-            <div class="d-flex align-center">seba4@gmail.com</div>
+            <div class="d-flex align-center">{{ userEmail }}</div>
 
             <v-icon x-large v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
           </template>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import ImgUpload from './Images/ImgUpload.vue';
 export default {
   components: { ImgUpload },
@@ -52,6 +52,11 @@ export default {
       select: null,
       showImgUploader: false,
     };
+  },
+  computed: {
+    ...mapGetters({
+      userEmail: 'getUserEmail',
+    }),
   },
   methods: {
     ...mapActions({

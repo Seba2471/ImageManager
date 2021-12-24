@@ -35,6 +35,13 @@ export default {
       return item._id == this.id;
     })[0];
   },
+  watch: {
+    id: function (val) {
+      this.album = this.albums.filter((item) => {
+        return item._id == val;
+      })[0];
+    },
+  },
   computed: {
     ...mapGetters({
       albums: 'getAlbums',

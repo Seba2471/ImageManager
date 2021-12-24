@@ -151,7 +151,6 @@ export default {
     },
     checkAllImages() {
       const result = this.images.map((a) => a._id);
-      console.log(result);
       this.setSelected(result);
     },
     uncheckAllImages() {

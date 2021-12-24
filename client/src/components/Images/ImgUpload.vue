@@ -83,7 +83,6 @@ export default {
       this.files.splice(index, 1);
     },
     submitImages() {
-      console.log(this.files);
       this.addImages({
         files: this.files,
       });
