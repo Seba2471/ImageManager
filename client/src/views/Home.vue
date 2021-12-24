@@ -1,77 +1,12 @@
 <template>
   <v-container>
-    <v-row justify-center>
-      <v-col xl="4" lg="6" xs="12" offset-xl="8" offset-lg="6" class="d-flex align-center justify-end">
-        <v-col cols="5">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="checkAllImages">
-              <v-icon> mdi-check-circle-outline </v-icon>
-              <span class="ml-3">Zaznacz wszystko</span>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="5" v-if="isSelected">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="uncheckAllImages">
-              <v-icon> mdi-checkbox-blank-circle-outline</v-icon>
-              <span class="ml-3">Odznacz wszystko</span>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="5" v-if="isSelected">
-          <v-row>
-            <v-menu bottom close-on-click>
-              <template v-slot:activator="{ on, attrs }">
-                <v-col class="customButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on">
-                  <v-icon> mdi-plus-box-outline </v-icon>
-                  <span class="ml-3">Dodaj do albumu</span>
-                </v-col>
-              </template>
-
-              <v-list class="pa-5">
-                <v-list-item @click="createNewAlbum" class="customButton pl-4 pr-4">
-                  <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  @click="addImagesToExistAlbum(album._id)"
-                  class="customButton pl-4 pr-4 d-flex align-center justify-center"
-                  v-for="album in this.albums"
-                  :key="album._id"
-                >
-                  <v-list-item-title>
-                    <v-icon> mdi-panorama-variant </v-icon> <span class="ml-2"> {{ album.name }} </span>
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-row>
-        </v-col>
-        <v-col cols="3" v-if="isSelected">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
-              <v-icon> mdi-trash-can-outline </v-icon>
-              <span class="ml-3">Usuń</span>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="8">
-          <v-select
-            class="sortButton d-flex align-center justify-center"
-            v-model="sortPick"
-            :items="sortItems"
-            menu-props="auto"
-            label="Sortowanie"
-            hide-details
-            prepend-icon="mdi-sort"
-          ></v-select>
-        </v-col>
-      </v-col>
-    </v-row>
+    <ImgTopBar @sortPick="getSortPick" :images="this.displayImages" />
     <ImgGrid class="mr-5" imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 
 <script>
+import ImgTopBar from '../components/Images/ImgTopBar.vue';
 import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 import ImgGrid from '../components/Images/ImgGrid.vue';
@@ -80,6 +15,7 @@ export default {
 
   components: {
     ImgGrid,
+    ImgTopBar,
   },
   data() {
     return {
@@ -125,6 +61,9 @@ export default {
     sortPick: async function (val) {
       this.sortImages(val);
     },
+    windowWidth: function (val) {
+      console.log(val);
+    },
   },
   methods: {
     ...mapMutations({
@@ -138,6 +77,9 @@ export default {
       createAlbum: 'createAlbum',
       sortImages: 'sortImages',
     }),
+    getSortPick(val) {
+      this.sortImages(val);
+    },
     sortImages(val) {
       if (val == this.sortItems[0]) {
         this.displayImages = this.images;
@@ -164,7 +106,9 @@ export default {
       this.$router.push('/album/new');
     },
     deleteSelectedImages() {
-      this.deleteImage();
+      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
+        this.deleteImage();
+      });
     },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';

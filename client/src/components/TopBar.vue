@@ -4,10 +4,10 @@
       <v-col lg="1">
         <h1 class="d-flex align-center">PICTLIST</h1>
       </v-col>
-      <v-col lg="4" offset="1">
+      <v-col lg="4" xl="4" sm="4" offset-lg="1">
         <v-text-field hide-details solo @keyup="searchTimeOut()" v-model="search" label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
       </v-col>
-      <v-col lg="1" offset="3" class="d-flex align-center">
+      <v-col lg="1" offset-lg="3" class="d-flex align-center">
         <v-row>
           <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
