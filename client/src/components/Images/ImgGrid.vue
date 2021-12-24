@@ -53,7 +53,6 @@ export default {
     if (this.windowWidth <= 1050) {
       this.mobile = true;
     }
-    this.setSelected([]);
   },
   watch: {
     windowWidth: function (val) {
@@ -90,7 +89,6 @@ export default {
     },
     checkSelected(id) {
       if (this.selected.includes(id)) {
-        console.log('true tu jets');
         return true;
       } else {
         return false;

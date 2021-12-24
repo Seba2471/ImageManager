@@ -1,15 +1,18 @@
 import getApi from '../getApi.js';
 import VueAuthImage from 'vue-auth-image';
-// import axios from 'axios';
 
 // const LOGIN_URL = '/login';
 
 const state = {
+  userEmail: null,
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
 };
 const getters = {
+  getUserEmail(state) {
+    return state.userEmail;
+  },
   getAccessToken(state) {
     return state.accessToken;
   },
@@ -22,6 +25,9 @@ const getters = {
 };
 
 const mutations = {
+  setUserEmail(state, userEmail) {
+    state.userEmail = userEmail;
+  },
   setAccessToken(state, accessToken) {
     state.accessToken = accessToken;
   },
@@ -37,25 +43,34 @@ const actions = {
   async login(context, payload) {
     try {
       const response = await getApi().post('/login', payload);
+      context.commit('setUserEmail', response.data.email);
       context.commit('setAccessToken', response.data.accessToken);
       context.commit('setRefreshToken', response.data.refreshToken);
       context.commit('setIsAuthenticated', true);
-      VueAuthImage.setup(response.data.accessToken);
+      if (response.data.accessToken) {
+        VueAuthImage.setup(response.data.accessToken);
+      }
       return true;
     } catch (err) {
       context.dispatch('logout');
       return false;
     }
   },
+  async register(context, payload) {
+    try {
+      const response = await getApi().post('/register', payload);
+      return response;
+    } catch (err) {
+      return err.response.data;
+    }
+  },
 
   async refresh(context) {
     try {
-      if (context.getters.isAuthenticated) {
-        const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
-        context.commit('setAccessToken', response.data.accessToken);
-        VueAuthImage.setup(response.data.accessToken);
-        return true;
-      }
+      const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
+      context.commit('setAccessToken', response.data.accessToken);
+      context.commit('setIsAuthenticated', true);
+      return true;
     } catch (e) {
       context.dispatch('logout');
       return false;
@@ -65,6 +80,7 @@ const actions = {
     context.commit('setAccessToken', null);
     context.commit('setRefreshToken', null);
     context.commit('setIsAuthenticated', false);
+    context.commit('setImages', []);
   },
 };
 

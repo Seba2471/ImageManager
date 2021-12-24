@@ -1,4 +1,5 @@
 import getApi from '../getApi';
+import sortArray from 'sort-array';
 
 const IMAGES_URL = '/images';
 const IMAGE_URL = '/image';
@@ -6,18 +7,33 @@ const IMAGE_URL = '/image';
 const state = {
   images: [],
   selected: [],
-  saveSelected: [],
+  uploadPercentage: 0,
 };
 
 const getters = {
   getImages(state) {
     return state.images;
   },
+  getReverseImage(state) {
+    return state.images.slice().reverse();
+  },
+  getSortByModifityDateDesc(state) {
+    return sortArray(state.images.slice(), {
+      by: 'last_modifity',
+      order: 'desc',
+    });
+  },
+  getSortByModifityDateAsc(state) {
+    return sortArray(state.images.slice(), {
+      by: 'last_modifity',
+      order: 'asc',
+    });
+  },
   getSelected(state) {
     return state.selected;
   },
-  getSaveSelected(state) {
-    return state.saveSelected;
+  getUploadPercentage(state) {
+    return state.uploadPercentage;
   },
 };
 
@@ -26,13 +42,13 @@ const mutations = {
     state.images = images;
   },
   setSelected(state, selected) {
-    state.selected = selected;
-  },
-  setSaveSelected(state, selected) {
-    state.saveSelected = selected;
+    state.selected = [...selected];
   },
   addSelected(state, selected) {
     state.selected = [...state.selected, selected];
+  },
+  setUploadPercentage(state, uploadPercentage) {
+    state.uploadPercentage = uploadPercentage;
   },
 };
 
@@ -58,12 +74,18 @@ const actions = {
     formData.append('mdates', ModifiedDate);
 
     try {
-      await getApi().post(IMAGE_URL, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      context.dispatch('fetchImages');
+      await getApi()
+        .post(IMAGE_URL, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: (progressEvent) =>
+            context.commit('setUploadPercentage', parseInt(Math.round((progressEvent.loaded / progressEvent.total) * 100))),
+        })
+        .then(() => {
+          setTimeout(() => context.commit('setUploadPercentage', 0), 2000);
+          context.dispatch('fetchImages');
+        });
     } catch (e) {
       console.log(e);
     }

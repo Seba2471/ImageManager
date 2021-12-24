@@ -1,8 +1,8 @@
 <template>
-  <div class="img_wrp" @mouseover="hover = true" @mouseleave="hover = false">
+  <div class="img_wrp" @mouseover="imgHover = true" @mouseleave="imgHover = false">
     <img @click="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
-    <div v-if="hover || isSelect" :class="iconClass" fab x-small>
-      <v-icon @click="IconSelect(image._id)" @mouseover="IconHover" @mouseleave="IconNoHover" :color="iconColor" medium>
+    <div v-if="imgHover || isSelected" :class="iconClass" fab x-small>
+      <v-icon @click="selectImg(image._id)" @mouseover="iconHover = true" @mouseleave="iconHover = false" :color="iconColor" medium>
         mdi-checkbox-marked-circle
       </v-icon>
     </div>
@@ -18,29 +18,42 @@ export default {
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
-      hover: false,
-      iconColor: '#eeeeee',
-      isSelect: false,
+      imgHover: false,
+      iconHover: false,
+      isSelected: false,
+      iconColor: '',
       imgClass: '',
       iconClass: 'icon',
     };
   },
+  created() {
+    if (this.selected.includes(this.image._id)) {
+      this.setSelectedStyles();
+    }
+  },
   watch: {
     selected: function (val) {
-      if (val.length == 0) {
-        this.isSelect = false;
-        this.hover = false;
-        this.iconColor = '#ffffff';
-        this.imgClass = '';
-        this.iconClass = 'icon';
+      if (val.includes(this.image._id)) {
+        this.setSelectedStyles();
+      } else {
+        this.isSelected = false;
+        this.notSelectedStyles();
       }
-      if (this.selectOne) {
-        if (!val.includes(this.image._id)) {
-          this.isSelect = false;
-          this.hover = false;
-          this.iconColor = '#ffffff';
+    },
+    iconHover: function (val) {
+      if (this.isSelected) {
+        if (val) {
+          this.iconColor = 'white';
+        } else {
+          this.iconColor = 'blue';
+        }
+      } else {
+        if (val) {
+          this.imgClass = 'imgHover';
+          this.iconColor = 'white';
+        } else {
+          this.iconColor = '';
           this.imgClass = '';
-          this.iconClass = 'icon';
         }
       }
     },
@@ -58,12 +71,19 @@ export default {
     showOverlay(fileName) {
       this.$emit('showImageOverlay', true, fileName);
     },
-    IconSelect(id) {
-      if (!this.isSelect) {
-        this.isSelect = true;
-        this.iconColor = 'blue';
-        this.imgClass = 'selectImg';
-        this.iconClass = 'selectIcon';
+    setSelectedStyles() {
+      this.isSelected = true;
+      this.imgClass = 'selectImg';
+      this.iconClass = 'selectIcon';
+      this.iconColor = 'blue';
+    },
+    notSelectedStyles() {
+      this.isSelected = false;
+      this.imgClass = '';
+      this.iconColor = '';
+    },
+    selectImg(id) {
+      if (!this.isSelected) {
         if (!this.selected.includes(id)) {
           if (this.selectOne) {
             this.setSelected([id]);
@@ -72,27 +92,8 @@ export default {
           }
         }
       } else {
-        this.isSelect = false;
-        this.iconColor = '#ffffff';
-        this.imgClass = '';
-        this.iconClass = 'icon';
         this.setSelected(this.selected.filter((item) => item != id));
       }
-    },
-    IconHover() {
-      if (!this.isSelect) {
-        this.iconColor = '#ffffff';
-        this.imgClass = 'imgHover';
-      }
-    },
-    IconNoHover() {
-      if (!this.isSelect) {
-        this.iconColor = '#eeeeee';
-        this.imgClass = '';
-      }
-    },
-    hideIcon() {
-      console.log('Hide');
     },
   },
 };
@@ -123,6 +124,6 @@ img:hover {
 }
 .selectImg {
   padding: 20px;
-  background-color: #aec8fa;
+  background-color: var(--v-blueLight-base);
 }
 </style>

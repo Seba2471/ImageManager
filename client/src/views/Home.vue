@@ -1,58 +1,12 @@
 <template>
   <v-container>
-    <v-row justify-center>
-      <v-col xl="4" lg="6" xs="12" offset-xl="8" offset-lg="6" class="d-flex align-center justify-end">
-        <v-col cols="5" v-if="isSelected">
-          <v-row>
-            <v-menu bottom close-on-click>
-              <template v-slot:activator="{ on, attrs }">
-                <v-col class="customButton pa-3 d-flex align-center justify-center" v-bind="attrs" v-on="on" @click="sort">
-                  <v-icon> mdi-plus-box-outline </v-icon>
-                  <span class="ml-3">Dodaj do albumu</span>
-                </v-col>
-              </template>
-
-              <v-list class="pa-5">
-                <v-list-item @click="createNewAlbum" class="customButton pl-4 pr-4">
-                  <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  @click="addImagesToExistAlbum(album._id)"
-                  class="customButton pl-4 pr-4 d-flex align-center justify-center"
-                  v-for="album in this.albums"
-                  :key="album._id"
-                >
-                  <v-list-item-title>
-                    <v-icon> mdi-panorama-variant </v-icon> <span class="ml-2"> {{ album.name }} </span>
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-row>
-        </v-col>
-        <v-col cols="3" v-if="isSelected">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
-              <v-icon> mdi-trash-can-outline </v-icon>
-              <span class="ml-3">Usuń</span>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="5">
-          <v-row>
-            <v-col class="customButton pa-3 d-flex align-center justify-center" @click="sort">
-              <v-icon> mdi-sort</v-icon>
-              <span class="ml-3">Od najnowszych </span>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-col>
-    </v-row>
-    <ImgGrid class="mr-5" imgHeight="250px" :images="this.images" />
+    <ImgTopBar @sortPick="getSortPick" :images="this.displayImages" />
+    <ImgGrid class="mr-5" imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 
 <script>
+import ImgTopBar from '../components/Images/ImgTopBar.vue';
 import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 import ImgGrid from '../components/Images/ImgGrid.vue';
@@ -61,6 +15,7 @@ export default {
 
   components: {
     ImgGrid,
+    ImgTopBar,
   },
   data() {
     return {
@@ -70,6 +25,8 @@ export default {
       windowWidth: window.innerWidth,
       overlayImageSize: '300px',
       displayImages: {},
+      sortPick: 'Od najnowszy',
+      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
       currentPosition: 0,
       isSelected: false,
     };
@@ -77,21 +34,35 @@ export default {
   created() {
     this.fetchImages();
     this.fetchAlbums();
+    this.displayImages = this.images;
+    this.setSelected([]);
   },
   computed: {
     ...mapGetters({
       images: 'getImages',
+      reverseImages: 'getReverseImage',
+      sortByModifityDateDesc: 'getSortByModifityDateDesc',
+      sortByModifityDateAsc: 'getSortByModifityDateAsc',
       selected: 'getSelected',
       albums: 'getAlbums',
     }),
   },
   watch: {
+    images: function () {
+      this.sortImages(this.sortPick);
+    },
     selected: function (val) {
       if (val.length == 0) {
         this.isSelected = false;
       } else {
         this.isSelected = true;
       }
+    },
+    sortPick: async function (val) {
+      this.sortImages(val);
+    },
+    windowWidth: function (val) {
+      console.log(val);
     },
   },
   methods: {
@@ -104,8 +75,29 @@ export default {
       deleteImage: 'deleteImage',
       fetchAlbums: 'fetchAlbums',
       createAlbum: 'createAlbum',
+      sortImages: 'sortImages',
     }),
-    sort() {},
+    getSortPick(val) {
+      this.sortImages(val);
+    },
+    sortImages(val) {
+      if (val == this.sortItems[0]) {
+        this.displayImages = this.images;
+      } else if (val == this.sortItems[1]) {
+        this.displayImages = this.reverseImages;
+      } else if (val == this.sortItems[2]) {
+        this.displayImages = this.sortByModifityDateDesc;
+      } else if (val == this.sortItems[3]) {
+        this.displayImages = this.sortByModifityDateAsc;
+      }
+    },
+    checkAllImages() {
+      const result = this.images.map((a) => a._id);
+      this.setSelected(result);
+    },
+    uncheckAllImages() {
+      this.setSelected([]);
+    },
     addImagesToExistAlbum(id) {
       this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
@@ -114,7 +106,9 @@ export default {
       this.$router.push('/album/new');
     },
     deleteSelectedImages() {
-      this.deleteImage();
+      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
+        this.deleteImage();
+      });
     },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';
@@ -158,3 +152,9 @@ export default {
   },
 };
 </script>
+<style>
+.sortButton {
+  margin: 0 0;
+  padding: 0 0;
+}
+</style>

@@ -30,7 +30,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
     "multer": "^1.4.3",
-    "mv": "^2.1.1"
+    "mv": "^2.1.1",
+    "signed-url": "^1.0.3"
   },
   "devDependencies": {
     "husky": "^7.0.4",

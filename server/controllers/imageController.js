@@ -5,7 +5,7 @@ import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../
 class imageController {
   async userImage(req, res) {
     const images = await Image.find({ owner: req.user.id });
-    res.json(images);
+    res.json(images.reverse());
   }
   async add(req, res) {
     try {
@@ -22,7 +22,7 @@ class imageController {
       req.files.map((file, index) => {
         const image = new Image({
           orignal_name: file.originalname,
-          last_modifity: imageModiftyDate[index],
+          last_modifity: Date.parse(imageModiftyDate[index]),
           file_name: file.filename,
           owner: owner.id,
         });

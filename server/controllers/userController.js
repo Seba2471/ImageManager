@@ -34,7 +34,7 @@ class userController {
       if (!isValidPassword) {
         throw new Error('Password not valid');
       }
-      res.json({ accessToken: getAccessToken(user), refreshToken: getRefreshToken(user) });
+      res.json({ email: user.email, accessToken: getAccessToken(user), refreshToken: getRefreshToken(user) });
     } catch (e) {
       console.log(e);
       res.status(401).send('Email or password is wrong');

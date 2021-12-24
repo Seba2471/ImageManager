@@ -4,10 +4,10 @@
       <v-col lg="1">
         <h1 class="d-flex align-center">PICTLIST</h1>
       </v-col>
-      <v-col lg="4" offset="1">
+      <v-col lg="4" xl="4" sm="4" offset-lg="1">
         <v-text-field hide-details solo @keyup="searchTimeOut()" v-model="search" label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
       </v-col>
-      <v-col lg="1" offset="3" class="d-flex align-center">
+      <v-col lg="1" offset-lg="3" class="d-flex align-center">
         <v-row>
           <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
@@ -21,7 +21,7 @@
       <v-col lg="2" class="d-flex justify-end">
         <v-menu left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
-            <div class="d-flex align-center">seba4@gmail.com</div>
+            <div class="d-flex align-center">{{ userEmail }}</div>
 
             <v-icon x-large v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
           </template>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import ImgUpload from './Images/ImgUpload.vue';
 export default {
   components: { ImgUpload },
@@ -52,6 +52,11 @@ export default {
       select: null,
       showImgUploader: false,
     };
+  },
+  computed: {
+    ...mapGetters({
+      userEmail: 'getUserEmail',
+    }),
   },
   methods: {
     ...mapActions({
