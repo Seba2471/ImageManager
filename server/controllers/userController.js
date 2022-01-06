@@ -1,5 +1,6 @@
 import User from '../db/models/userModel.js';
 import { getAccessToken, getRefreshToken, compareRefreshToken, deleteRefreshTokens } from '../services/auth/jwtService.js';
+import { getUser } from '../services/auth/userService.js';
 
 class userController {
   async create(req, res) {
@@ -30,6 +31,7 @@ class userController {
       if (!user) {
         throw new Error('User not found');
       }
+
       const isValidPassword = user.comparePassword(req.body.password);
       if (!isValidPassword) {
         throw new Error('Password not valid');
@@ -38,6 +40,25 @@ class userController {
     } catch (e) {
       console.log(e);
       res.status(401).send('Email or password is wrong');
+    }
+  }
+
+  async changePassword(req, res) {
+    try {
+      const user = await getUser(req.user.email);
+      if (!req.body.oldPassword || !req.body.newPassword) {
+        res.status(401).send('Old password and new password is required');
+      }
+      const isValidPassword = user.comparePassword(req.body.oldPassword);
+      if (!isValidPassword) {
+        res.status(401).send('Old password is wrong');
+        throw new Error('Password not valid');
+      }
+      user.password = req.body.newPassword;
+      await user.save();
+      res.send('Password changed');
+    } catch (e) {
+      console.log(e);
     }
   }
 

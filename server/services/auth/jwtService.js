@@ -26,9 +26,9 @@ export const getRefreshToken = (user) => {
   }
 };
 
-export const compareRefreshToken = (token) => {
+export const compareRefreshToken = async (token) => {
   let userData = {};
-  const refreshToken = RefreshToken.findOne({ refreshToken: token });
+  const refreshToken = await RefreshToken.findOne({ refreshToken: token });
   if (!refreshToken) {
     throw new Error('Refresh Token Not Exists');
   }
