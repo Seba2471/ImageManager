@@ -26,7 +26,6 @@ class userController {
 
   async login(req, res) {
     try {
-      console.log(req.body.email);
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
         throw new Error('User not found');
@@ -38,7 +37,6 @@ class userController {
       }
       res.json({ email: user.email, accessToken: getAccessToken(user), refreshToken: getRefreshToken(user) });
     } catch (e) {
-      console.log(e);
       res.status(401).send('Email or password is wrong');
     }
   }

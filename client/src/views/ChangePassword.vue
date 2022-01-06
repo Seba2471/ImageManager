@@ -3,18 +3,22 @@
     <v-col xl="6" offset-xl="3" lg="8" offset-lg="2" sm="10" offset-sm="1">
       <h3 class="mb-5 font-weight-medium d-flex justify-center">Zmień hasło do konta</h3>
       <v-form ref="form" v-model="valid" lazy-validation>
+        <v-text-field autocomplete="username" style="display: none"></v-text-field>
         <v-text-field
           v-model="oldPassword"
+          autocomplete="current-password"
           outlined
           :append-icon="showOldPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showOldPassword ? 'text' : 'password'"
           label="Stare hasło"
           class="input-group--focused d-flex align-center"
           required
+          :error-messages="errorMsg == '' ? '' : errorMsg"
           @click:append="showOldPassword = !showOldPassword"
         ></v-text-field>
         <v-text-field
           v-model="newPassword"
+          autocomplete="new-password"
           outlined
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassword ? 'text' : 'password'"
@@ -26,6 +30,7 @@
         ></v-text-field>
         <v-text-field
           v-model="replyNewPassword"
+          autocomplete="new-password"
           outlined
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :type="showPassword ? 'text' : 'password'"
@@ -64,7 +69,11 @@ export default {
     }),
     async changePassword() {
       if (this.$refs.form.validate()) {
-        await this.fetchChangePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword });
+        await this.fetchChangePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword }).then((res) => {
+          if (!res) {
+            this.errorMsg = 'Podane hasło jest błędne';
+          }
+        });
       }
       this.$refs.form.reset();
     },

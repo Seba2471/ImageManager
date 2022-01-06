@@ -52,7 +52,6 @@ const actions = {
       }
       return true;
     } catch (err) {
-      context.dispatch('logout');
       return false;
     }
   },
@@ -67,10 +66,10 @@ const actions = {
 
   async changePassword(context, payload) {
     try {
-      const response = await getApi().post('/change-password', payload);
-      return response;
+      await getApi().post('/change-password', payload);
+      return true;
     } catch (err) {
-      return err.response.data;
+      return false;
     }
   },
 

@@ -30,12 +30,12 @@ export const compareRefreshToken = async (token) => {
   let userData = {};
   const refreshToken = await RefreshToken.findOne({ refreshToken: token });
   if (!refreshToken) {
-    throw new Error('Refresh Token Not Exists');
+    return new Error('Refresh Token Not Exists');
   }
   jwt.verify(token, refreshKey, (err, data) => {
     if (err) {
       console.log(err);
-      throw new Error('Refresh Token Incorrect');
+      return new Error('Refresh Token Incorrect');
     }
     return (userData = {
       id: data.id,

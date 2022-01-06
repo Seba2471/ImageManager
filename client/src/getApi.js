@@ -3,7 +3,7 @@ import store from './store';
 import VueAuthImage from 'vue-auth-image';
 
 async function refreshToken(error) {
-  if (error.response.status === 401) {
+  if (error.response.status === 401 && store.getters.isAuthenticated) {
     if (await store.dispatch('refresh')) {
       VueAuthImage.setup(store.getters.getAccessToken);
       const config = { ...error.response.config };
