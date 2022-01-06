@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
+import ChangePassword from '../views/ChangePassword';
 import Albums from '../views/Albums.vue';
 import NewAlbum from '../views/NewAlbum.vue';
 import Album from '../views/Album.vue';
@@ -31,6 +32,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/user/edit',
+    name: 'ChangePassword',
+    component: ChangePassword,
   },
   {
     path: '/albums',

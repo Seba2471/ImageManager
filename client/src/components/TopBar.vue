@@ -27,6 +27,9 @@
           </template>
 
           <v-list>
+            <v-list-item :to="{ name: 'ChangePassword' }">
+              <v-list-item-title>Zmień hasło</v-list-item-title>
+            </v-list-item>
             <v-list-item :to="{ name: 'Login' }" @click="this.logout">
               <v-list-item-title>Wyloguj</v-list-item-title>
             </v-list-item>
