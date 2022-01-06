@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'ChangePassword',
   data() {
@@ -57,9 +59,12 @@ export default {
     };
   },
   methods: {
-    changePassword() {
+    ...mapActions({
+      fetchChangePassword: 'changePassword',
+    }),
+    async changePassword() {
       if (this.$refs.form.validate()) {
-        console.log(this.oldPassword, this.newPassword);
+        await this.fetchChangePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword });
       }
       this.$refs.form.reset();
     },

@@ -65,6 +65,15 @@ const actions = {
     }
   },
 
+  async changePassword(context, payload) {
+    try {
+      const response = await getApi().post('/change-password', payload);
+      return response;
+    } catch (err) {
+      return err.response.data;
+    }
+  },
+
   async refresh(context) {
     try {
       const response = await getApi().post('/refresh', { refreshToken: context.getters.getRefreshToken });
