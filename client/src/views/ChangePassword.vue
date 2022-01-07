@@ -60,7 +60,11 @@ export default {
       showOldPassword: false,
       valid: true,
       errorMsg: '',
-      passwordRules: [(v) => !!v || 'Hasło jest wymagane', () => this.newPassword == this.replyNewPassword || 'Hasła nie są takie same'],
+      passwordRules: [
+        (v) => !!v || 'Hasło jest wymagane',
+        () => this.newPassword == this.replyNewPassword || 'Hasła nie są takie same',
+        (v) => v.length > 4 || 'Hasło jest za krótkie',
+      ],
     };
   },
   methods: {
@@ -73,9 +77,9 @@ export default {
           if (!res) {
             this.errorMsg = 'Podane hasło jest błędne';
           }
+          this.$refs.form.reset();
         });
       }
-      this.$refs.form.reset();
     },
   },
 };
