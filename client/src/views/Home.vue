@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <ImgTopBar @sortPick="getSortPick" :images="this.displayImages" />
-    <ImgGrid class="mr-5" imgHeight="250px" :images="this.displayImages" />
+    <ImgGrid imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 

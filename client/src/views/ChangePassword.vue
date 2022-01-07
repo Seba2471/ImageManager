@@ -2,7 +2,7 @@
   <v-row class="mt-16">
     <v-col xl="6" offset-xl="3" lg="8" offset-lg="2" sm="10" offset-sm="1">
       <h3 class="mb-5 font-weight-medium d-flex justify-center">Zmień hasło do konta</h3>
-      <v-form ref="form" v-model="valid" lazy-validation>
+      <v-form ref="form" v-model="valid" lazy-validation class="pl-10 pr-10">
         <v-text-field autocomplete="username" style="display: none"></v-text-field>
         <v-text-field
           v-model="oldPassword"

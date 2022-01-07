@@ -1,13 +1,13 @@
 <template>
   <v-row class="mt-3 d-flex justify-center">
-    <ul v-if="!mobile">
+    <ul v-if="!mobile" class="mr-10">
       <li @click="showImg(image.file_name)" v-for="(image, index) in this.images" :key="index">
         <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" :selectOne="selectOne" :isSelected="true" />
       </li>
       <li></li>
     </ul>
     <v-row v-if="mobile" class="ma-5">
-      <v-col :cols="mobileCols" v-for="(image, index) in this.images" :key="index">
+      <v-col class="d-flex justify-center" :cols="mobileCols" v-for="(image, index) in this.images" :key="index">
         <Img class="ma-3 imgComponent" :image="image" :height="imgHeight" />
       </v-col>
     </v-row>
