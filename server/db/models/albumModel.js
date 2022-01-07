@@ -3,22 +3,21 @@ import mongoose from 'mongoose';
 const albumSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required'],
   },
   thumbnail: {
     type: String,
-    required: true,
+    required: [true, 'Thumbnail is required'],
   },
   images: [
     {
       type: mongoose.Types.ObjectId,
-      required: true,
       ref: 'Image',
     },
   ],
   owner: {
     type: mongoose.Types.ObjectId,
-    required: true,
+    required: [true, 'Owner is required'],
     ref: 'User',
   },
 });

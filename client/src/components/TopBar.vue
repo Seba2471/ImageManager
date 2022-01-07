@@ -2,7 +2,9 @@
   <div>
     <v-row class="wrapper">
       <v-col lg="1">
-        <h1 class="d-flex align-center">PICTLIST</h1>
+        <router-link class="text-decoration-none" to="/">
+          <h1 class="d-flex align-center">PICTLIST</h1>
+        </router-link>
       </v-col>
       <v-col lg="4" xl="4" sm="4" offset-lg="1">
         <v-text-field hide-details solo @keyup="searchTimeOut()" v-model="search" label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
@@ -19,16 +21,19 @@
         </v-overlay>
       </v-col>
       <v-col lg="2" class="d-flex justify-end">
-        <v-menu left offset-y transition="scale-transition">
+        <v-menu min-width="250px" left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <div class="d-flex align-center">{{ userEmail }}</div>
 
             <v-icon x-large v-bind="attrs" v-on="on">mdi-chevron-down</v-icon>
           </template>
 
-          <v-list>
+          <v-list color="background">
+            <v-list-item :to="{ name: 'ChangePassword' }">
+              <v-list-item-title class="text-center">Zmień hasło</v-list-item-title>
+            </v-list-item>
             <v-list-item :to="{ name: 'Login' }" @click="this.logout">
-              <v-list-item-title>Wyloguj</v-list-item-title>
+              <v-list-item-title class="text-center">Wyloguj</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>

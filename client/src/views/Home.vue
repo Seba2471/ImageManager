@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <ImgTopBar @sortPick="getSortPick" :images="this.displayImages" />
-    <ImgGrid class="mr-5" imgHeight="250px" :images="this.displayImages" />
+    <ImgGrid imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 
@@ -19,16 +19,13 @@ export default {
   },
   data() {
     return {
-      link: `${process.env.VUE_APP_BASE_URL}/image/`,
       overlay: false,
       currentImg: '',
-      windowWidth: window.innerWidth,
       overlayImageSize: '300px',
       displayImages: {},
-      sortPick: 'Od najnowszy',
-      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
+      sortPick: 'Od najnowszych',
+      sortItems: ['Od najnowszych', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
       currentPosition: 0,
-      isSelected: false,
     };
   },
   created() {
@@ -51,18 +48,8 @@ export default {
     images: function () {
       this.sortImages(this.sortPick);
     },
-    selected: function (val) {
-      if (val.length == 0) {
-        this.isSelected = false;
-      } else {
-        this.isSelected = true;
-      }
-    },
     sortPick: async function (val) {
       this.sortImages(val);
-    },
-    windowWidth: function (val) {
-      console.log(val);
     },
   },
   methods: {
@@ -78,7 +65,7 @@ export default {
       sortImages: 'sortImages',
     }),
     getSortPick(val) {
-      this.sortImages(val);
+      this.sortPick = val;
     },
     sortImages(val) {
       if (val == this.sortItems[0]) {
@@ -90,25 +77,6 @@ export default {
       } else if (val == this.sortItems[3]) {
         this.displayImages = this.sortByModifityDateAsc;
       }
-    },
-    checkAllImages() {
-      const result = this.images.map((a) => a._id);
-      this.setSelected(result);
-    },
-    uncheckAllImages() {
-      this.setSelected([]);
-    },
-    addImagesToExistAlbum(id) {
-      this.addAlbumImages({ id, images: this.selected });
-      this.setSelected([]);
-    },
-    createNewAlbum() {
-      this.$router.push('/album/new');
-    },
-    deleteSelectedImages() {
-      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
-        this.deleteImage();
-      });
     },
     showImg(id) {
       document.documentElement.style.overflow = 'hidden';

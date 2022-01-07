@@ -5,9 +5,10 @@
         <h1 class="text-center mb-5">PICTLIST</h1>
         <p class="mb-5 font-weight-medium">Zaloguj się i zarządzaj swoimi zdjęciami!</p>
         <v-form>
-          <v-text-field v-model="userEmail" outlined label="E-mail" required :error="wrong_data"></v-text-field>
+          <v-text-field v-model="userEmail" autocomplete="username" outlined label="E-mail" required :error="wrong_data"></v-text-field>
           <v-text-field
             v-model="userPassword"
+            autocomplete="current-password"
             outlined
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"
@@ -35,8 +36,8 @@ export default {
   name: 'Login',
   data() {
     return {
-      userEmail: 'sebix@gmail.com',
-      userPassword: 'tajne',
+      userEmail: '',
+      userPassword: '',
       showPassword: false,
       wrong_data: false,
     };
@@ -45,13 +46,12 @@ export default {
     ...mapActions({
       fetchLogin: 'login',
     }),
-    login() {
-      this.fetchLogin({ email: this.userEmail, password: this.userPassword }).then((response) => {
-        if (!response) {
+    async login() {
+      await this.fetchLogin({ email: this.userEmail, password: this.userPassword }).then((res) => {
+        if (!res) {
           this.wrong_data = true;
         } else {
-          this.wrong_data = false;
-          this.$router.push('/');
+          this.$router.push({ name: 'Home' });
         }
       });
     },

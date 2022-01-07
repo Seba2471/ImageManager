@@ -2,7 +2,9 @@
   <div>
     <v-row v-if="!showSearch" class="wrapper">
       <v-col lg="1">
-        <h1 class="d-flex align-center">PICTLIST</h1>
+        <router-link class="text-decoration-none" to="/">
+          <h1 class="d-flex align-center">PICTLIST</h1>
+        </router-link>
       </v-col>
       <v-spacer></v-spacer>
       <v-col lg="1" class="d-flex justify-end align-center">
@@ -23,14 +25,23 @@
         </v-overlay>
       </v-col>
       <v-col cols="1" class="d-flex align-center">
-        <v-menu left offset-y transition="scale-transition">
+        <v-menu min-width="200px" left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>
           </template>
 
-          <v-list>
+          <v-list color="background">
+            <v-list-item :to="{ path: '/' }">
+              <v-list-item-title class="text-center">Zdjęcia</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'Albums' }">
+              <v-list-item-title class="text-center">Albumy</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'ChangePassword' }">
+              <v-list-item-title class="text-center">Zmień hasło</v-list-item-title>
+            </v-list-item>
             <v-list-item :to="{ name: 'Login' }" @click="this.logout">
-              <v-list-item-title>Wyloguj</v-list-item-title>
+              <v-list-item-title class="text-center">Wyloguj</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>

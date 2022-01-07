@@ -52,7 +52,6 @@ const actions = {
       }
       return true;
     } catch (err) {
-      context.dispatch('logout');
       return false;
     }
   },
@@ -62,6 +61,15 @@ const actions = {
       return response;
     } catch (err) {
       return err.response.data;
+    }
+  },
+
+  async changePassword(context, payload) {
+    try {
+      await getApi().post('/change-password', payload);
+      return true;
+    } catch (err) {
+      return false;
     }
   },
 

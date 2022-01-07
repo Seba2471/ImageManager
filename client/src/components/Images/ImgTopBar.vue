@@ -116,8 +116,8 @@ export default {
   data() {
     return {
       windowWidth: window.innerWidth,
-      sortPick: 'Od najnowszy',
-      sortItems: ['Od najnowszy', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
+      sortPick: 'Od najnowszych',
+      sortItems: ['Od najnowszych', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
       isSelected: false,
       window: {
         width: 0,

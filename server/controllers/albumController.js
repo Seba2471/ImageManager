@@ -21,8 +21,11 @@ class albumController {
       await album.save();
       res.status(201).send('Create new album');
     } catch (e) {
-      res.sendStatus(403);
-      console.log(e);
+      console.log(e.errors.name?.message, e.errors.thumbnail?.message);
+      res.status(403).json({
+        nameError: e.errors.name?.message,
+        thumbnailError: e.errors.thumbnail?.message,
+      });
     }
   }
 
@@ -32,11 +35,14 @@ class albumController {
       res.sendStatus(201);
     } catch (e) {
       console.log(e);
-      res.sendStatus(403);
+      res.status(403).send('No images to add');
     }
   }
   async deleteImages(req, res) {
     try {
+      if (!req.body.images) {
+        return res.status(403).send('No images to delete');
+      }
       await deleteImages(req.params.id, req.user.id, req.body.images);
       res.sendStatus(201);
     } catch (e) {
