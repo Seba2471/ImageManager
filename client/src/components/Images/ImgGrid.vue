@@ -44,20 +44,20 @@ export default {
       overlay: false,
       currentImg: '',
       currentPosition: 0,
-      windowWidth: window.innerWidth,
       overlayImageSize: '300px',
       mobile: false,
+      window: {
+        width: 0,
+        height: 0,
+      },
     };
   },
   created() {
-    if (this.windowWidth <= 1050) {
-      this.mobile = true;
-    }
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
   },
-  watch: {
-    windowWidth: function (val) {
-      console.log(val);
-    },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   },
   computed: {
     ...mapGetters({
@@ -69,6 +69,16 @@ export default {
       addSelected: 'addSelected',
       setSelected: 'setSelected',
     }),
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
+
+      if (this.window.width < 960) {
+        this.mobile = true;
+      } else {
+        this.mobile = false;
+      }
+    },
     showOverlay(val, fileName) {
       if (!this.mobile) {
         this.overlay = val;
@@ -76,15 +86,14 @@ export default {
       }
     },
     showMobileOverlay(val, fileName) {
-      console.log('test');
       this.overlay = val;
       this.showImg(fileName);
     },
     showImg(file_name) {
-      // document.documentElement.style.overflow = 'hidden';
-      if (this.windowWidth > 1904) {
+      document.documentElement.style.overflow = 'hidden';
+      if (this.window.width > 1904) {
         this.overlayImageSize = '900px';
-      } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
+      } else if (this.window.width < 1904 && this.window.width > 1264) {
         this.overlayImageSize = '700px';
       }
       this.currentPosition = this.images
@@ -102,6 +111,7 @@ export default {
       }
     },
     closeImg() {
+      document.documentElement.style.overflow = 'auto';
       this.currentPosition = 0;
       this.overlay = false;
     },
