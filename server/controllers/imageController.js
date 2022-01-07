@@ -65,11 +65,7 @@ class imageController {
 
   async delete(req, res) {
     try {
-      console.log(req.body);
-      removeUserImages(req.body.images);
-      // const owner = await User.findById(req.user.id);
-      // owner.imagesCount -= 1;
-      // owner.save();
+      await removeUserImages(req.body.images, req.user.id);
       res.sendStatus(204);
     } catch (e) {
       console.log(e);

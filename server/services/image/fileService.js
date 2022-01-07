@@ -4,6 +4,7 @@ import path from 'path';
 import { __dirname } from '../../config.js';
 import mv from 'mv';
 import Image from '../../db/models/imageModel.js';
+import User from '../../db/models/userModel.js';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -57,7 +58,7 @@ export const getImagePath = (owner, filename) => {
 export const removeUserImage = (image) => {
   fs.unlinkSync(image.path);
 };
-export const removeUserImages = (imagesId) => {
+export const removeUserImages = async (imagesId, userId) => {
   Image.find(
     {
       _id: {
@@ -89,4 +90,13 @@ export const removeUserImages = (imagesId) => {
       }
     }
   );
+
+  const owner = await User.findById(userId);
+  User.findByIdAndUpdate(owner.id, { imagesCount: owner.imagesCount - imagesId.length }, function (err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      docs.imagesCount -= imagesId.length;
+    }
+  });
 };
