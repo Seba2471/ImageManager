@@ -8,7 +8,7 @@
     </ul>
     <v-row v-if="mobile" class="ma-5">
       <v-col class="d-flex justify-center" :cols="mobileCols" v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" :image="image" :height="imgHeight" />
+        <Img class="ma-3 imgComponent" @showMobileImageOverlay="showMobileOverlay" :image="image" :height="imgHeight" />
       </v-col>
     </v-row>
     <v-overlay :value="overlay">
@@ -70,6 +70,13 @@ export default {
       setSelected: 'setSelected',
     }),
     showOverlay(val, fileName) {
+      if (!this.mobile) {
+        this.overlay = val;
+        this.showImg(fileName);
+      }
+    },
+    showMobileOverlay(val, fileName) {
+      console.log('test');
       this.overlay = val;
       this.showImg(fileName);
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="img_wrp" @mouseover="imgHover = true" @mouseleave="imgHover = false">
-    <img @click="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
+    <img @click.prevent="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
     <div v-if="imgHover || isSelected" :class="iconClass" fab x-small>
       <v-icon @click="selectImg(image._id)" @mouseover="iconHover = true" @mouseleave="iconHover = false" :color="iconColor" medium>
         mdi-checkbox-marked-circle
@@ -24,6 +24,7 @@ export default {
       iconColor: '',
       imgClass: '',
       iconClass: 'icon',
+      counter: 0,
     };
   },
   created() {
@@ -69,7 +70,19 @@ export default {
       setSelected: 'setSelected',
     }),
     showOverlay(fileName) {
-      this.$emit('showImageOverlay', true, fileName);
+      this.counter++;
+
+      if (this.counter == 1) {
+        this.timer = setTimeout(() => {
+          this.$emit('showImageOverlay', true, fileName);
+          this.counter = 0;
+        }, 300);
+
+        return;
+      }
+      clearTimeout(this.timer);
+      this.counter = 0;
+      this.$emit('showMobileImageOverlay', true, fileName);
     },
     setSelectedStyles() {
       this.isSelected = true;
