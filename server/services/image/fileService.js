@@ -59,44 +59,46 @@ export const removeUserImage = (image) => {
   fs.unlinkSync(image.path);
 };
 export const removeUserImages = async (imagesId, userId) => {
-  Image.find(
-    {
+  try {
+    await Image.find({
       _id: {
         $in: imagesId,
       },
-    },
-    function (err, docs) {
-      if (err) {
-        throw new Error('Image Find Error');
-      }
-      docs.map((image) => {
-        try {
-          fs.unlinkSync(getImagePath(image.owner, image.file_name));
-        } catch (e) {
-          throw new Error('Unlink File Error');
-        }
+    })
+      .then(function (docs) {
+        docs.map((image) => {
+          try {
+            fs.unlinkSync(getImagePath(image.owner, image.file_name));
+          } catch (e) {
+            throw new Error('Unlink File Error');
+          }
+        });
+      })
+      .catch(() => {
+        throw new Error('Images not found');
       });
-    }
-  );
-  Image.deleteMany(
-    {
-      _id: {
-        $in: imagesId,
+    Image.deleteMany(
+      {
+        _id: {
+          $in: imagesId,
+        },
       },
-    },
-    function (err) {
-      if (err) {
-        throw new Error('Delete Error');
+      function (err) {
+        if (err) {
+          throw new Error('Delete Error');
+        }
       }
-    }
-  );
+    );
 
-  const owner = await User.findById(userId);
-  User.findByIdAndUpdate(owner.id, { imagesCount: owner.imagesCount - imagesId.length }, function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      docs.imagesCount -= imagesId.length;
-    }
-  });
+    const owner = await User.findById(userId);
+    User.findByIdAndUpdate(owner.id, { imagesCount: owner.imagesCount - imagesId.length }, function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        docs.imagesCount -= imagesId.length;
+      }
+    });
+  } catch (e) {
+    throw new Error(e);
+  }
 };

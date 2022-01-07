@@ -17,6 +17,9 @@ class imageController {
 
       let images = [];
 
+      if (!req.body.mdates) {
+        return res.status(403).send('No images to add');
+      }
       const imageModiftyDate = req.body.mdates.split(',');
 
       req.files.map((file, index) => {
@@ -47,7 +50,6 @@ class imageController {
     } catch (e) {
       console.log(e);
       removeErrorImage(req.files);
-      res.sendStatus(403);
     }
   }
 
@@ -65,11 +67,14 @@ class imageController {
 
   async delete(req, res) {
     try {
+      if (!req.body.images) {
+        return res.status(403).send('No images to delete');
+      }
       await removeUserImages(req.body.images, req.user.id);
       res.sendStatus(204);
     } catch (e) {
       console.log(e);
-      res.sendStatus(403);
+      res.status(403).send('Images not exists');
     }
   }
 }

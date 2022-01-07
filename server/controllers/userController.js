@@ -20,6 +20,9 @@ class userController {
     }
   }
   async refreshToken(req, res) {
+    if (!req.body.refreshToken) {
+      return res.status(401).send('Refresh token is required');
+    }
     const user = compareRefreshToken(req.body.refreshToken);
     res.json({ accessToken: getAccessToken(user) });
   }
@@ -44,8 +47,9 @@ class userController {
   async changePassword(req, res) {
     try {
       const user = await getUser(req.user.email);
+
       if (!req.body.oldPassword || !req.body.newPassword) {
-        res.status(401).send('Old password and new password is required');
+        return res.status(403).send('Old password and new password is required');
       }
       const isValidPassword = user.comparePassword(req.body.oldPassword);
       if (!isValidPassword) {
