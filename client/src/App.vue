@@ -1,7 +1,7 @@
 <template>
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
-    <TopBar v-if="isAuthenticated && !mobile" class="topBar" />
-    <TopBarMobile v-if="isAuthenticated && mobile" class="topBar" />
+    <TopBar v-if="isAuthenticated && !topBarMobile" class="topBar" />
+    <TopBarMobile v-if="isAuthenticated && topBarMobile" class="topBar" />
     <v-row v-if="isAuthenticated">
       <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
@@ -43,6 +43,7 @@ export default {
         height: 0,
       },
       mobile: false,
+      topBarMobile: false,
     };
   },
   created() {
@@ -55,6 +56,7 @@ export default {
   watch: {
     windowWidth: async function () {
       this.mobile = await this.isMobile(960);
+      this.topBarMobile = await this.isMobile(1100);
     },
   },
   computed: {

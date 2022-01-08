@@ -9,7 +9,7 @@
       <v-col lg="4" xl="4" sm="4" offset-lg="1">
         <v-text-field hide-details solo @keyup="searchTimeOut()" v-model="search" label="Wyszukaj" prepend-inner-icon="mdi-magnify"></v-text-field>
       </v-col>
-      <v-col lg="1" offset-lg="3" class="d-flex align-center">
+      <v-col cols="1" offset="2" offset-xl="3" offset-md="1" class="d-flex align-center">
         <v-row>
           <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
@@ -20,7 +20,7 @@
           <ImgUpload @close="closeImagesUploader" />
         </v-overlay>
       </v-col>
-      <v-col lg="2" class="d-flex justify-end">
+      <v-col cols="2" offset="1" offset-xl="0" offset-md="2" class="d-flex justify-end">
         <v-menu min-width="250px" left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <div class="d-flex align-center">{{ userEmail }}</div>
