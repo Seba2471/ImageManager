@@ -1,7 +1,7 @@
 <template>
   <v-row justify-center>
     <v-col xl="5" lg="8" md="12" sm="12" xs="12" offset-xl="7" offset-lg="4" class="d-flex align-center justify-end">
-      <v-col cols="5">
+      <v-col cols="4">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="checkAllImages">
             <v-icon> mdi-check-circle-outline </v-icon>
@@ -53,7 +53,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col lg="8" md="8" sm="5" xs="4" v-if="!isSelected">
+      <v-col lg="8" md="7" sm="5" xs="4" v-if="!isSelected">
         <v-select
           class="sortButton d-flex align-center justify-center"
           v-model="sortPick"

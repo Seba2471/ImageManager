@@ -33,7 +33,7 @@
 
 <script>
 import Img from './Img.vue';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
   props: ['images', 'imgHeight', 'mobileCols', 'selectOne'],
   components: { Img },
@@ -46,22 +46,19 @@ export default {
       currentPosition: 0,
       overlayImageSize: '300px',
       mobile: false,
-      window: {
-        width: 0,
-        height: 0,
-      },
     };
   },
-  created() {
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
+  created() {},
+  watch: {
+    windowWidth: async function () {
+      this.mobile = await this.isMobile(960);
+      this.overlayResize();
+    },
   },
   computed: {
     ...mapGetters({
       selected: 'getSelected',
+      windowWidth: 'getWidth',
     }),
   },
   methods: {
@@ -69,14 +66,16 @@ export default {
       addSelected: 'addSelected',
       setSelected: 'setSelected',
     }),
-    handleResize() {
-      this.window.width = window.innerWidth;
-      this.window.height = window.innerHeight;
-
-      if (this.window.width < 960) {
-        this.mobile = true;
-      } else {
-        this.mobile = false;
+    ...mapActions({
+      isMobile: 'isMobile',
+    }),
+    overlayResize() {
+      if (this.windowWidth > 1904) {
+        this.overlayImageSize = '900px';
+      } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
+        this.overlayImageSize = '700px';
+      } else if (this.windowWidth < 1264 && this.windowWidth > 800) {
+        this.overlayImageSize = '600px';
       }
     },
     showOverlay(val, fileName) {
@@ -91,11 +90,6 @@ export default {
     },
     showImg(file_name) {
       document.documentElement.style.overflow = 'hidden';
-      if (this.window.width > 1904) {
-        this.overlayImageSize = '900px';
-      } else if (this.window.width < 1904 && this.window.width > 1264) {
-        this.overlayImageSize = '700px';
-      }
       this.currentPosition = this.images
         .map(function (e) {
           return e.file_name;

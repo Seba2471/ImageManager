@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 import TopBar from './components/TopBar.vue';
 import TopBarMobile from './components/TopBarMobile.vue';
@@ -52,21 +52,30 @@ export default {
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
+  watch: {
+    windowWidth: async function () {
+      this.mobile = await this.isMobile(960);
+    },
+  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'getIsAuthenticated',
+      windowWidth: 'getWidth',
     }),
   },
   methods: {
+    ...mapMutations({
+      setHeight: 'setHeight',
+      setWidth: 'setWidth',
+    }),
+    ...mapActions({
+      isMobile: 'isMobile',
+    }),
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
-
-      if (this.window.width < 960) {
-        this.mobile = true;
-      } else {
-        this.mobile = false;
-      }
+      this.setWidth(window.innerWidth);
+      this.setHeight(window.innerHeight);
     },
   },
 };

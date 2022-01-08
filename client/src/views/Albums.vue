@@ -1,7 +1,12 @@
 <template>
   <div class="mt-15 ma-8">
     <v-row>
-      <v-col @click="showAlbum(album)" cols="4" v-for="album in this.albums" :key="album._id">
+      <v-col cols="4" xl="2" lg="3" @click="() => this.$router.push('/album/new')">
+        <div class="d-flex justify-center align-center" style="min-height: 230px"><v-icon x-large> mdi-plus-box-outline</v-icon></div>
+
+        <span class="albumTitle mt-3 d-flex justify-center align-center"> Stwórz nowy album </span>
+      </v-col>
+      <v-col @click="showAlbum(album)" cols="4" xl="2" lg="3" v-for="album in this.albums" :key="album._id">
         <div class="d-flex justify-center align-center">
           <img class="albumImg" v-auth-image="`${link}${album.thumbnail}`" />
         </div>
