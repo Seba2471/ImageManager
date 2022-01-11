@@ -1,7 +1,7 @@
 <template>
   <v-row class="d-flex align-center justify-end">
-    <v-col offset-xl="7" class="d-flex align-center justify-end">
-      <v-col cols="4" md="3" xl="6">
+    <v-col cols="12" class="d-flex align-center justify-end">
+      <v-col cols="4" sm="3" md="2" lg="3" xl="2" offset-xl="2">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="checkAllImages">
             <v-icon> mdi-check-circle-outline </v-icon>
@@ -9,7 +9,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="4" md="3" xl="6">
+      <v-col v-if="!mobile" cols="4" md="2" lg="3" xl="2">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="uncheckAllImages">
             <v-icon> mdi-checkbox-blank-circle-outline</v-icon>
@@ -17,7 +17,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="2" xl="3" v-if="!mobile && isSelected">
+      <v-col cols="2" md="2" lg="2" xl="1" v-if="!mobile && isSelected">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
             <v-icon> mdi-trash-can-outline </v-icon>
@@ -25,7 +25,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="2" xl="3">
+      <v-col cols="3" md="3" lg="2" xl="1">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="saveEdit()">
             <v-icon> mdi-check-underline-circle-outline</v-icon>
@@ -33,7 +33,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="2" xl="3">
+      <v-col cols="3" md="3" lg="2" xl="1">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="cancelEdit()">
             <v-icon> mdi-cancel</v-icon>
@@ -41,14 +41,20 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col sm="2" md="1" v-if="mobile && isSelected" class="d-flex align-center justify-center">
-        <v-menu left offset-y transition="scale-transition">
+      <v-col cols="1" sm="1" md="1" v-if="mobile && isSelected" class="d-flex align-center justify-end">
+        <v-menu min-width="250px" left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }"><v-icon v-bind="attrs" v-on="on">mdi-dots-vertical</v-icon> </template>
-          <v-list>
+          <v-list color="background">
             <v-list-item>
-              <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
+              <v-col class="customButton pa-3 d-flex align-center justify-left" @click="deleteSelectedImages">
                 <v-icon> mdi-trash-can-outline </v-icon>
                 <span class="ml-3">Usuń</span>
+              </v-col>
+            </v-list-item>
+            <v-list-item>
+              <v-col class="customButton pa-3 d-flex align-center justify-center" @click="uncheckAllImages">
+                <v-icon> mdi-checkbox-blank-circle-outline</v-icon>
+                <span class="ml-3">Odznacz wszystko</span>
               </v-col>
             </v-list-item>
           </v-list>

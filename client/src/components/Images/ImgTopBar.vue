@@ -9,7 +9,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="5" v-if="isSelected">
+      <v-col cols="4" v-if="isSelected">
         <v-row>
           <v-col class="customButton pa-3 d-flex align-center justify-center" @click="uncheckAllImages">
             <v-icon> mdi-checkbox-blank-circle-outline</v-icon>
@@ -64,10 +64,10 @@
           prepend-icon="mdi-sort"
         ></v-select>
       </v-col>
-      <v-col sm="2" v-if="isSelected && mobile" class="d-flex align-center justify-center">
+      <v-col cols="1" v-if="isSelected && mobile" class="d-flex align-center justify-center">
         <v-menu left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }"><v-icon v-bind="attrs" v-on="on">mdi-dots-vertical</v-icon> </template>
-          <v-list>
+          <v-list color="background">
             <v-list-item>
               <v-menu bottom close-on-click>
                 <template v-slot:activator="{ on, attrs }">
@@ -77,7 +77,7 @@
                   </v-col>
                 </template>
 
-                <v-list class="pa-5">
+                <v-list class="pa-5" color="background">
                   <v-list-item @click="createNewAlbum" class="customButton pl-4 pr-4">
                     <v-list-item-title> <v-icon> mdi-plus-box-outline </v-icon> <span class="ml-2">Nowy album </span> </v-list-item-title>
                   </v-list-item>
@@ -95,7 +95,7 @@
               </v-menu>
             </v-list-item>
             <v-list-item>
-              <v-col class="customButton pa-3 d-flex align-center justify-center" @click="deleteSelectedImages">
+              <v-col class="customButton pa-3 d-flex align-center justify-start" @click="deleteSelectedImages">
                 <v-icon> mdi-trash-can-outline </v-icon>
                 <span class="ml-3">Usuń</span>
               </v-col>
