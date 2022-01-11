@@ -1,3 +1,4 @@
+import { response } from 'express';
 import Album from '../db/models/albumModel.js';
 import { addImages, deleteImages } from '../services/album/albumService.js';
 
@@ -29,6 +30,18 @@ class albumController {
     }
   }
 
+  async changeName(req, res) {
+    try {
+      const album = await Album.findById(req.params.id);
+      album.name = req.body.name;
+      await album.save();
+      res.status(200).send('Album name changed');
+    } catch (e) {
+      console.log(e);
+      res.status(403).send('Album name change failed');
+    }
+  }
+
   async addImages(req, res) {
     try {
       await addImages(req.params.id, req.user.id, req.body.images);
@@ -40,11 +53,12 @@ class albumController {
   }
   async deleteImages(req, res) {
     try {
+      console.log(req.body.images);
       if (!req.body.images) {
         return res.status(403).send('No images to delete');
       }
       await deleteImages(req.params.id, req.user.id, req.body.images);
-      res.sendStatus(201);
+      res.sendStatus(204);
     } catch (e) {
       res.sendStatus(403);
       console.log(e);

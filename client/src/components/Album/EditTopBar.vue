@@ -27,9 +27,17 @@
       </v-col>
       <v-col cols="2" xl="3">
         <v-row>
-          <v-col class="customButton pa-3 d-flex align-center justify-center" @click="disableEdit()">
-            <v-icon> mdi-arrow-u-left-top</v-icon>
-            <span class="ml-3">Wróć</span>
+          <v-col class="customButton pa-3 d-flex align-center justify-center" @click="saveEdit()">
+            <v-icon> mdi-check-underline-circle-outline</v-icon>
+            <span class="ml-3">Zapisz</span>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="2" xl="3">
+        <v-row>
+          <v-col class="customButton pa-3 d-flex align-center justify-center" @click="cancelEdit()">
+            <v-icon> mdi-cancel</v-icon>
+            <span class="ml-3">Anuluj</span>
           </v-col>
         </v-row>
       </v-col>
@@ -95,8 +103,11 @@ export default {
       fetchAlbums: 'fetchAlbums',
       isMobile: 'isMobile',
     }),
-    disableEdit() {
-      this.$emit('disableEdit', false);
+    saveEdit() {
+      this.$emit('editStatus', true);
+    },
+    cancelEdit() {
+      this.$emit('editStatus', false);
     },
     checkAllImages() {
       const result = this.images.map((a) => a._id);
@@ -106,9 +117,8 @@ export default {
       this.setSelected([]);
     },
     deleteSelectedImages() {
-      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
-        this.deleteImage();
-      });
+      console.log(this.selected);
+      this.$emit('saveImagesToDelete', this.selected);
     },
   },
 };

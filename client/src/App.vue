@@ -86,6 +86,7 @@ export default {
 <style>
 .App {
   font-family: 'Montserrat', sans-serif;
+  color: var(--v-text-base) !important;
 }
 .topBar {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);

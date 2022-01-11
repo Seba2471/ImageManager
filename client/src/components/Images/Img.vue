@@ -1,8 +1,19 @@
 <template>
-  <div class="img_wrp" @mouseover="imgHover = true" @mouseleave="imgHover = false">
-    <img @click.prevent="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
-    <div v-if="imgHover || isSelected" :class="iconClass" fab x-small>
-      <v-icon @click="selectImg(image._id)" @mouseover="iconHover = true" @mouseleave="iconHover = false" :color="iconColor" medium>
+  <div class="img_wrp" @mouseover="disableSelect ? null : (imgHover = true)" @mouseleave="disableSelect ? null : (imgHover = false)">
+    <img
+      @click.prevent="disableSelect ? null : showOverlay(image.file_name)"
+      :class="imgClass"
+      v-auth-image="`${link}${image.file_name}`"
+      :height="height"
+    />
+    <div v-if="disableSelect ? null : imgHover || isSelected" :class="iconClass" fab x-small>
+      <v-icon
+        @click="selectImg(image._id)"
+        @mouseover="disableSelect ? null : (iconHover = true)"
+        @mouseleave="disableSelect ? null : (iconHover = false)"
+        :color="iconColor"
+        medium
+      >
         mdi-checkbox-marked-circle
       </v-icon>
     </div>
@@ -14,7 +25,7 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Img',
-  props: ['image', 'height', 'selectOne'],
+  props: ['image', 'height', 'selectOne', 'disableSelect'],
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,

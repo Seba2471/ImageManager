@@ -11,6 +11,9 @@ const getters = {
   getAlbums(state) {
     return state.albums;
   },
+  getAlbumById(state) {
+    return (id) => state.albums.find((album) => album._id == id);
+  },
 };
 const mutations = {
   setAlbums(state, albums) {
@@ -36,10 +39,43 @@ const actions = {
       console.log(e);
     }
   },
+  async changeAlbumName(context, payload) {
+    try {
+      await getApi().patch(`${ALBUM_URL}/${payload.id}`, { name: payload.name });
+      context.commit(
+        'setAlbums',
+        context.getters.getAlbums.map((item) => {
+          if (item._id == payload.id) {
+            item.name = payload.name;
+          }
+          return item;
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  },
   async addAlbumImages(context, payload) {
     try {
       await getApi().post(`${ALBUM_URL}/images/${payload.id}`, { images: payload.images });
       context.dispatch('fetchAlbums');
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async deleteAlbumImages(context, payload) {
+    try {
+      await getApi().patch(`${ALBUM_URL}/images/${payload.id}`, { images: payload.images });
+      context.commit(
+        'setAlbums',
+        context.getters.getAlbums.map((item) => {
+          if (item._id == payload.id) {
+            item.images = item.images.filter((image) => !payload.images.includes(image._id));
+          }
+          return item;
+        })
+      );
     } catch (e) {
       console.log(e);
     }
