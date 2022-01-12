@@ -1,51 +1,38 @@
 <template>
-  <div class="img_wrp" @mouseover="disableSelect ? null : (imgHover = true)" @mouseleave="disableSelect ? null : (imgHover = false)">
-    <img
-      @click.prevent="disableSelect ? null : showOverlay(image.file_name)"
-      :class="imgClass"
-      v-auth-image="`${link}${image.file_name}`"
-      :height="height"
-    />
-    <div v-if="disableSelect ? null : imgHover || isSelected" :class="iconClass" fab x-small>
-      <v-icon
-        @click="selectImg(image._id)"
-        @mouseover="disableSelect ? null : (iconHover = true)"
-        @mouseleave="disableSelect ? null : (iconHover = false)"
-        :color="iconColor"
-        medium
-      >
-        mdi-checkbox-marked-circle
-      </v-icon>
+  <div class="album_wrp" @mouseover="albumHover = true" @mouseleave="albumHover = false">
+    <div class="d-flex justify-center align-center">
+      <img @click.prevent="showAlbum(album)" :class="albumClass" v-auth-image="`${link}${album.thumbnail}`" />
+      <div v-if="albumHover || isSelected" :class="iconClass" fab x-small>
+        <v-icon @click="selectAlbum(album._id)" @mouseover="iconHover = true" @mouseleave="iconHover = false" :color="iconColor" medium>
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </div>
     </div>
+
+    <span class="albumTitle mt-3 d-flex justify-center align-center"> {{ album.name }} </span>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
-
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
-  name: 'Img',
-  props: ['image', 'height', 'selectOne', 'disableSelect'],
+  props: ['album'],
+  name: 'AlbumItem',
   data() {
     return {
       link: `${process.env.VUE_APP_BASE_URL}/image/`,
-      imgHover: false,
+      albumHover: false,
       iconHover: false,
       isSelected: false,
       iconColor: '',
-      imgClass: '',
+      albumClass: '',
       iconClass: 'icon',
       counter: 0,
     };
   },
-  created() {
-    if (this.selected.includes(this.image._id)) {
-      this.setSelectedStyles();
-    }
-  },
   watch: {
     selected: function (val) {
-      if (val.includes(this.image._id)) {
+      if (val.includes(this.album._id)) {
         this.setSelectedStyles();
       } else {
         this.isSelected = false;
@@ -61,31 +48,36 @@ export default {
         }
       } else {
         if (val) {
-          this.imgClass = 'imgHover';
+          this.albumClass = 'albumHover';
           this.iconColor = 'white';
         } else {
           this.iconColor = '';
-          this.imgClass = '';
+          this.albumClass = '';
         }
       }
     },
   },
   computed: {
     ...mapGetters({
-      selected: 'getSelectedImages',
+      selected: 'getSelectedAlbums',
     }),
   },
   methods: {
     ...mapMutations({
-      addSelected: 'addSelectedImages',
-      setSelected: 'setSelectedImages',
+      addSelected: 'addSelectedAlbums',
+      setSelected: 'setSelectedAlbums',
     }),
-    showOverlay(fileName) {
+    ...mapActions({
+      isMobile: 'isMobile',
+    }),
+    async showAlbum(album) {
       this.counter++;
-
+      const mobile = await this.isMobile(960);
       if (this.counter == 1) {
         this.timer = setTimeout(() => {
-          this.$emit('showImageOverlay', true, fileName);
+          if (!mobile) {
+            this.$router.push({ path: `/album/${album._id}` });
+          }
           this.counter = 0;
         }, 300);
 
@@ -93,29 +85,26 @@ export default {
       }
       clearTimeout(this.timer);
       this.counter = 0;
-      this.$emit('showMobileImageOverlay', true, fileName);
+      this.$router.push({ path: `/album/${album._id}` });
     },
     setSelectedStyles() {
       this.isSelected = true;
-      this.imgClass = 'selectImg';
+      this.albumClass = 'selectAlbum';
       this.iconClass = 'selectIcon';
       this.iconColor = 'blue';
     },
     notSelectedStyles() {
       this.isSelected = false;
-      this.imgClass = '';
+      this.iconClass = 'icon';
+      this.albumClass = '';
       this.iconColor = '';
     },
-    selectImg(id) {
+    selectAlbum(id) {
       if (!this.isSelected) {
-        if (!this.selected.includes(id)) {
-          if (this.selectOne) {
-            this.setSelected([id]);
-          } else {
-            this.addSelected(id);
-          }
-        }
+        this.setSelectedStyles();
+        this.addSelected(id);
       } else {
+        this.notSelectedStyles();
         this.setSelected(this.selected.filter((item) => item != id));
       }
     },
@@ -124,13 +113,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+img {
+  border-radius: 50px;
+  height: 23vh;
+  max-width: 30vh;
+}
 img:hover {
   filter: brightness(90%);
 }
 .imgHover {
   filter: brightness(90%);
 }
-.img_wrp {
+.album_wrp {
   display: inline-block;
   position: relative;
 }
@@ -140,13 +134,17 @@ img:hover {
   left: 0;
   margin: 5px 5px;
 }
+.albumTitle {
+  font-size: 18px;
+  font-weight: bold;
+}
 .selectIcon {
   position: absolute;
   top: 0;
   left: 0;
-  margin: 10px 10px;
+  margin: 17px 17px;
 }
-.selectImg {
+.selectAlbum {
   padding: 20px;
   background-color: var(--v-blueLight-base);
 }

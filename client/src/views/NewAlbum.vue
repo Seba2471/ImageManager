@@ -92,13 +92,13 @@ export default {
   computed: {
     ...mapGetters({
       images: 'getImages',
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
       windowWidth: 'getWidth',
     }),
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       createAlbum: 'createAlbum',
@@ -139,6 +139,7 @@ export default {
         thumbnail: albumThumbnail,
         images: this.selected,
       });
+      this.setSelected([]);
       this.$router.push('/albums');
     },
   },

@@ -128,7 +128,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
       albums: 'getAlbums',
     }),
   },
@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       addAlbumImages: 'addAlbumImages',

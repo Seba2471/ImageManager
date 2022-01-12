@@ -49,7 +49,7 @@ export default {
       return this.$store.getters.getAlbumById(this.id);
     },
     ...mapGetters({
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
     }),
   },
   watch: {
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
       addAlbumImage: 'addAlbumImage',
     }),
     ...mapActions({

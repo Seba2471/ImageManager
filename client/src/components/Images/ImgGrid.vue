@@ -65,14 +65,14 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
       windowWidth: 'getWidth',
     }),
   },
   methods: {
     ...mapMutations({
-      addSelected: 'addSelected',
-      setSelected: 'setSelected',
+      addSelected: 'addSelectedImages',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       isMobile: 'isMobile',

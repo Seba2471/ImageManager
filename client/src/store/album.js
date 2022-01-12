@@ -5,6 +5,7 @@ const ALBUM_URL = '/album';
 
 const state = {
   albums: [],
+  selectedAlbums: [],
 };
 
 const getters = {
@@ -14,10 +15,19 @@ const getters = {
   getAlbumById(state) {
     return (id) => state.albums.find((album) => album._id == id);
   },
+  getSelectedAlbums(state) {
+    return state.selectedAlbums;
+  },
 };
 const mutations = {
   setAlbums(state, albums) {
     state.albums = albums;
+  },
+  addSelectedAlbums(state, selected) {
+    state.selectedAlbums = [...state.selectedAlbums, selected];
+  },
+  setSelectedAlbums(state, selected) {
+    state.selectedAlbums = selected;
   },
 };
 
@@ -78,6 +88,19 @@ const actions = {
       );
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  async deleteAlbum(context, payload) {
+    try {
+      await getApi().delete(`${ALBUM_URL}/${payload.id}`);
+      context.commit(
+        'setAlbums',
+        context.getters.getAlbums.filter((album) => album._id != payload.id)
+      );
+      return true;
+    } catch (e) {
+      return false;
     }
   },
 };

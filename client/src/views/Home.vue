@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       fetchImages: 'fetchImages',
