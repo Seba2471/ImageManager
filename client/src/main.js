@@ -7,7 +7,6 @@ import VueAuthImage from 'vue-auth-image';
 import VueSimpleAlert from 'vue-simple-alert';
 
 Vue.use(VueSimpleAlert);
-
 // register vue-auth-image directive
 Vue.use(VueAuthImage);
 

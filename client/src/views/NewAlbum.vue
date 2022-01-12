@@ -4,19 +4,10 @@
     <v-col cols="12" class="d-flex align-center justify-center mt-5">
       <h2>Kreator tworzenia nowego albumu</h2>
     </v-col>
-    <v-row class="d-flex align-center justify-center mt-10">
-      <v-col cols="2" xl="2" lg="3" md="4" xs="12">
-        <Step number="1" title="Podaj tytuł" :disable="!showTitle" />
-      </v-col>
-      <v-col cols="2" xl="2" lg="3" md="4" class="ml-7">
-        <Step number="2" title="Wybierz miniaturkę" :disable="!showThumbnail" />
-      </v-col>
-      <v-col cols="2" xl="2" lg="3" md="4" class="ml-7">
-        <Step number="3" title="Wybierz zdjęcia" :disable="!showImages" />
-      </v-col>
-      GOTOWE
-    </v-row>
-    <v-col v-if="showTitle" xl="6" offset-xl="3" xs="12" class="mt-16">
+    <StepList v-if="!mobile" :showTitle="showTitle" :showThumbnail="showThumbnail" :showImages="showImages" />
+    <StepListMobile v-if="mobile" :showTitle="showTitle" :showThumbnail="showThumbnail" :showImages="showImages" />
+
+    <v-col v-if="showTitle" cols="10" offset="1" xl="6" offset-xl="3" class="mt-16">
       <v-row>
         <v-col xl="4" offset-xl="8" xs="6" class="d-flex align-center justify-end mb-5">
           <div @click="next" class="customButton pa-3 d-flex align-center justify-end">
@@ -29,13 +20,13 @@
     </v-col>
     <v-col v-if="showThumbnail" cols="10" offset="1" class="mt-16">
       <v-row>
-        <v-col xl="4" lg="4" xs="6" class="d-flex align-center justify-start mb-5">
+        <v-col cols="6" xl="4" lg="4" class="d-flex align-center justify-start mb-5">
           <div @click="back" class="customButton pa-3 d-flex align-center justify-center">
             <v-icon> mdi-chevron-left </v-icon>
             <span class="ml-3">Podaj tytuł</span>
           </div>
         </v-col>
-        <v-col xl="4" offset-xl="4" xs="6" class="d-flex align-center justify-end mb-5">
+        <v-col xl="4" offset-xl="4" class="d-flex align-center justify-end mb-5">
           <div @click="next" class="customButton pa-3 d-flex align-center justify-end">
             <span class="ml-3">Wybierz zdjęcia</span>
             <v-icon> mdi-chevron-right </v-icon>
@@ -44,15 +35,15 @@
       </v-row>
       <ImgGrid :images="this.images" imgHeight="150px" mobileCols="6" selectOne="true" />
     </v-col>
-    <v-col v-if="showImages" cols="10" offset="1" class="mt-16">
+    <v-col v-if="showImages" cols="8" offset="1" class="mt-16">
       <v-row>
-        <v-col xl="4" lg="4" xs="6" class="d-flex align-center justify-start mb-5">
+        <v-col xl="4" lg="4" class="d-flex align-center justify-start mb-5">
           <div @click="back" class="customButton pa-3 d-flex align-center justify-center">
             <v-icon> mdi-chevron-left </v-icon>
             <span class="ml-3">Wybierz miniaturkę</span>
           </div>
         </v-col>
-        <v-col xl="4" offset-xl="4" xs="6" class="d-flex align-center justify-end mb-5">
+        <v-col xl="4" offset-xl="4" class="d-flex align-center justify-end mb-5">
           <div @click="addAlbum" class="customButton pa-3 d-flex align-center justify-end">
             <span class="ml-3">Stwórz album</span>
             <v-icon> mdi-chevron-right </v-icon>
@@ -65,13 +56,15 @@
 </template>
 
 <script>
-import Step from '../components/Album/Step.vue';
+import StepListMobile from '../components/Album/StepListMobile.vue';
+import StepList from '../components/Album/StepList.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import ImgGrid from '../components/Images/ImgGrid.vue';
 export default {
   components: {
     ImgGrid,
-    Step,
+    StepList,
+    StepListMobile,
   },
   data() {
     return {
@@ -82,25 +75,34 @@ export default {
       albumTitle: '',
       albumThumbnail: '',
       albumImages: [],
+      mobile: false,
     };
   },
-  created() {
+  async created() {
     this.savedImages = this.selected;
     this.setSelected([]);
     this.showTitle = true;
+    this.mobile = await this.isMobile(1200);
+  },
+  watch: {
+    windowWidth: async function () {
+      this.mobile = await this.isMobile(1200);
+    },
   },
   computed: {
     ...mapGetters({
       images: 'getImages',
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
+      windowWidth: 'getWidth',
     }),
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       createAlbum: 'createAlbum',
+      isMobile: 'isMobile',
     }),
     next() {
       if (this.showTitle) {
@@ -132,7 +134,12 @@ export default {
           albumThumbnail = image.file_name;
         }
       });
-      this.createAlbum({ name: this.albumTitle, thumbnail: albumThumbnail, images: this.selected });
+      this.createAlbum({
+        name: this.albumTitle,
+        thumbnail: albumThumbnail,
+        images: this.selected,
+      });
+      this.setSelected([]);
       this.$router.push('/albums');
     },
   },

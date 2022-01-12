@@ -27,7 +27,8 @@ router.delete('/image', isAuth, imageController.delete);
 
 router.post('/album', isAuth, albumController.create);
 router.get('/albums', isAuth, albumController.list);
+router.patch('/album/:id', isAuth, albumController.changeName);
 router.post('/album/images/:id', isAuth, albumController.addImages);
-router.delete('/album/images/:id', isAuth, albumController.deleteImages);
+router.patch('/album/images/:id', isAuth, albumController.deleteImages);
 router.delete('/album/:id', isAuth, albumController.delete);
 export default router;

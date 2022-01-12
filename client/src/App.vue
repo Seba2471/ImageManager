@@ -1,7 +1,7 @@
 <template>
   <v-app class="App" :style="{ background: $vuetify.theme.themes.light.background, color: $vuetify.theme.themes.light.text }">
-    <TopBar v-if="isAuthenticated && !mobile" class="topBar" />
-    <TopBarMobile v-if="isAuthenticated && mobile" class="topBar" />
+    <TopBar v-if="isAuthenticated && !topBarMobile" class="topBar" />
+    <TopBarMobile v-if="isAuthenticated && topBarMobile" class="topBar" />
     <v-row v-if="isAuthenticated">
       <div v-if="!mobile" class="navComponent ml-3">
         <NavComponent />
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 import TopBar from './components/TopBar.vue';
 import TopBarMobile from './components/TopBarMobile.vue';
@@ -43,6 +43,7 @@ export default {
         height: 0,
       },
       mobile: false,
+      topBarMobile: false,
     };
   },
   created() {
@@ -52,21 +53,31 @@ export default {
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
+  watch: {
+    windowWidth: async function () {
+      this.mobile = await this.isMobile(960);
+      this.topBarMobile = await this.isMobile(1100);
+    },
+  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'getIsAuthenticated',
+      windowWidth: 'getWidth',
     }),
   },
   methods: {
+    ...mapMutations({
+      setHeight: 'setHeight',
+      setWidth: 'setWidth',
+    }),
+    ...mapActions({
+      isMobile: 'isMobile',
+    }),
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
-
-      if (this.window.width < 960) {
-        this.mobile = true;
-      } else {
-        this.mobile = false;
-      }
+      this.setWidth(window.innerWidth);
+      this.setHeight(window.innerHeight);
     },
   },
 };
@@ -75,6 +86,7 @@ export default {
 <style>
 .App {
   font-family: 'Montserrat', sans-serif;
+  color: var(--v-text-base) !important;
 }
 .topBar {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);

@@ -2,13 +2,21 @@
   <v-row class="mt-3 d-flex justify-center">
     <ul v-if="!mobile" class="mr-10">
       <li @click="showImg(image.file_name)" v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" @showImageOverlay="showOverlay" :image="image" :height="imgHeight" :selectOne="selectOne" :isSelected="true" />
+        <Img
+          class="ma-3 imgComponent"
+          @showImageOverlay="showOverlay"
+          :image="image"
+          :height="imgHeight"
+          :selectOne="selectOne"
+          :isSelected="true"
+          :disableSelect="disableSelect"
+        />
       </li>
       <li></li>
     </ul>
     <v-row v-if="mobile" class="ma-5">
       <v-col class="d-flex justify-center" :cols="mobileCols" v-for="(image, index) in this.images" :key="index">
-        <Img class="ma-3 imgComponent" :image="image" :height="imgHeight" />
+        <Img class="ma-3 imgComponent" @showMobileImageOverlay="showMobileOverlay" :image="image" :height="imgHeight" />
       </v-col>
     </v-row>
     <v-overlay :value="overlay">
@@ -33,9 +41,9 @@
 
 <script>
 import Img from './Img.vue';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
-  props: ['images', 'imgHeight', 'mobileCols', 'selectOne'],
+  props: ['images', 'imgHeight', 'mobileCols', 'selectOne', 'disableSelect'],
   components: { Img },
   name: 'ImgGrid',
   data() {
@@ -44,42 +52,56 @@ export default {
       overlay: false,
       currentImg: '',
       currentPosition: 0,
-      windowWidth: window.innerWidth,
-      overlayImageSize: '300px',
+      overlayImageSize: '',
       mobile: false,
     };
   },
-  created() {
-    if (this.windowWidth <= 1050) {
-      this.mobile = true;
-    }
+  async created() {
+    this.overlayResize(this.windowWidth);
+    this.mobile = await this.isMobile(960);
   },
   watch: {
-    windowWidth: function (val) {
-      console.log(val);
+    windowWidth: async function (val) {
+      this.mobile = await this.isMobile(960);
+      this.overlayResize(val);
     },
   },
   computed: {
     ...mapGetters({
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
+      windowWidth: 'getWidth',
     }),
   },
   methods: {
     ...mapMutations({
-      addSelected: 'addSelected',
-      setSelected: 'setSelected',
+      addSelected: 'addSelectedImages',
+      setSelected: 'setSelectedImages',
     }),
+    ...mapActions({
+      isMobile: 'isMobile',
+    }),
+    overlayResize(val) {
+      if (val > 1904) {
+        this.overlayImageSize = '900px';
+      } else if (val < 1904 && val > 1264) {
+        this.overlayImageSize = '700px';
+      } else if (val < 1264 && val > 800) {
+        this.overlayImageSize = '600px';
+      } else if (val < 800) {
+        this.overlayImageSize = '300px';
+      }
+    },
     showOverlay(val, fileName) {
+      document.documentElement.style.overflow = 'hidden';
+      this.overlay = val;
+      this.showImg(fileName);
+    },
+    showMobileOverlay(val, fileName) {
+      document.documentElement.style.overflow = 'hidden';
       this.overlay = val;
       this.showImg(fileName);
     },
     showImg(file_name) {
-      // document.documentElement.style.overflow = 'hidden';
-      if (this.windowWidth > 1904) {
-        this.overlayImageSize = '900px';
-      } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
-        this.overlayImageSize = '700px';
-      }
       this.currentPosition = this.images
         .map(function (e) {
           return e.file_name;
@@ -95,6 +117,7 @@ export default {
       }
     },
     closeImg() {
+      document.documentElement.style.overflow = 'auto';
       this.currentPosition = 0;
       this.overlay = false;
     },

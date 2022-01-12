@@ -7,7 +7,7 @@
         </router-link>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col lg="1" class="d-flex justify-end align-center">
+      <v-col cols="1" class="d-flex justify-end align-center">
         <v-row>
           <v-col @click="showSearch = true" class="d-flex align-center justify-end customButton">
             <v-icon> mdi-magnify </v-icon>
@@ -49,7 +49,15 @@
     </v-row>
     <v-row v-if="showSearch">
       <v-col class="ma-5">
-        <v-text-field hide-details solo label="Wyszukaj" prepend-inner-icon="mdi-arrow-left" @click:prepend-inner="showSearch = false"></v-text-field>
+        <v-text-field
+          v-model="search"
+          @keyup="searchTimeOut()"
+          hide-details
+          solo
+          label="Wyszukaj"
+          prepend-inner-icon="mdi-arrow-left"
+          @click:prepend-inner="showSearch = false"
+        ></v-text-field>
       </v-col>
     </v-row>
   </div>
@@ -79,8 +87,18 @@ export default {
     closeImagesUploader(value) {
       this.showImgUploader = value;
     },
-    hideSearch() {
-      console.log('click');
+    searchTimeOut() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.getSearch();
+      }, 800);
+    },
+    getSearch() {
+      this.$router.push(`/search/${this.search}`);
+      this.search = '';
     },
   },
 };

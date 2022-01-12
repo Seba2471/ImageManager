@@ -6,7 +6,7 @@ const IMAGE_URL = '/image';
 
 const state = {
   images: [],
-  selected: [],
+  selectedImages: [],
   uploadPercentage: 0,
 };
 
@@ -29,8 +29,8 @@ const getters = {
       order: 'asc',
     });
   },
-  getSelected(state) {
-    return state.selected;
+  getSelectedImages(state) {
+    return state.selectedImages;
   },
   getUploadPercentage(state) {
     return state.uploadPercentage;
@@ -41,11 +41,11 @@ const mutations = {
   setImages(state, images) {
     state.images = images;
   },
-  setSelected(state, selected) {
-    state.selected = [...selected];
+  setSelectedImages(state, selected) {
+    state.selectedImages = [...selected];
   },
-  addSelected(state, selected) {
-    state.selected = [...state.selected, selected];
+  addSelectedImages(state, selected) {
+    state.selectedImages = [...state.selectedImages, selected];
   },
   setUploadPercentage(state, uploadPercentage) {
     state.uploadPercentage = uploadPercentage;
