@@ -67,6 +67,14 @@ const actions = {
   },
   async addAlbumImages(context, payload) {
     try {
+      const album = context.getters.getAlbumById(payload.id);
+      payload.images.forEach((image, index) => {
+        album.images.forEach((albumImage) => {
+          if (image == albumImage._id) {
+            payload.images.splice(index, 1);
+          }
+        });
+      });
       await getApi().post(`${ALBUM_URL}/images/${payload.id}`, { images: payload.images });
       context.dispatch('fetchAlbums');
     } catch (e) {

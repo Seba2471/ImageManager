@@ -92,15 +92,16 @@ export default {
       }
     },
     showOverlay(val, fileName) {
+      document.documentElement.style.overflow = 'hidden';
       this.overlay = val;
       this.showImg(fileName);
     },
     showMobileOverlay(val, fileName) {
+      document.documentElement.style.overflow = 'hidden';
       this.overlay = val;
       this.showImg(fileName);
     },
     showImg(file_name) {
-      document.documentElement.style.overflow = 'hidden';
       this.currentPosition = this.images
         .map(function (e) {
           return e.file_name;
