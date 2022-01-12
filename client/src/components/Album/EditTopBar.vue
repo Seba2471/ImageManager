@@ -77,9 +77,10 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     this.fetchAlbums();
     this.setSelected([]);
+    this.mobile = await this.isMobile(1200);
   },
   watch: {
     selected: function (val) {
@@ -96,13 +97,13 @@ export default {
   computed: {
     ...mapGetters({
       windowWidth: 'getWidth',
-      selected: 'getSelected',
+      selected: 'getSelectedImages',
       albums: 'getAlbums',
     }),
   },
   methods: {
     ...mapMutations({
-      setSelected: 'setSelected',
+      setSelected: 'setSelectedImages',
     }),
     ...mapActions({
       deleteImage: 'deleteImage',

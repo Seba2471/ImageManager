@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="d-flex align-center justify-end mt-2">
-      <v-col cols="2" v-if="!isEdit" @click="edit" class="customButton d-flex align-center justify-center">
+      <v-col cols="4" md="3" lg="3" xl="2" v-if="!isEdit" @click="edit" class="customButton d-flex align-center justify-center">
         <v-icon> mdi-pencil-circle-outline</v-icon>
         <span class="ml-3">Edytuj </span>
       </v-col>

@@ -53,7 +53,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col lg="8" md="7" sm="5" xs="4" v-if="!isSelected">
+      <v-col cols="8" lg="8" md="7" sm="5" v-if="!isSelected">
         <v-select
           class="sortButton d-flex align-center justify-center"
           v-model="sortPick"

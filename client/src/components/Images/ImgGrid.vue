@@ -52,15 +52,18 @@ export default {
       overlay: false,
       currentImg: '',
       currentPosition: 0,
-      overlayImageSize: '300px',
+      overlayImageSize: '',
       mobile: false,
     };
   },
-  created() {},
+  async created() {
+    this.overlayResize(this.windowWidth);
+    this.mobile = await this.isMobile(960);
+  },
   watch: {
-    windowWidth: async function () {
+    windowWidth: async function (val) {
       this.mobile = await this.isMobile(960);
-      this.overlayResize();
+      this.overlayResize(val);
     },
   },
   computed: {
@@ -77,20 +80,20 @@ export default {
     ...mapActions({
       isMobile: 'isMobile',
     }),
-    overlayResize() {
-      if (this.windowWidth > 1904) {
+    overlayResize(val) {
+      if (val > 1904) {
         this.overlayImageSize = '900px';
-      } else if (this.windowWidth < 1904 && this.windowWidth > 1264) {
+      } else if (val < 1904 && val > 1264) {
         this.overlayImageSize = '700px';
-      } else if (this.windowWidth < 1264 && this.windowWidth > 800) {
+      } else if (val < 1264 && val > 800) {
         this.overlayImageSize = '600px';
+      } else if (val < 800) {
+        this.overlayImageSize = '300px';
       }
     },
     showOverlay(val, fileName) {
-      if (!this.mobile) {
-        this.overlay = val;
-        this.showImg(fileName);
-      }
+      this.overlay = val;
+      this.showImg(fileName);
     },
     showMobileOverlay(val, fileName) {
       this.overlay = val;
