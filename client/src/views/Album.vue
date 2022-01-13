@@ -19,7 +19,12 @@
         <v-text-field v-model="newTitle" :value="album.name" height="34px" class="titleInput text-input-blue"> </v-text-field>
       </v-col>
     </v-row>
-    <ImgGrid class="d-flex align-center justify-start" :images="this.album.images" imgHeight="250px" :disableSelect="!isEdit" />
+    <ImgGrid
+      class="d-flex align-center justify-start"
+      :images="imagesToDelete.length > 0 ? this.album.images.filter((image) => !imagesToDelete.includes(image._id)) : this.album.images"
+      imgHeight="250px"
+      :disableSelect="!isEdit"
+    />
   </v-container>
 </template>
 
@@ -79,8 +84,11 @@ export default {
         }
       }
       this.setSelected([]);
+      this.imagesToDelete = [];
     },
     saveImagesToDelete(val) {
+      const result = this.album.images.filter((image) => !val.includes(image._id));
+      console.log(result);
       this.imagesToDelete = val;
     },
     edit() {

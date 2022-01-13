@@ -124,8 +124,10 @@ export default {
       this.setSelected([]);
     },
     deleteSelectedImages() {
-      console.log(this.selected);
-      this.$emit('saveImagesToDelete', this.selected);
+      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
+        this.$emit('saveImagesToDelete', this.selected);
+        this.setSelected([]);
+      });
     },
   },
 };

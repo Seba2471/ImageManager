@@ -67,14 +67,14 @@ const actions = {
   },
   async addAlbumImages(context, payload) {
     try {
-      const album = context.getters.getAlbumById(payload.id);
-      payload.images.forEach((image, index) => {
-        album.images.forEach((albumImage) => {
-          if (image == albumImage._id) {
-            payload.images.splice(index, 1);
-          }
-        });
+      const albumImages = context.getters.getAlbumById(payload.id).images.map((image) => {
+        return image._id;
       });
+
+      payload.images = payload.images.filter((image) => {
+        return !albumImages.includes(image);
+      });
+
       await getApi().post(`${ALBUM_URL}/images/${payload.id}`, { images: payload.images });
       context.dispatch('fetchAlbums');
     } catch (e) {
