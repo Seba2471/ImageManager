@@ -91,11 +91,25 @@ const actions = {
     }
   },
 
-  async deleteImage(context) {
+  async deleteImage(context, payload) {
     try {
-      await getApi().delete(IMAGE_URL, { data: { images: context.getters.getSelected } });
-      context.commit('setSelected', []);
-      context.dispatch('fetchImages');
+      await getApi().patch(IMAGE_URL, { images: payload });
+      context.commit('setSelectedImages', []);
+      context.commit(
+        'setAlbums',
+        context.getters.getAlbums.map((item) => {
+          item.images = item.images.filter((image) => !payload.includes(image._id));
+          return item;
+        })
+      );
+      context.commit(
+        'setImages',
+        context.getters.getImages.filter((image) => {
+          if (!payload.includes(image._id)) {
+            return image;
+          }
+        })
+      );
       return true;
     } catch (e) {
       return false;

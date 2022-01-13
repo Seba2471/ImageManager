@@ -1,6 +1,6 @@
 import Image from '../db/models/imageModel.js';
 import User from '../db/models/userModel.js';
-import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../services/image/fileService.js';
+import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../services/image/imageService.js';
 
 class imageController {
   async userImage(req, res) {

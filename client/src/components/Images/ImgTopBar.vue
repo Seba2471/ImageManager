@@ -188,7 +188,7 @@ export default {
     },
     deleteSelectedImages() {
       this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
-        this.deleteImage();
+        this.deleteImage(this.selected);
       });
     },
   },
