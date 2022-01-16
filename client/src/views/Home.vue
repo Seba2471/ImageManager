@@ -1,11 +1,13 @@
 <template>
   <v-container>
     <ImgTopBar @sortPick="getSortPick" :images="this.displayImages" />
-    <ImgGrid imgHeight="250px" :images="this.displayImages" />
+    <ErrorAlert :responseStatus="status" />
+    <ImgGrid v-if="imageStatus" imgHeight="250px" :images="this.displayImages" />
   </v-container>
 </template>
 
 <script>
+import ErrorAlert from '../components/ErrorAlert.vue';
 import ImgTopBar from '../components/Images/ImgTopBar.vue';
 import { mapMutations, mapGetters, mapActions } from 'vuex';
 
@@ -16,6 +18,7 @@ export default {
   components: {
     ImgGrid,
     ImgTopBar,
+    ErrorAlert,
   },
   data() {
     return {
@@ -26,11 +29,14 @@ export default {
       sortPick: 'Od najnowszych',
       sortItems: ['Od najnowszych', 'Od najstarszych', 'Data utworzenia(od najnowsze)', 'Data utworzenia(od najstarsze)'],
       currentPosition: 0,
+      status: true,
+      imageStatus: true,
     };
   },
-  created() {
-    this.fetchImages();
-    this.fetchAlbums();
+  async created() {
+    this.status = await this.fetchImages();
+    this.imageStatus = this.status;
+    this.status = await this.fetchAlbums();
     this.displayImages = this.images;
     this.setSelected([]);
   },

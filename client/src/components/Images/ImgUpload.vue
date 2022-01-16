@@ -44,19 +44,23 @@
             <div class="d-flex align-center ml-2">Prześlij</div>
           </v-col>
         </v-row>
+        <ErrorAlert :responseStatus="status" />
       </div>
     </v-card>
   </v-container>
 </template>
 
 <script>
+import ErrorAlert from '../ErrorAlert.vue';
 import { mapActions } from 'vuex';
 export default {
+  components: { ErrorAlert },
   data() {
     return {
       urls: [],
       files: [],
       isEmpty: true,
+      status: true,
     };
   },
   watch: {
@@ -82,11 +86,13 @@ export default {
       this.urls = this.urls.filter((url) => url != val);
       this.files.splice(index, 1);
     },
-    submitImages() {
-      this.addImages({
+    async submitImages() {
+      this.status = await this.addImages({
         files: this.files,
       });
-      this.$emit('close', false);
+      if (this.status) {
+        this.$emit('close', false);
+      }
     },
   },
 };

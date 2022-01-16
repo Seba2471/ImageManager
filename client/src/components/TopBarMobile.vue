@@ -3,7 +3,7 @@
     <v-row v-if="!showSearch" class="wrapper">
       <v-col lg="1">
         <router-link class="text-decoration-none" to="/">
-          <h1 class="d-flex align-center">PICTLIST</h1>
+          <h2 class="d-flex align-center">PICTLIST</h2>
         </router-link>
       </v-col>
       <v-spacer></v-spacer>
@@ -14,7 +14,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="1" class="d-flex align-center">
+      <v-col cols="2" class="d-flex align-center">
         <v-row>
           <v-col @click="showImgUploader = true" class="d-flex align-center justify-center customButton">
             <v-icon> mdi-tray-arrow-up </v-icon>
@@ -24,7 +24,7 @@
           <ImgUpload @close="closeImagesUploader" />
         </v-overlay>
       </v-col>
-      <v-col cols="1" class="d-flex align-center">
+      <v-col cols="2" class="d-flex align-center">
         <v-menu min-width="200px" left offset-y transition="scale-transition">
           <template v-slot:activator="{ on, attrs }">
             <v-icon v-bind="attrs" v-on="on">mdi-menu</v-icon>

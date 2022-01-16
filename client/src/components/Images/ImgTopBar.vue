@@ -104,13 +104,16 @@
         </v-menu>
       </v-col>
     </v-col>
+    <ErrorAlert :responseStatus="status" />
   </v-row>
 </template>
 
 <script>
+import ErrorAlert from '../ErrorAlert.vue';
 import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 export default {
+  components: { ErrorAlert },
   name: 'ImgTopBar',
   props: ['images'],
   data() {
@@ -124,6 +127,7 @@ export default {
         height: 0,
       },
       mobile: false,
+      status: true,
     };
   },
   computed: {
@@ -179,17 +183,17 @@ export default {
     uncheckAllImages() {
       this.setSelected([]);
     },
-    addImagesToExistAlbum(id) {
-      this.addAlbumImages({ id, images: this.selected });
+    async addImagesToExistAlbum(id) {
+      this.status = await this.addAlbumImages({ id, images: this.selected });
       this.setSelected([]);
     },
     createNewAlbum() {
       this.$router.push('/album/new');
     },
-    deleteSelectedImages() {
-      this.$confirm('Czy na pewno chcesz usunąć?').then(() => {
-        this.deleteImage();
-      });
+    async deleteSelectedImages() {
+      if (await this.$confirm('Czy na pewno chcesz usunąć?')) {
+        this.status = await this.deleteImage(this.selected);
+      }
     },
   },
 };

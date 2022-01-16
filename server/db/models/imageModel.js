@@ -15,6 +15,12 @@ const imageSchema = new Schema({
     type: String,
     required: true,
   },
+  albums: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'Album',
+    },
+  ],
   owner: {
     type: mongoose.Types.ObjectId,
     required: true,

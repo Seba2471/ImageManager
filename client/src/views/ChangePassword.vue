@@ -39,7 +39,6 @@
           :rules="passwordRules"
           @click:append="showPassword = !showPassword"
         ></v-text-field>
-        {{ errorMsg }}
         <v-btn block large color="primary" @click="changePassword"> Zmień hasło </v-btn>
       </v-form>
     </v-col>
@@ -77,7 +76,6 @@ export default {
           if (!res) {
             this.errorMsg = 'Podane hasło jest błędne';
           }
-          this.$refs.form.reset();
         });
       }
     },

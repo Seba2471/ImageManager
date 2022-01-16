@@ -45,13 +45,14 @@ const actions = {
     try {
       await getApi().post(ALBUM_URL, payload);
       context.dispatch('fetchAlbums');
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
     }
   },
   async changeAlbumName(context, payload) {
     try {
-      await getApi().patch(`${ALBUM_URL}/${payload.id}`, { name: payload.name });
+      await getApi().patch(`${ALBUM_URL}/name/${payload.id}`, { name: payload.name });
       context.commit(
         'setAlbums',
         context.getters.getAlbums.map((item) => {
@@ -61,24 +62,51 @@ const actions = {
           return item;
         })
       );
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
+    }
+  },
+  async changeAlbumThumbnail(context, payload) {
+    try {
+      const album = context.getters.getAlbumById(payload.id);
+      let newImage = '';
+      album.images.map((image) => {
+        if (image._id == payload.image) {
+          newImage = image.file_name;
+        }
+      });
+      await getApi().patch(`${ALBUM_URL}/thumbnail/${payload.id}`, { file_name: newImage });
+      context.commit(
+        'setAlbums',
+        context.getters.getAlbums.map((item) => {
+          if (item._id == payload.id) {
+            item.thumbnail = newImage;
+          }
+          return item;
+        })
+      );
+      return true;
+    } catch (e) {
+      return false;
     }
   },
   async addAlbumImages(context, payload) {
     try {
-      const album = context.getters.getAlbumById(payload.id);
-      payload.images.forEach((image, index) => {
-        album.images.forEach((albumImage) => {
-          if (image == albumImage._id) {
-            payload.images.splice(index, 1);
-          }
-        });
+      const albumImages = context.getters.getAlbumById(payload.id).images.map((image) => {
+        return image._id;
       });
+
+      payload.images = payload.images.filter((image) => {
+        return !albumImages.includes(image);
+      });
+
       await getApi().post(`${ALBUM_URL}/images/${payload.id}`, { images: payload.images });
       context.dispatch('fetchAlbums');
+
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
     }
   },
 
@@ -94,8 +122,9 @@ const actions = {
           return item;
         })
       );
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
     }
   },
 

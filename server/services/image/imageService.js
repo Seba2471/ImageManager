@@ -5,6 +5,8 @@ import { __dirname } from '../../config.js';
 import mv from 'mv';
 import Image from '../../db/models/imageModel.js';
 import User from '../../db/models/userModel.js';
+import mongoose from 'mongoose';
+import { deleteImageFromAlbums } from '../album/albumService.js';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -60,19 +62,30 @@ export const removeUserImage = (image) => {
 };
 export const removeUserImages = async (imagesId, userId) => {
   try {
-    await Image.find({
+    const images = await Image.find({
       _id: {
         $in: imagesId,
       },
     })
       .then(function (docs) {
+        const albums = [];
+        const images = [];
         docs.map((image) => {
           try {
             fs.unlinkSync(getImagePath(image.owner, image.file_name));
           } catch (e) {
             throw new Error('Unlink File Error');
           }
+          image.albums.map((album) => {
+            if (!albums.includes(album.toString())) {
+              albums.push(album.toString());
+            }
+          });
+          if (!images.includes(image)) {
+            images.push(image._id);
+          }
         });
+        deleteImageFromAlbums(albums, images);
       })
       .catch(() => {
         throw new Error('Images not found');
@@ -100,5 +113,14 @@ export const removeUserImages = async (imagesId, userId) => {
     });
   } catch (e) {
     throw new Error(e);
+  }
+};
+
+export const addAlbumToImages = async (id, images) => {
+  if (typeof id == 'string') {
+    const newId = mongoose.Types.ObjectId(id);
+    await Image.updateMany({ _id: { $in: images } }, { $push: { albums: newId } });
+  } else {
+    await Image.updateMany({ _id: { $in: images } }, { $push: { albums: id } });
   }
 };

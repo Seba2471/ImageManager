@@ -1,6 +1,6 @@
-import { response } from 'express';
 import Album from '../db/models/albumModel.js';
 import { addImages, deleteImages } from '../services/album/albumService.js';
+import { addAlbumToImages } from '../services/image/imageService.js';
 
 class albumController {
   async list(req, res) {
@@ -19,7 +19,9 @@ class albumController {
       owner: req.user.id,
     });
     try {
-      await album.save();
+      await album.save().then((doc) => {
+        addAlbumToImages(doc._id, req.body.images);
+      });
       res.status(201).send('Create new album');
     } catch (e) {
       console.log(e.errors.name?.message, e.errors.thumbnail?.message);
@@ -39,6 +41,18 @@ class albumController {
     } catch (e) {
       console.log(e);
       res.status(403).send('Album name change failed');
+    }
+  }
+
+  async changeThumbnail(req, res) {
+    try {
+      const album = await Album.findById(req.params.id);
+      album.thumbnail = req.body.file_name;
+      await album.save();
+      res.status(200).send('Album thumbnail changed');
+    } catch (e) {
+      console.log(e);
+      res.status(403).send('Album thumbnail change failed');
     }
   }
 

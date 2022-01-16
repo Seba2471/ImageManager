@@ -1,8 +1,8 @@
 <template>
   <div class="album_wrp" @mouseover="albumHover = true" @mouseleave="albumHover = false">
     <div class="d-flex justify-center align-center">
-      <img @click.prevent="showAlbum(album)" :class="albumClass" v-auth-image="`${link}${album.thumbnail}`" />
-      <div v-if="albumHover || isSelected" :class="iconClass" fab x-small>
+      <img @click.prevent="showAlbum(album)" @error="replaceImg" :class="albumClass" v-auth-image="`${link}${album.thumbnail}`" />
+      <div v-if="(!disableSelect && albumHover) || isSelected" :class="iconClass" fab x-small>
         <v-icon @click="selectAlbum(album._id)" @mouseover="iconHover = true" @mouseleave="iconHover = false" :color="iconColor" medium>
           mdi-checkbox-marked-circle
         </v-icon>
@@ -15,8 +15,10 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import imgError from '../../assets/img-error.png';
+
 export default {
-  props: ['album'],
+  props: ['album', 'disableSelect'],
   name: 'AlbumItem',
   data() {
     return {
@@ -28,6 +30,7 @@ export default {
       albumClass: '',
       iconClass: 'icon',
       counter: 0,
+      imgError: imgError,
     };
   },
   watch: {
@@ -70,6 +73,9 @@ export default {
     ...mapActions({
       isMobile: 'isMobile',
     }),
+    replaceImg(e) {
+      e.target.src = this.imgError;
+    },
     async showAlbum(album) {
       this.counter++;
       const mobile = await this.isMobile(960);
@@ -116,7 +122,7 @@ export default {
 img {
   border-radius: 50px;
   height: 23vh;
-  max-width: 30vh;
+  max-width: 23vh;
 }
 img:hover {
   filter: brightness(90%);
