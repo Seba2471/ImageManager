@@ -7,6 +7,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-model="userEmail"
+            autocomplete="username"
             outlined
             label="E-mail"
             :error-messages="errorMsg == '' ? '' : errorMsg"
@@ -15,6 +16,7 @@
           ></v-text-field>
           <v-text-field
             v-model="userPassword"
+            autocomplete="new-password"
             outlined
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"
@@ -26,6 +28,7 @@
           ></v-text-field>
           <v-text-field
             v-model="userPasswordReply"
+            autocomplete="new-password"
             outlined
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"

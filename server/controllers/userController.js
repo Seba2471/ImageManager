@@ -23,7 +23,7 @@ class userController {
     if (!req.body.refreshToken) {
       return res.status(401).send('Refresh token is required');
     }
-    const user = compareRefreshToken(req.body.refreshToken);
+    const user = await compareRefreshToken(req.body.refreshToken);
     res.json({ accessToken: getAccessToken(user) });
   }
 

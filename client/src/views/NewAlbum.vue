@@ -26,8 +26,8 @@
           </div>
         </v-col>
         <v-col xl="4" offset-xl="4" class="d-flex align-center justify-end mb-5">
-          <div @click="next" class="customButton pa-3 d-flex align-center justify-end">
-            <span class="ml-3">Wybierz zdjęcia</span>
+          <div @click="chooseThumbnailCheck" class="customButton pa-3 d-flex align-center justify-end">
+            <span :class="selected.length >= 1 ? 'ml-3 text--text' : 'ml-3 grey--text'">Wybierz zdjęcia</span>
             <v-icon> mdi-chevron-right </v-icon>
           </div>
         </v-col>
@@ -111,6 +111,11 @@ export default {
       createAlbum: 'createAlbum',
       isMobile: 'isMobile',
     }),
+    chooseThumbnailCheck() {
+      if (this.selected.length >= 1) {
+        this.next();
+      }
+    },
     next() {
       if (this.showTitle) {
         this.showThumbnail = true;
