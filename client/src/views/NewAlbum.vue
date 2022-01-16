@@ -1,13 +1,12 @@
 <template>
   <div>
-    {{ this.albumThumbnail }}
     <v-col cols="12" class="d-flex align-center justify-center mt-5">
       <h2>Kreator tworzenia nowego albumu</h2>
     </v-col>
     <StepList v-if="!mobile" :showTitle="showTitle" :showThumbnail="showThumbnail" :showImages="showImages" />
     <StepListMobile v-if="mobile" :showTitle="showTitle" :showThumbnail="showThumbnail" :showImages="showImages" />
-
-    <v-col v-if="showTitle" cols="10" offset="1" xl="6" offset-xl="3" class="mt-16">
+    <ErrorAlert :responseStatus="status" />
+    <v-col v-if="showTitle" cols="10" offset="1" xl="6" offset-xl="3" :class="status ? 'mt-16' : 'mt-5'">
       <v-row>
         <v-col xl="4" offset-xl="8" xs="6" class="d-flex align-center justify-end mb-5">
           <div @click="next" class="customButton pa-3 d-flex align-center justify-end">
@@ -18,7 +17,7 @@
       </v-row>
       <v-text-field v-model="albumTitle" outlined label="Tytuł albumu" />
     </v-col>
-    <v-col v-if="showThumbnail" cols="10" offset="1" class="mt-16">
+    <v-col v-if="showThumbnail" cols="10" offset="1" :class="status ? 'mt-16' : 'mt-5'">
       <v-row>
         <v-col cols="6" xl="4" lg="4" class="d-flex align-center justify-start mb-5">
           <div @click="back" class="customButton pa-3 d-flex align-center justify-center">
@@ -33,9 +32,10 @@
           </div>
         </v-col>
       </v-row>
-      <ImgGrid :images="this.images" imgHeight="150px" mobileCols="6" selectOne="true" />
+      <ImgGrid v-if="imageStatus" :images="this.images" imgHeight="150px" mobileCols="6" selectOne="true" />
+      <ErrorAlert :responseStatus="imageStatus" />
     </v-col>
-    <v-col v-if="showImages" cols="8" offset="1" class="mt-16">
+    <v-col v-if="showImages" cols="10" offset="1" :class="status ? 'mt-16' : 'mt-5'">
       <v-row>
         <v-col xl="4" lg="4" class="d-flex align-center justify-start mb-5">
           <div @click="back" class="customButton pa-3 d-flex align-center justify-center">
@@ -50,7 +50,8 @@
           </div>
         </v-col>
       </v-row>
-      <ImgGrid :images="this.images" imgHeight="150px" mobileCols="6" />
+      <ImgGrid v-if="imageStatus" :images="this.images" imgHeight="150px" mobileCols="6" />
+      <ErrorAlert :responseStatus="imageStatus" />
     </v-col>
   </div>
 </template>
@@ -60,11 +61,13 @@ import StepListMobile from '../components/Album/StepListMobile.vue';
 import StepList from '../components/Album/StepList.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import ImgGrid from '../components/Images/ImgGrid.vue';
+import ErrorAlert from '../components/ErrorAlert.vue';
 export default {
   components: {
     ImgGrid,
     StepList,
     StepListMobile,
+    ErrorAlert,
   },
   data() {
     return {
@@ -76,9 +79,12 @@ export default {
       albumThumbnail: '',
       albumImages: [],
       mobile: false,
+      status: true,
+      imageStatus: true,
     };
   },
   async created() {
+    this.imageStatus = await this.fetchImages();
     this.savedImages = this.selected;
     this.setSelected([]);
     this.showTitle = true;
@@ -101,6 +107,7 @@ export default {
       setSelected: 'setSelectedImages',
     }),
     ...mapActions({
+      fetchImages: 'fetchImages',
       createAlbum: 'createAlbum',
       isMobile: 'isMobile',
     }),
@@ -124,7 +131,7 @@ export default {
         this.showThumbnail = false;
       }
     },
-    addAlbum() {
+    async addAlbum() {
       if (this.albumTitle === '') {
         this.albumTitle = 'Nowy album';
       }
@@ -134,13 +141,19 @@ export default {
           albumThumbnail = image.file_name;
         }
       });
-      this.createAlbum({
+      this.status = await this.createAlbum({
         name: this.albumTitle,
         thumbnail: albumThumbnail,
         images: this.selected,
       });
-      this.setSelected([]);
-      this.$router.push('/albums');
+      if (!this.status) {
+        this.showTitle = true;
+        this.showThumbnail = false;
+        this.showImages = false;
+      } else {
+        this.setSelected([]);
+        this.$router.push('/albums');
+      }
     },
   },
 };

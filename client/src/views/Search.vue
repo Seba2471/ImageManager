@@ -2,20 +2,19 @@
   <div>
     Wyniki wyszukiwania frazy: {{ query }}
     <v-row class="mt-5">
-      <v-col @click="showAlbum(album)" class="ml-5" cols="2" v-for="album in this.result" :key="album._id">
-        <div class="d-flex justify-center align-center">
-          <img class="albumImg" v-auth-image="`${link}${album.thumbnail}`" />
-        </div>
-        <span class="albumTitle mt-3 d-flex justify-center align-center"> {{ album.name }} </span>
+      <v-col class="ml-5" cols="2" v-for="album in this.result" :key="album._id">
+        <AlbumItem :album="album" :disableSelect="true" />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import AlbumItem from '../components/Album/AlbumItem.vue';
 import { mapGetters } from 'vuex';
 
 export default {
+  components: { AlbumItem },
   props: ['query'],
   data() {
     return {

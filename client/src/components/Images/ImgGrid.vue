@@ -30,7 +30,7 @@
           <v-icon style="height: 40px" x-large @click="prevImg">mdi-chevron-left</v-icon>
         </v-col>
 
-        <img v-auth-image="`${link}${this.currentImg}`" :height="this.overlayImageSize" />
+        <img @error="replaceImg" v-auth-image="`${link}${this.currentImg}`" :height="this.overlayImageSize" />
         <v-col class="d-flex align-center">
           <v-icon style="height: 40px" x-large @click="nextImg">mdi-chevron-right</v-icon>
         </v-col>
@@ -42,6 +42,8 @@
 <script>
 import Img from './Img.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import imgError from '../../assets/img-error.png';
+
 export default {
   props: ['images', 'imgHeight', 'mobileCols', 'selectOne', 'disableSelect'],
   components: { Img },
@@ -54,6 +56,7 @@ export default {
       currentPosition: 0,
       overlayImageSize: '',
       mobile: false,
+      imgError: imgError,
     };
   },
   async created() {
@@ -80,6 +83,9 @@ export default {
     ...mapActions({
       isMobile: 'isMobile',
     }),
+    replaceImg(e) {
+      e.target.src = this.imgError;
+    },
     overlayResize(val) {
       if (val > 1904) {
         this.overlayImageSize = '900px';

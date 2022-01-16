@@ -44,6 +44,18 @@ class albumController {
     }
   }
 
+  async changeThumbnail(req, res) {
+    try {
+      const album = await Album.findById(req.params.id);
+      album.thumbnail = req.body.file_name;
+      await album.save();
+      res.status(200).send('Album thumbnail changed');
+    } catch (e) {
+      console.log(e);
+      res.status(403).send('Album thumbnail change failed');
+    }
+  }
+
   async addImages(req, res) {
     try {
       await addImages(req.params.id, req.user.id, req.body.images);

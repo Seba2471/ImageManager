@@ -1,6 +1,12 @@
 <template>
   <div class="img_wrp" @mouseover="disableSelect ? null : (imgHover = true)" @mouseleave="disableSelect ? null : (imgHover = false)">
-    <img @click.prevent="showOverlay(image.file_name)" :class="imgClass" v-auth-image="`${link}${image.file_name}`" :height="height" />
+    <img
+      @click.prevent="showOverlay(image.file_name)"
+      @error="replaceImg"
+      :class="imgClass"
+      v-auth-image="`${link}${image.file_name}`"
+      :height="height"
+    />
     <div v-if="disableSelect ? null : imgHover || isSelected" :class="iconClass" fab x-small>
       <v-icon
         @click="selectImg(image._id)"
@@ -17,6 +23,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import imgError from '../../assets/img-error.png';
 
 export default {
   name: 'Img',
@@ -31,6 +38,7 @@ export default {
       imgClass: '',
       iconClass: 'icon',
       counter: 0,
+      imgError: imgError,
     };
   },
   created() {
@@ -75,6 +83,9 @@ export default {
       addSelected: 'addSelectedImages',
       setSelected: 'setSelectedImages',
     }),
+    replaceImg(e) {
+      e.target.src = this.imgError;
+    },
     showOverlay(fileName) {
       this.counter++;
 

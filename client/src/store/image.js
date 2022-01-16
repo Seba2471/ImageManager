@@ -57,8 +57,9 @@ const actions = {
     try {
       const response = await getApi().get(IMAGES_URL);
       context.commit('setImages', response.data);
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
     }
   },
   async addImages(context, payload) {
@@ -85,9 +86,13 @@ const actions = {
         .then(() => {
           setTimeout(() => context.commit('setUploadPercentage', 0), 2000);
           context.dispatch('fetchImages');
+        })
+        .catch(() => {
+          return false;
         });
+      return true;
     } catch (e) {
-      console.log(e);
+      return false;
     }
   },
 

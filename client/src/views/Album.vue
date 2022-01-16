@@ -6,10 +6,17 @@
         <span class="ml-3">Edytuj </span>
       </v-col>
       <v-col v-if="isEdit" cols="12">
-        <EditTopBar :images="this.album.images" @editStatus="editStatus" @saveImagesToDelete="saveImagesToDelete" />
+        <EditTopBar
+          :images="this.album.images"
+          @editStatus="editStatus"
+          @selectOne="setSelectOne"
+          @saveImagesToDelete="saveImagesToDelete"
+          @saveThumbnail="saveThumbnail"
+        />
       </v-col>
     </v-row>
-    <v-row v-if="!isEdit">
+    <ErrorAlert :responseStatus="status" />
+    <v-row v-if="!isEdit && albumStatus">
       <v-col cols="12" class="d-flex align-center justify-center">
         <h1>{{ album.name }}</h1>
       </v-col>
@@ -20,20 +27,23 @@
       </v-col>
     </v-row>
     <ImgGrid
+      v-if="albumStatus"
       class="d-flex align-center justify-start"
       :images="imagesToDelete.length > 0 ? this.album.images.filter((image) => !imagesToDelete.includes(image._id)) : this.album.images"
       imgHeight="250px"
       :disableSelect="!isEdit"
+      :selectOne="selectOne"
     />
   </v-container>
 </template>
 
 <script>
+import ErrorAlert from '../components/ErrorAlert.vue';
 import EditTopBar from '../components/Album/EditTopBar.vue';
 import ImgGrid from '../components/Images/ImgGrid.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 export default {
-  components: { ImgGrid, EditTopBar },
+  components: { ImgGrid, EditTopBar, ErrorAlert },
   name: 'Album',
   props: ['id'],
   data() {
@@ -43,10 +53,14 @@ export default {
       newTitle: '',
       saveTitle: '',
       imagesToDelete: [],
+      status: true,
+      albumStatus: true,
+      selectOne: false,
     };
   },
-  created() {
-    this.fetchAlbums();
+  async created() {
+    this.albumStatus = await this.fetchAlbums();
+    this.status = this.albumStatus;
     this.setSelected([]);
   },
   computed: {
@@ -71,6 +85,7 @@ export default {
       fetchAlbums: 'fetchAlbums',
       changeAlbumName: 'changeAlbumName',
       deleteAlbumImages: 'deleteAlbumImages',
+      changeAlbumThumbnail: 'changeAlbumThumbnail',
     }),
     editStatus(val) {
       this.isEdit = false;
@@ -95,6 +110,16 @@ export default {
       this.isEdit = true;
       this.saveTitle = this.album.name;
       this.newTitle = this.album.name;
+    },
+    setSelectOne(val) {
+      this.setSelected([]);
+      this.selectOne = val;
+    },
+    async saveThumbnail(val) {
+      if (val) {
+        this.status = await this.changeAlbumThumbnail({ id: this.album._id, image: this.selected[0] });
+        this.setSelected([]);
+      }
     },
   },
 };
