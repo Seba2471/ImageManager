@@ -3,14 +3,14 @@ import store from './store';
 import VueAuthImage from 'vue-auth-image';
 
 async function refreshToken(error) {
-  if (error.response.status === 401 && store.getters.isAuthenticated) {
+  if (error.response.status === 401 && store.getters.getIsAuthenticated) {
     if (await store.dispatch('refresh')) {
       VueAuthImage.setup(store.getters.getAccessToken);
       const config = { ...error.response.config };
-      console.log(config);
       config.headers.Authorization = `Bearer ${store.getters.getAccessToken}`;
-      window.location.reload();
       return axios(config);
+    } else {
+      store.dispatch('logout');
     }
     throw error;
   }
