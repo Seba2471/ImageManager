@@ -1,6 +1,9 @@
+# Piclist - Sieciowy menadzer zdjęc 
+
+## Demo version - https://piclist-image-manager.herokuapp.com/
+
+
 # Project setup
-
-
 
 ## Server
 
