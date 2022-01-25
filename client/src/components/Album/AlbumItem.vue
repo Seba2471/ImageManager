@@ -16,13 +16,14 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import imgError from '../../assets/img-error.png';
+import { baseUrl } from '../../config.js';
 
 export default {
   props: ['album', 'disableSelect'],
   name: 'AlbumItem',
   data() {
     return {
-      link: `${process.env.VUE_APP_BASE_URL}/image/`,
+      link: `${baseUrl}/image/`,
       albumHover: false,
       iconHover: false,
       isSelected: false,
