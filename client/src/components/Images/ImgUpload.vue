@@ -87,12 +87,10 @@ export default {
       this.files.splice(index, 1);
     },
     async submitImages() {
-      this.status = await this.addImages({
+      await this.addImages({
         files: this.files,
       });
-      if (this.status) {
-        this.$emit('close', false);
-      }
+      this.$emit('close', false);
     },
   },
 };
