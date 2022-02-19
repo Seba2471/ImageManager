@@ -67,10 +67,15 @@ class imageController {
 
   async delete(req, res) {
     try {
-      if (!req.body.images) {
+      if (!req.query.Ids) {
         return res.status(403).send('No images to delete');
       }
-      await removeUserImages(req.body.images, req.user.id);
+      const imageIds = req.query.Ids.split(',');
+      if (req.url.length > 1600) {
+        return res.status(403).send('Request Uri too long');
+      }
+
+      await removeUserImages(imageIds, req.user.id);
       res.sendStatus(204);
     } catch (e) {
       console.log(e);
