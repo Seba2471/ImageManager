@@ -96,9 +96,11 @@ const actions = {
     }
   },
 
-  async deleteImage(context, payload) {
+  async deleteImages(context, payload) {
     try {
-      await getApi().patch(IMAGE_URL, { images: payload });
+      const imagesIds = payload.join(',');
+      const newUrl = IMAGES_URL + '?Ids=' + imagesIds;
+      await getApi().delete(newUrl, { images: payload });
       context.commit('setSelectedImages', []);
       context.commit(
         'setAlbums',

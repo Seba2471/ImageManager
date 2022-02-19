@@ -162,7 +162,7 @@ export default {
     }),
     ...mapActions({
       addAlbumImages: 'addAlbumImages',
-      deleteImage: 'deleteImage',
+      deleteImages: 'deleteImages',
       fetchAlbums: 'fetchAlbums',
       createAlbum: 'createAlbum',
     }),
@@ -192,7 +192,7 @@ export default {
     },
     async deleteSelectedImages() {
       if (await this.$confirm('Czy na pewno chcesz usunąć?')) {
-        this.status = await this.deleteImage(this.selected);
+        this.status = await this.deleteImages(this.selected);
       }
     },
   },

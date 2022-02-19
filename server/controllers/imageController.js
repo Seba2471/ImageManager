@@ -1,6 +1,7 @@
 import Image from '../db/models/imageModel.js';
 import User from '../db/models/userModel.js';
 import { removeErrorImage, moveImage, getImagePath, removeUserImages } from '../services/image/imageService.js';
+import { UrlLengthLimit } from '../config.js';
 
 class imageController {
   async userImage(req, res) {
@@ -71,7 +72,7 @@ class imageController {
         return res.status(403).send('No images to delete');
       }
       const imageIds = req.query.Ids.split(',');
-      if (req.url.length > 1600) {
+      if (req.url.length > UrlLengthLimit) {
         return res.status(403).send('Request Uri too long');
       }
 

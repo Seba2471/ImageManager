@@ -9,5 +9,6 @@ const database = process.env.DATABASE;
 const accessKey = process.env.ACCESS_KEY;
 const refreshKey = process.env.REFRESH_KEY;
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const UrlLengthLimit = 1600;
 
-export { port, database, __dirname, accessKey, refreshKey };
+export { port, database, __dirname, accessKey, refreshKey, UrlLengthLimit };
