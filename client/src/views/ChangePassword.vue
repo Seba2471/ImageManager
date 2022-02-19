@@ -75,6 +75,8 @@ export default {
         await this.fetchChangePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword }).then((res) => {
           if (!res) {
             this.errorMsg = 'Podane hasło jest błędne';
+          } else {
+            this.$refs.form.reset();
           }
         });
       }

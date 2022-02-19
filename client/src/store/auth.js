@@ -66,7 +66,7 @@ const actions = {
 
   async changePassword(context, payload) {
     try {
-      await getApi().post('/change-password', payload);
+      await getApi().patch('/change-password', payload);
       return true;
     } catch (err) {
       return false;
