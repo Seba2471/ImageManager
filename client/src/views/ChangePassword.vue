@@ -1,9 +1,14 @@
 <template>
   <v-row class="mt-16">
     <v-col xl="6" offset-xl="3" lg="8" offset-lg="2" sm="10" offset-sm="1">
-      <h3 class="mb-5 font-weight-medium d-flex justify-center">Zmień hasło do konta</h3>
+      <h3 class="mb-5 font-weight-medium d-flex justify-center">
+        Zmień hasło do konta
+      </h3>
       <v-form ref="form" v-model="valid" lazy-validation class="pl-10 pr-10">
-        <v-text-field autocomplete="username" style="display: none"></v-text-field>
+        <v-text-field
+          autocomplete="username"
+          style="display: none"
+        ></v-text-field>
         <v-text-field
           v-model="oldPassword"
           autocomplete="current-password"
@@ -39,46 +44,52 @@
           :rules="passwordRules"
           @click:append="showPassword = !showPassword"
         ></v-text-field>
-        <v-btn block large color="primary" @click="changePassword"> Zmień hasło </v-btn>
+        <v-btn block large color="primary" @click="changePassword">
+          Zmień hasło
+        </v-btn>
       </v-form>
     </v-col>
   </v-row>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 export default {
-  name: 'ChangePassword',
+  name: "ChangePassword",
   data() {
     return {
-      oldPassword: '',
-      newPassword: '',
-      replyNewPassword: '',
+      oldPassword: "",
+      newPassword: "",
+      replyNewPassword: "",
       showPassword: false,
       showOldPassword: false,
       valid: true,
-      errorMsg: '',
+      errorMsg: "",
       passwordRules: [
-        (v) => !!v || 'Hasło jest wymagane',
-        () => this.newPassword == this.replyNewPassword || 'Hasła nie są takie same',
-        (v) => v.length > 4 || 'Hasło jest za krótkie',
+        (v) => !!v || "Hasło jest wymagane",
+        () =>
+          this.newPassword == this.replyNewPassword ||
+          "Hasła nie są takie same",
+        (v) => v?.length > 4 || "Hasło jest za krótkie",
       ],
     };
   },
   methods: {
     ...mapActions({
-      fetchChangePassword: 'changePassword',
+      fetchChangePassword: "changePassword",
     }),
     async changePassword() {
       if (this.$refs.form.validate()) {
-        await this.fetchChangePassword({ oldPassword: this.oldPassword, newPassword: this.newPassword }).then((res) => {
-          if (!res) {
-            this.errorMsg = 'Podane hasło jest błędne';
-          } else {
-            this.$refs.form.reset();
-          }
+        const res = await this.fetchChangePassword({
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword,
         });
+        if (!res) {
+          this.errorMsg = "Podane hasło jest błędne";
+        } else {
+          this.$refs.form.reset();
+        }
       }
     },
   },

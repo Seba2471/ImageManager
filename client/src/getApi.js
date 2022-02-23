@@ -4,7 +4,7 @@ import VueAuthImage from 'vue-auth-image';
 import { baseUrl, UrlLengthLimit } from './config.js';
 
 async function refreshToken(error) {
-  if (error.response.status === 401 && store.getters.getIsAuthenticated) {
+  if (error.response.status === 401 && store.getters.getIsAuthenticated && error.response.data == 'Token not valid') {
     if (await store.dispatch('refresh')) {
       VueAuthImage.setup(store.getters.getAccessToken);
       const config = { ...error.response.config };

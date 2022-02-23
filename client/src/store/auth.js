@@ -66,8 +66,11 @@ const actions = {
 
   async changePassword(context, payload) {
     try {
-      await getApi().patch('/change-password', payload);
-      return true;
+      const response = await getApi().patch('/change-password', payload);
+      if (response.status == 200) {
+        return true;
+      }
+      return false;
     } catch (err) {
       return false;
     }

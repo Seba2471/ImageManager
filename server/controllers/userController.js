@@ -49,11 +49,11 @@ class userController {
       const user = await getUser(req.user.email);
 
       if (!req.body.oldPassword || !req.body.newPassword) {
-        return res.status(401).send('Old password and new password is required');
+        return res.status(403).send('Old password and new password is required');
       }
       const isValidPassword = user.comparePassword(req.body.oldPassword);
       if (!isValidPassword) {
-        res.status(403).send('Old password is wrong');
+        res.status(401).send('Old password is wrong');
         throw new Error('Password not valid');
       }
       user.password = req.body.newPassword;
